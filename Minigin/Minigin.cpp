@@ -12,6 +12,10 @@
 #include "Time.h"
 #include "ScoreObserver.h"
 #include "LivesObserver.h"
+#include "AudioService.h"
+#include "Locator.h"
+#include "AnimationComponent.h"
+#include "ConsoleAudioService.h"
 
 using namespace std;
 using namespace std::chrono;
@@ -20,8 +24,20 @@ void dae::Minigin::Initialize()
 {
 	if (SDL_Init(SDL_INIT_VIDEO) != 0)
 	{
-		throw std::runtime_error(std::string("SDL_Init Error: ") + SDL_GetError());
+		throw std::runtime_error(std::string("SDL_Init_Video Error: ") + SDL_GetError());
 	}
+
+	if (SDL_Init(SDL_INIT_AUDIO) != 0)
+	{
+		throw std::runtime_error(std::string("SDL_Init_Audio Error: ") + SDL_GetError());
+	}
+
+	int frequency = 44100;
+	int chunkSize = 2048;
+	int channels = 2;
+
+	if (Mix_OpenAudio(frequency, MIX_DEFAULT_FORMAT, channels, chunkSize) < 0)
+		throw std::runtime_error(std::string("SDL_Audio Error: ") + Mix_GetError());
 
 	m_Window = SDL_CreateWindow(
 		"Programming 4 assignment",
@@ -35,8 +51,13 @@ void dae::Minigin::Initialize()
 	{
 		throw std::runtime_error(std::string("SDL_CreateWindow Error: ") + SDL_GetError());
 	}
-
 	Renderer::GetInstance().Init(m_Window);
+
+	Locator::Provide(new ConsoleAudioService());
+	//Locator::GetAudio().AddSound(AudioService::SoundIds::AttackEffect, "Resources/Sounds/Attack.wav", true);
+	//Locator::GetAudio().AddSound(AudioService::SoundIds::MainMenuStream, "Resources/Sounds/Music.mp3", false);
+	//Locator::GetAudio().QueueSound(AudioService::SoundIds::MainMenuStream, false, 100);
+	//Locator::GetAudio().QueueSound(AudioService::SoundIds::AttackEffect, true, 100);
 }
 
 /**
@@ -159,13 +180,22 @@ void dae::Minigin::LoadGame() const
 	font = ResourceManager::GetInstance().LoadFont("Lingua.otf", 20);
 	instruction->AddComponent(new TextComponent("How to play :", font, SDL_Color{ 255,70,0 }));
 	scene.Add(instruction);
+	//q*bert
+	auto qbert3 = std::make_shared<GameObject>("Q*Bert3");
+	qbert3->AddComponent(new TransformComponent(glm::vec3(150, 200, 0)));
+	qbert3->AddComponent(new Texture2DComponent("Ugg.png"));
+	qbert3->AddComponent(new AnimationComponent(4));
+	scene.Add(qbert3);
+	scene.AddPlayer(qbert3);
 }
 
 void dae::Minigin::Cleanup()
 {
+	Locator::FreeResources();
 	Renderer::GetInstance().Destroy();
 	SDL_DestroyWindow(m_Window);
 	m_Window = nullptr;
+	Mix_Quit();
 	SDL_Quit();
 }
 
@@ -187,6 +217,8 @@ void dae::Minigin::Run()
 
 	input.BindCommands();
 
+	std::thread soundThread(&AudioService::Update, &Locator::GetAudio());
+
 	while (doContinue)
 	{
 		const auto currentTime{ high_resolution_clock::now() };
@@ -202,6 +234,8 @@ void dae::Minigin::Run()
 		sceneManager.Update();
 		renderer.Render();
 	}
+
+	soundThread.detach();
 
 	Cleanup();
 }

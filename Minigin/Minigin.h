@@ -1,5 +1,7 @@
 #pragma once
 struct SDL_Window;
+
+class ConsoleAudioService;
 namespace dae
 {
 	class Minigin
