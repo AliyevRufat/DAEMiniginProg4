@@ -1,12 +1,12 @@
 #pragma once
 #include "GameObject.h"
 
-class Cube
+class CubeComponent
 {
 public:
-	Cube();
+	CubeComponent();
 	void IsActive();
 private:
-	std::shared_ptr<GameObject> m_pCube;
+	//std::shared_ptr<GameObject> m_pCube;
 	bool m_IsActive;
 };

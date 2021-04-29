@@ -23,8 +23,10 @@ class AnimationComponent final : public BaseComponent
 {
 public:
 	AnimationComponent(int nrOfColumns);
-	SDL_Rect Animate(AnimationState animState);
+	SDL_Rect Animate();
+	void SetAnimationState(AnimationState animState);
 private:
 	std::shared_ptr<dae::Texture2D> m_spTexture2D{};
 	int m_NrOfColumns;
+	AnimationState m_AnimState;
 };

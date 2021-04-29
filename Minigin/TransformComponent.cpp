@@ -10,3 +10,8 @@ dae::Transform TransformComponent::GetTransform() const
 {
 	return m_Transform;
 }
+
+void TransformComponent::SetPosition(const glm::vec3& position)
+{
+	m_Transform.SetPosition(position.x, position.y, position.z);
+}

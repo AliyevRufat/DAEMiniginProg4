@@ -42,12 +42,12 @@ void dae::InputManager::BindCommands()
 	//assign buttons
 	AssignKey<DieCommand>(ControllerButton::ButtonA);
 	AssignKey<IncreasePointsCommand>(ControllerButton::ButtonB);
-	AssignKey<DieCommand>(ControllerButton::ButtonX, 1);
-	AssignKey<IncreasePointsCommand>(ControllerButton::ButtonY, 1);
-	AssignKey<FartCommand>(ControllerButton::ButtonUp);
-	AssignKey<JumpCommand>(ControllerButton::ButtonDown);
-	AssignKey<FireCommand>(ControllerButton::ButtonLeft);
-	AssignKey<DuckCommand>(ControllerButton::ButtonRight);
+	AssignKey<DieCommand>(ControllerButton::ButtonX, 0);
+	AssignKey<IncreasePointsCommand>(ControllerButton::ButtonY, 0);
+	AssignKey<JumpLeftTop>(ControllerButton::ButtonUp);
+	AssignKey<JumpRightDown>(ControllerButton::ButtonDown);
+	AssignKey<JumpLeftDown>(ControllerButton::ButtonLeft);
+	AssignKey<JumpRightTop>(ControllerButton::ButtonRight);
 	AssignKey<ExitCommand>(ControllerButton::ButtonSelect);
 	AssignKey<FartCommand>(ControllerButton::ButtonStart);
 	AssignKey<FartCommand>(ControllerButton::ButtonLeftThumb);

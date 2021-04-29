@@ -4,10 +4,11 @@
 
 AnimationComponent::AnimationComponent(int nrOfColumns)
 	:m_NrOfColumns{ nrOfColumns }
+	, m_AnimState{}
 {
 }
 
-SDL_Rect AnimationComponent::Animate(AnimationState animState)
+SDL_Rect AnimationComponent::Animate()
 {
 	if (!m_IsInitialized)
 	{
@@ -15,7 +16,7 @@ SDL_Rect AnimationComponent::Animate(AnimationState animState)
 		m_spTexture2D = m_pGameObject->GetComponent<Texture2DComponent>()->GetTexture2D();
 	}
 
-	if ((int)animState <= m_NrOfColumns)
+	if ((int)m_AnimState <= m_NrOfColumns)
 	{
 		int textureWidth, textureHeight;
 		SDL_QueryTexture(m_spTexture2D.get()->GetSDLTexture(), nullptr, nullptr, &textureWidth, &textureHeight);
@@ -23,8 +24,13 @@ SDL_Rect AnimationComponent::Animate(AnimationState animState)
 		srcRect.h = textureHeight;
 		srcRect.w = textureWidth / m_NrOfColumns;
 		srcRect.y = 0;
-		srcRect.x = srcRect.h * (int)animState;
+		srcRect.x = srcRect.w * (int)m_AnimState;
 		return srcRect;
 	}
 	return SDL_Rect();
+}
+
+void AnimationComponent::SetAnimationState(AnimationState animState)
+{
+	m_AnimState = animState;
 }

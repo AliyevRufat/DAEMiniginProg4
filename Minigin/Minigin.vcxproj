@@ -212,7 +212,7 @@ xcopy "$(SolutionDir)3rdParty\SDL2_Mixer\lib\x64\*.dll" "$(OutputPath)" /R /Y</C
     <ClInclude Include="BaseComponent.h" />
     <ClInclude Include="Commands.h" />
     <ClInclude Include="ConsoleAudioService.h" />
-    <ClInclude Include="Cube.h" />
+    <ClInclude Include="CubeComponent.h" />
     <ClInclude Include="Font.h" />
     <ClInclude Include="FPSTextComponent.h" />
     <ClInclude Include="GameObject.h" />
@@ -223,8 +223,10 @@ xcopy "$(SolutionDir)3rdParty\SDL2_Mixer\lib\x64\*.dll" "$(OutputPath)" /R /Y</C
     <ClInclude Include="Locator.h" />
     <ClInclude Include="Minigin.h" />
     <ClInclude Include="MiniginPCH.h" />
+    <ClInclude Include="MovementComponent.h" />
     <ClInclude Include="NullAudio.h" />
     <ClInclude Include="Observer.h" />
+    <ClInclude Include="PyramidComponent.h" />
     <ClInclude Include="SceneObject.h" />
     <ClInclude Include="Renderer.h" />
     <ClInclude Include="ResourceManager.h" />
@@ -247,7 +249,7 @@ xcopy "$(SolutionDir)3rdParty\SDL2_Mixer\lib\x64\*.dll" "$(OutputPath)" /R /Y</C
   <ItemGroup>
     <ClCompile Include="AnimationComponent.cpp" />
     <ClCompile Include="ConsoleAudioService.cpp" />
-    <ClCompile Include="Cube.cpp" />
+    <ClCompile Include="CubeComponent.cpp" />
     <ClCompile Include="Font.cpp" />
     <ClCompile Include="FPSTextComponent.cpp" />
     <ClCompile Include="GameObject.cpp" />
@@ -264,6 +266,8 @@ xcopy "$(SolutionDir)3rdParty\SDL2_Mixer\lib\x64\*.dll" "$(OutputPath)" /R /Y</C
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">MiniginPCH.h</PrecompiledHeaderFile>
     </ClCompile>
+    <ClCompile Include="MovementComponent.cpp" />
+    <ClCompile Include="PyramidComponent.cpp" />
     <ClCompile Include="Renderer.cpp" />
     <ClCompile Include="ResourceManager.cpp" />
     <ClCompile Include="Scene.cpp" />
