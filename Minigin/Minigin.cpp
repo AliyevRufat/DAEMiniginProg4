@@ -220,6 +220,8 @@ void dae::Minigin::LoadGame() const
 	auto level = std::make_shared<GameObject>("Pyramid");
 	level->AddComponent(new PyramidComponent(scene, glm::vec3(670, 200, 0)));
 	scene.Add(level);
+	scene.AddLevel(level);
+	scene.SetCurrentLevel(level);
 	//q*bert
 	auto qbert = std::make_shared<GameObject>("Q*Bert");
 	qbert->AddComponent(new TransformComponent(glm::vec3(230, 900, 0)));
@@ -277,6 +279,7 @@ void dae::Minigin::Run()
 
 		input.ProcessInput();
 		input.ControllerAnalogs();
+		input.KeyboardInput();
 		doContinue = input.InputHandler();
 
 		Time::GetInstance().SetDeltaTime(deltaTime);

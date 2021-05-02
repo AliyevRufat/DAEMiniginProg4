@@ -24,14 +24,24 @@ namespace dae
 		std::shared_ptr<SceneObject> GetObjectByName(const std::string& name) const;
 		void AddPlayer(const std::shared_ptr<GameObject>& spPlayer);
 		std::shared_ptr<GameObject> GetPlayer(int index);
+		//
+		void SetCurrentLevel(const std::shared_ptr<GameObject>& level);
+		std::shared_ptr<GameObject> GetCurrentLevel() const;
+		void AddLevel(const std::shared_ptr<GameObject>& level);
+		std::shared_ptr<GameObject> GetLevel(int index) const;
+		//
+		float  GetSceneScale() const;
 
 	private:
 		explicit Scene(const std::string& name);
 
 		std::string m_Name;
-		std::vector<std::shared_ptr<SceneObject>> m_SpObjects{};
-		std::vector<std::shared_ptr<GameObject>> m_SpPlayers{};
+		std::vector<std::shared_ptr<SceneObject>> m_SpObjects;
+		std::vector<std::shared_ptr<GameObject>> m_SpPlayers;
+		std::vector< std::shared_ptr<GameObject>> m_SpLevels;
+		std::shared_ptr<GameObject> m_SpCurrentLevel;
 
 		static unsigned int m_IdCounter;
+		float m_SceneScale = 1.0f;
 	};
 }

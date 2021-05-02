@@ -8,6 +8,7 @@ class PyramidComponent final : public BaseComponent
 {
 public:
 	PyramidComponent(dae::Scene& scene, const glm::vec3& topCubePos);
+	glm::vec3 GetCubeOffset() const;
 
 private:
 	void Initialize(dae::Scene& scene);
@@ -19,7 +20,7 @@ private:
 	const int m_FirstRowCubeCount;
 	const int m_CubeColumnCount;
 	const SDL_Rect m_CubeSrcRect;
-	glm::vec3 m_CubeOffset;
+	glm::vec3 m_CubeDistance;
 	const glm::vec3 m_HighestCubePos;
 	const float m_CubeScale;
 

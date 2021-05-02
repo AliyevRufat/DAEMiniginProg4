@@ -44,10 +44,17 @@ void dae::InputManager::BindCommands()
 	AssignKey<IncreasePointsCommand>(ControllerButton::ButtonB);
 	AssignKey<DieCommand>(ControllerButton::ButtonX, 0);
 	AssignKey<IncreasePointsCommand>(ControllerButton::ButtonY, 0);
-	AssignKey<JumpLeftTop>(ControllerButton::ButtonUp);
-	AssignKey<JumpRightDown>(ControllerButton::ButtonDown);
-	AssignKey<JumpLeftDown>(ControllerButton::ButtonLeft);
-	AssignKey<JumpRightTop>(ControllerButton::ButtonRight);
+	//move
+	AssignKey<JumpUp>(ControllerButton::ButtonUp);
+	AssignKey<JumpDown>(ControllerButton::ButtonDown);
+	AssignKey<JumpLeft>(ControllerButton::ButtonLeft);
+	AssignKey<JumpRight>(ControllerButton::ButtonRight);
+	//keyboard
+	AssignKey<JumpUp>(KeyboardButton::W);
+	AssignKey<JumpDown>(KeyboardButton::S);
+	AssignKey<JumpLeft>(KeyboardButton::A);
+	AssignKey<JumpRight>(KeyboardButton::D);
+	//
 	AssignKey<ExitCommand>(ControllerButton::ButtonSelect);
 	AssignKey<FartCommand>(ControllerButton::ButtonStart);
 	AssignKey<FartCommand>(ControllerButton::ButtonLeftThumb);
@@ -61,7 +68,7 @@ void dae::InputManager::BindCommands()
 	AssignStick<MoveCommand>(m_Sticks[0].first);
 	AssignStick<LookCommand>(m_Sticks[1].first);
 }
-
+// TODO : change the names of the functions to controller buttons , controller analog sticks and keyboard buttons
 bool dae::InputManager::InputHandler()
 {
 	//const int connectedControllers{ 1 };
@@ -144,4 +151,42 @@ void dae::InputManager::ControllerAnalogs()
 			}
 		}
 	}
+}
+
+bool dae::InputManager::KeyboardInput()
+{
+	SDL_Event ev;
+
+	if (SDL_PollEvent(&ev))
+	{
+		if (ev.type == SDL_QUIT)
+			return false;
+
+		if (ev.type == SDL_KEYDOWN)
+		{
+			KeyboardKey key = std::make_pair(int(ev.key.keysym.sym), KeyboardButton(int(ev.key.keysym.sym)));
+			KeyboardCommandsMap& commandMap = m_KeyboardButtonCommands;
+
+			if (commandMap.find(key) != commandMap.end())
+			{
+				const auto& command = commandMap.at(key);
+				command->Execute();
+				command->SetIsPressed(true);
+			}
+		}
+		if (ev.type == SDL_KEYUP)
+		{
+			KeyboardKey key = std::make_pair(int(ev.key.keysym.sym), KeyboardButton(int(ev.key.keysym.sym)));
+			KeyboardCommandsMap& commandMap = m_KeyboardButtonCommands;
+
+			if (commandMap.find(key) != commandMap.end())
+			{
+				const auto& command = commandMap.at(key);
+				command->Release();
+				command->SetIsPressed(false);
+			}
+		}
+	}
+
+	return true;
 }

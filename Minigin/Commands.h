@@ -20,6 +20,7 @@ public:
 
 	virtual ~Command() = default;
 	virtual void Execute() const = 0;
+	virtual void Release() const = 0;
 	virtual void Undo() = 0;
 
 	[[nodiscard]] bool GetIsPressed() const { return m_IsPressed; };
@@ -35,6 +36,7 @@ public:
 	FireCommand(int index) :Command(index) {};
 
 	void Execute() const override { std::cout << "Fire!" << '\n'; }
+	void Release() const override {};
 
 	void Undo() override {};
 };
@@ -45,6 +47,7 @@ public:
 	DuckCommand(int index) :Command(index) {};
 
 	void Execute() const override { std::cout << "Duck!" << '\n'; }
+	void Release() const override {};
 	void Undo() override {};
 };
 
@@ -54,6 +57,7 @@ public:
 	JumpCommand(int index) :Command(index) {};
 
 	void Execute() const override { std::cout << "Jump!" << '\n'; }
+	void Release() const override {};
 	void Undo() override {};
 };
 
@@ -63,6 +67,7 @@ public:
 	FartCommand(int index) :Command(index) {};
 
 	void Execute() const override { std::cout << "Fart..." << '\n'; }
+	void Release() const override {};
 	void Undo() override {};
 };
 
@@ -72,6 +77,7 @@ public:
 	ExitCommand(int index) :Command(index) {};
 
 	void Execute() const override { std::cout << "Exiting..." << '\n'; }
+	void Release() const override {};
 	void Undo() override {};
 };
 
@@ -86,6 +92,8 @@ public:
 		auto pPlayerActor = dae::SceneManager::GetInstance().GetCurrentScene().get()->GetPlayer(m_ControllerIndex);
 		pPlayerActor.get()->GetComponent<HealthComponent>()->Die();
 	}
+
+	void Release() const override {};
 
 	void Undo() override {};
 };
@@ -102,6 +110,8 @@ public:
 		pPlayerActor.get()->GetComponent<ScoreComponent>()->IncreaseScore((int)Event::ColorChanged);
 	}
 
+	void Release() const override {};
+
 	void Undo() override {};
 };
 //-------------------------------------------------------------------------------------------------------IDLE MOVEMENT-------------------------------------------------------
@@ -113,9 +123,10 @@ public:
 	void Execute() const override
 	{
 		auto pPlayerActor = dae::SceneManager::GetInstance().GetCurrentScene().get()->GetPlayer(m_ControllerIndex);
-		pPlayerActor->GetComponent<AnimationComponent>()->SetAnimationState(AnimationState::IdleLeftTop);
 		//pPlayerActor.get()->GetComponent<TransformComponent>()->MoveLeftTop ? ? ? ;
 	}
+
+	void Release() const override {};
 
 	void Undo() override {};
 };
@@ -128,9 +139,10 @@ public:
 	void Execute() const override
 	{
 		auto pPlayerActor = dae::SceneManager::GetInstance().GetCurrentScene().get()->GetPlayer(m_ControllerIndex);
-		pPlayerActor->GetComponent<AnimationComponent>()->SetAnimationState(AnimationState::IdleRightTop);
 		//pPlayerActor.get()->GetComponent<TransformComponent>()->MoveLeftTop ? ? ? ;
 	}
+
+	void Release() const override {};
 
 	void Undo() override {};
 };
@@ -143,9 +155,10 @@ public:
 	void Execute() const override
 	{
 		auto pPlayerActor = dae::SceneManager::GetInstance().GetCurrentScene().get()->GetPlayer(m_ControllerIndex);
-		pPlayerActor->GetComponent<AnimationComponent>()->SetAnimationState(AnimationState::IdleRightDown);
 		//pPlayerActor.get()->GetComponent<TransformComponent>()->MoveLeftTop ? ? ? ;
 	}
+
+	void Release() const override {};
 
 	void Undo() override {};
 };
@@ -158,69 +171,87 @@ public:
 	void Execute() const override
 	{
 		auto pPlayerActor = dae::SceneManager::GetInstance().GetCurrentScene().get()->GetPlayer(m_ControllerIndex);
-		pPlayerActor->GetComponent<AnimationComponent>()->SetAnimationState(AnimationState::IdleLeftDown);
 		//pPlayerActor.get()->GetComponent<TransformComponent>()->MoveLeftTop ? ? ? ;
 	}
+
+	void Release() const override {};
 
 	void Undo() override {};
 };
 //-------------------------------------------------------------------------------------------------------JUMP MOVEMENT-------------------------------------------------------
-class JumpLeftTop final : public Command
+class JumpUp final : public Command
 {
 public:
-	JumpLeftTop(int index) :Command(index) {};
+	JumpUp(int index) :Command(index) {};
 
 	void Execute() const override
 	{
 		auto pPlayerActor = dae::SceneManager::GetInstance().GetCurrentScene().get()->GetPlayer(m_ControllerIndex);
-		pPlayerActor->GetComponent<AnimationComponent>()->SetAnimationState(AnimationState::JumpLeftTop);
-		pPlayerActor->GetComponent<MovementComponent>()->Move(MoveDirection::LeftTop);
+		pPlayerActor->GetComponent<MovementComponent>()->Move(MoveDirection::Up);
 	}
+
+	void Release() const override
+	{
+		auto pPlayerActor = dae::SceneManager::GetInstance().GetCurrentScene().get()->GetPlayer(m_ControllerIndex);
+		pPlayerActor->GetComponent<MovementComponent>()->KeyReleased(MoveDirection::Up);
+	};
 
 	void Undo() override {};
 };
 
-class JumpRightTop final : public Command
+class JumpDown final : public Command
 {
 public:
-	JumpRightTop(int index) :Command(index) {};
+	JumpDown(int index) :Command(index) {};
 
 	void Execute() const override
 	{
 		auto pPlayerActor = dae::SceneManager::GetInstance().GetCurrentScene().get()->GetPlayer(m_ControllerIndex);
-		pPlayerActor->GetComponent<AnimationComponent>()->SetAnimationState(AnimationState::JumpRightTop);
-		pPlayerActor->GetComponent<MovementComponent>()->Move(MoveDirection::RightTop);
+		pPlayerActor->GetComponent<MovementComponent>()->Move(MoveDirection::Down);
 	}
 
+	void Release() const override
+	{
+		auto pPlayerActor = dae::SceneManager::GetInstance().GetCurrentScene().get()->GetPlayer(m_ControllerIndex);
+		pPlayerActor->GetComponent<MovementComponent>()->KeyReleased(MoveDirection::Down);
+	};
 	void Undo() override {};
 };
 
-class JumpRightDown final : public Command
+class JumpLeft final : public Command
 {
 public:
-	JumpRightDown(int index) :Command(index) {};
+	JumpLeft(int index) :Command(index) {};
 
 	void Execute() const override
 	{
 		auto pPlayerActor = dae::SceneManager::GetInstance().GetCurrentScene().get()->GetPlayer(m_ControllerIndex);
-		pPlayerActor->GetComponent<AnimationComponent>()->SetAnimationState(AnimationState::JumpRightDown);
-		pPlayerActor->GetComponent<MovementComponent>()->Move(MoveDirection::RightDown);
+		pPlayerActor->GetComponent<MovementComponent>()->Move(MoveDirection::Left);
 	}
 
+	void Release() const override
+	{
+		auto pPlayerActor = dae::SceneManager::GetInstance().GetCurrentScene().get()->GetPlayer(m_ControllerIndex);
+		pPlayerActor->GetComponent<MovementComponent>()->KeyReleased(MoveDirection::Left);
+	};
 	void Undo() override {};
 };
 
-class JumpLeftDown final : public Command
+class JumpRight final : public Command
 {
 public:
-	JumpLeftDown(int index) :Command(index) {};
+	JumpRight(int index) :Command(index) {};
 
 	void Execute() const override
 	{
 		auto pPlayerActor = dae::SceneManager::GetInstance().GetCurrentScene().get()->GetPlayer(m_ControllerIndex);
-		pPlayerActor->GetComponent<AnimationComponent>()->SetAnimationState(AnimationState::JumpLeftDown);
-		pPlayerActor->GetComponent<MovementComponent>()->Move(MoveDirection::LeftDown);
+		pPlayerActor->GetComponent<MovementComponent>()->Move(MoveDirection::Right);
 	}
 
+	void Release() const override
+	{
+		auto pPlayerActor = dae::SceneManager::GetInstance().GetCurrentScene().get()->GetPlayer(m_ControllerIndex);
+		pPlayerActor->GetComponent<MovementComponent>()->KeyReleased(MoveDirection::Right);
+	};
 	void Undo() override {};
 };

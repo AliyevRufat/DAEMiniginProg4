@@ -13,6 +13,16 @@
 
 namespace dae
 {
+	enum class KeyboardButton
+	{
+		W = SDLK_w,
+		A = SDLK_a,
+		S = SDLK_s,
+		D = SDLK_d,
+		P = SDLK_p,
+		SPACE = SDLK_SPACE
+	};
+
 	enum class ControllerButton
 	{
 		ButtonA = XINPUT_GAMEPAD_A,
@@ -40,14 +50,22 @@ namespace dae
 	//for sticks
 	using ControllerStick = std::pair<std::string, AnalogStickInput>;
 	using ControllerStickCommandMap = std::map<std::string, std::unique_ptr<AnalogStickCommand>>;
+	//for keyboard
+	using KeyboardKey = std::pair<unsigned, KeyboardButton>;
+	using KeyboardCommandsMap = std::map<KeyboardKey, std::unique_ptr<Command>>;
 	//----------------------------------------------------------------------------------------------
-	struct Controller
+	struct Controller //TODO : use this instead of the three seperatly
 	{
 		ControllerButtonCommandsMap m_ConsoleButtonCommands;
 		ControllerTriggerCommandMap m_ConsoleTriggerCommands;
 		ControllerStickCommandMap m_ConsoleStickCommands;
 		XINPUT_STATE m_CurrentState{};
 	};
+	struct Keyboard //TODO : this as well like above
+	{
+		KeyboardCommandsMap m_ConsoleCommands;
+	};
+
 	//----------------------------------------------------------------------------------------------
 	class InputManager final : public Singleton<InputManager>
 	{
@@ -55,6 +73,7 @@ namespace dae
 		InputManager();
 		//Functions
 		void ProcessInput();
+		bool KeyboardInput();
 		bool InputHandler();
 		void ControllerAnalogs();
 		void BindCommands();
@@ -85,6 +104,13 @@ namespace dae
 		{
 			m_StickCommands.insert(std::make_pair(stickName, std::make_unique<T>(controllerIndex)));
 		}
+		//keyboard template
+		template <typename T>
+		void AssignKey(KeyboardButton button, int keyboardParameter = 0)
+		{
+			KeyboardKey key = std::make_pair(unsigned(button), button);
+			m_KeyboardButtonCommands.insert(std::make_pair(key, std::make_unique<T>(keyboardParameter)));
+		}
 		//----------------------------------------------------------------------------------------------
 
 	private:
@@ -106,6 +132,8 @@ namespace dae
 		ControllerStickCommandMap m_StickCommands;
 		static const int amountOfAnalogSticks = 2;
 		ControllerStick m_Sticks[amountOfAnalogSticks] = { std::make_pair("LeftStick" , AnalogStickInput{0.f,0.f}),std::make_pair("RightStick" , AnalogStickInput{0.f,0.f}) };
+		//for keyboard
+		KeyboardCommandsMap m_KeyboardButtonCommands;
 		//controllers
 		//std::vector<std::unique_ptr<Controller>> m_Controllers;
 	};
