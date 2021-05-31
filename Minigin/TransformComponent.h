@@ -9,6 +9,8 @@ public:
 	dae::Transform GetTransform() const;
 	void SetPosition(const glm::vec2& position);
 	void SetScale(const glm::vec2& scale);
+	const SDL_Rect& GetRect();
 private:
 	dae::Transform m_Transform;
+	SDL_Rect m_SDLRect;
 };

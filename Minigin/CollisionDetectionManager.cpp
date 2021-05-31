@@ -1,12 +1,30 @@
 #include "MiniginPCH.h"
 #include "CollisionDetectionManager.h"
+#include "TransformComponent.h"
 
 void CollisionDetectionManager::Update()
 {
+	for (auto& transform : m_pTransform)
+	{
+		if (IsOverlapping(m_pQbertTransform->GetRect(), transform->GetRect()))
+		{
+			std::cout << "Player overlapped Coily" << '\n';
+		}
+	}
 }
 
 void CollisionDetectionManager::AddCollisionObject(std::shared_ptr<GameObject> gameObject)
 {
+	auto transform = gameObject->GetComponent<TransformComponent>();
+
+	if (gameObject->GetName() == "Q*Bert")
+	{
+		m_pQbertTransform = transform;
+	}
+	else
+	{
+		m_pTransform.push_back(transform);
+	}
 }
 
 bool CollisionDetectionManager::IsOverlapping(const SDL_Rect& r1, const SDL_Rect& r2)

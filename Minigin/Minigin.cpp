@@ -18,6 +18,7 @@
 #include "ConsoleAudioService.h"
 #include "PyramidComponent.h"
 #include "MovementComponent.h"
+#include "CollisionDetectionManager.h"
 
 using namespace std;
 using namespace std::chrono;
@@ -227,7 +228,7 @@ void dae::Minigin::LoadGame() const
 	const int playerWidth = 16;
 	const int playerHeight = 16;
 	auto qbert = std::make_shared<GameObject>("Q*Bert");
-	qbert->AddComponent(new TransformComponent(glm::vec2(windowSurface->w / 2 + playerWidth, windowSurface->h / 2 - playerHeight)));
+	qbert->AddComponent(new TransformComponent(glm::vec2(windowSurface->w / 2 + playerWidth, windowSurface->h / 2 - playerHeight), glm::vec2(playerWidth, playerHeight)));
 	qbert->AddComponent(new HealthComponent(3));
 	qbert->AddComponent(new ScoreComponent(0));
 	qbert->AddWatcher(new LivesObserver());
@@ -237,11 +238,12 @@ void dae::Minigin::LoadGame() const
 	qbert->AddComponent(new AnimationComponent(8));
 	scene.Add(qbert);
 	scene.AddPlayer(qbert);
+	CollisionDetectionManager::GetInstance().AddCollisionObject(qbert);
 	//enemy
 	const int enemyWidth = 16;
 	const int enemyHeight = 48;
 	auto coily = std::make_shared<GameObject>("Coily");
-	coily->AddComponent(new TransformComponent(glm::vec2(windowSurface->w / 2 + enemyWidth, windowSurface->h / 2 - enemyHeight)));
+	coily->AddComponent(new TransformComponent(glm::vec2(windowSurface->w / 2 + enemyWidth, windowSurface->h / 2 - enemyHeight), glm::vec2(enemyWidth, enemyHeight)));
 	coily->AddComponent(new HealthComponent(1));
 	coily->AddWatcher(new LivesObserver());
 	coily->AddComponent(new Texture2DComponent("Coily.png", 2));
@@ -249,6 +251,7 @@ void dae::Minigin::LoadGame() const
 	coily->AddComponent(new AnimationComponent(8));
 	scene.Add(coily);
 	scene.AddPlayer(coily);
+	CollisionDetectionManager::GetInstance().AddCollisionObject(coily);
 	//player died text
 	auto playerDied = std::make_shared<GameObject>("Player 1 Died!");
 	playerDied->AddComponent(new TransformComponent(glm::vec2(500, 300)));
@@ -301,6 +304,7 @@ void dae::Minigin::Run()
 
 		sceneManager.Update();
 		renderer.Render();
+		CollisionDetectionManager::GetInstance().Update();
 	}
 
 	soundThread.detach();
