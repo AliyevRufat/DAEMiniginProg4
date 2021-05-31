@@ -13,6 +13,7 @@ Scene::Scene(const std::string& name)
 	, m_SpLevels{}
 	, m_SpObjects{}
 	, m_SpPlayers{}
+	, m_CurrentGameMode{}
 {
 }
 

@@ -2,165 +2,249 @@
 #include "MovementComponent.h"
 #include "TransformComponent.h"
 #include "AnimationComponent.h"
+#include "SceneManager.h"
 #include "PyramidComponent.h"
 #include "SceneManager.h"
 #include "Scene.h"
 #include "Time.h"
+#include "Texture2DComponent.h"
 
-MovementComponent::MovementComponent()
-	:m_Jumped{ false }
-	, m_JumpingUp{ false }
-	, m_CurrentPos{}
-	, m_DesiredPosLeft{}
-	, m_DesiredPosRight{}
-	, m_DesiredPosTop{}
-	, m_DesiredPosBottom{}
-	, m_JumpDirection{}
-	, m_MoveDirection{}
-	, m_JumpSpeed{ 25 }
+MovementComponent::MovementComponent(const std::shared_ptr<GameObject>& pPlayer)
+	: m_Speed{ 100 }
+	, m_IsMoving{ false }
+	, m_CurrentCubeIndex{ 0 }
+	, m_FallingToDeath{ false }
+	, m_Direction{ AnimationComponent::AnimationState::IdleLeftDown }
 	, m_IsKeyPressed{ false }
+	, m_pPlayer{ pPlayer }
+	, m_CurrentCoilyJumpTime{ 0.0f }
+	, m_MaxCoilyJumpTime{ 1.5f }
 {
-	const glm::vec3& cubeOffset = dae::SceneManager::GetInstance().GetCurrentScene()->GetCurrentLevel()->GetComponent<PyramidComponent>()->GetCubeOffset();
+	const glm::vec2& cubeOffset = dae::SceneManager::GetInstance().GetCurrentScene()->GetCurrentLevel()->GetComponent<PyramidComponent>()->GetCubeOffset();
 	m_MoveDistance = cubeOffset;
 }
 
 void MovementComponent::Update()
 {
-	//if (m_Jumped)
-	//{
-	//	const auto& transform = m_pGameObject->GetComponent<TransformComponent>();
-	//	glm::vec3 pos = transform->GetTransform().GetPosition();
-	//
-	//	const float moveDistanceRatio = (m_MoveDistance.y / m_MoveDistance.x);
-	//	float jumpHeight = m_MoveDistance.y / 2.0f;
-	//	const glm::vec2 speed = { m_JumpSpeed,m_JumpSpeed * moveDistanceRatio * (m_MoveDistance.y / jumpHeight) };
-	//
-	//	pos.x += Time::GetInstance().GetDeltaTime() * speed.x * m_JumpDirection.x;
-	//
-	//	if (m_JumpDirection.y >= 0)
-	//		jumpHeight = m_MoveDistance.y / 2.0f;
-	//	else
-	//		jumpHeight = m_MoveDistance.y * 1.5f;
-	//
-	//	if (m_FirstHalfOfTheJump)
-	//	{
-	//		pos.y -= deltaT * speed.y;
-	//
-	//		if (abs(pos.y - m_JumpStartPos.y) > jumpHeight)
-	//			m_FirstHalfOfTheJump = false;
-	//	}
-	//	else
-	//	{
-	//		pos.y += deltaT * speed.y;
-	//	}
-	//
-	//	if (abs(pos.x - m_JumpStartPos.x) > m_MoveDistance.x)
-	//	{
-	//		// Done with jumping
-	//		const auto& renderComp = m_pGameObject->GetComponent<RenderComponent>();
-	//		const auto& playerComp = m_pGameObject->GetComponent<PlayerComponent>();
-	//
-	//		// Direction - 1 = not jumping version of sprite
-	//		renderComp->SetSrcRect(SDL_Rect{ ((int)m_Direction - 1) * (int)playerComp->GetSize().x,0,(int)playerComp->GetSize().x,(int)playerComp->GetSize().y });
-	//		m_Jumped = false;
-	//	}
-	//
-	//	transform->SetPosition(pos.x, pos.y);
-	//}
-	//
-
-	//if (m_IsKeyPressed[(int)m_MoveDirection] && m_IsKeyPressed[(int)m_MoveDirection])
-	//{
-	//}
-	if (m_Jumped)
+	if (m_FallingToDeath)
 	{
-		m_pGameObject->GetComponent<TransformComponent>()->SetPosition(m_CurrentPos);
+		FallToDeath();
+	}
+	else if (m_IsMoving)
+	{
+		Jump();
+	}
 
-		if (m_JumpingUp)
-		{
-			m_CurrentPos.y += (200 * Time::GetInstance().GetDeltaTime()) * m_JumpDirection.y;
+	if (m_pGameObject->GetName() == "Coily")
+	{
+		m_CurrentCoilyJumpTime += Time::GetInstance().GetDeltaTime();
 
-			if (m_CurrentPos.y <= m_DesiredPosTop - 20)
-			{
-				m_JumpingUp = false;
-			}
-		}
-		else
+		if (m_CurrentCoilyJumpTime >= m_MaxCoilyJumpTime)
 		{
-			m_CurrentPos.y -= (200 * Time::GetInstance().GetDeltaTime()) * m_JumpDirection.y;
-		}
-		m_CurrentPos.x += (110 * Time::GetInstance().GetDeltaTime()) * m_JumpDirection.x;
-
-		if (m_CurrentPos.x <= m_DesiredPosLeft)
-		{
-			m_CurrentPos.x = m_DesiredPosLeft;
-		}
-		//stop jump
-		if (m_CurrentPos.x == m_DesiredPosLeft && m_CurrentPos.y >= m_DesiredPosTop && !m_JumpingUp)
-		{
-			m_Jumped = false;
-			//set to idle
-			//int moveDirIdle = (int)m_MoveDirection;
-			//moveDirIdle--;
-			//m_pGameObject->GetComponent<AnimationComponent>()->SetAnimationState(AnimationState(int(moveDirIdle)));
+			FollowPlayer();
+			m_CurrentCoilyJumpTime -= m_CurrentCoilyJumpTime;
 		}
 	}
 }
 
-void MovementComponent::Move(MoveDirection moveDir)
+void MovementComponent::FollowPlayer()
 {
-	m_CurrentPos = m_pGameObject->GetComponent<TransformComponent>()->GetTransform().GetPosition();
+	if (m_IsMoving)
+	{
+		return;
+	}
+	auto playerPos = m_pPlayer->GetComponent<TransformComponent>()->GetTransform().GetPosition();
+	auto pos = m_pGameObject->GetComponent<TransformComponent>()->GetTransform().GetPosition();
+
+	if (playerPos.x < pos.x && playerPos.y < pos.y) // left top
+	{
+		m_Direction = AnimationComponent::AnimationState::JumpLeftTop;
+		m_pGameObject->GetComponent<AnimationComponent>()->SetAnimationState(AnimationComponent::AnimationState::JumpLeftTop);
+		ActivateJump();
+	}
+	else if (playerPos.x < pos.x && playerPos.y > pos.y) // left bottom
+	{
+		m_Direction = AnimationComponent::AnimationState::JumpLeftDown;
+		m_pGameObject->GetComponent<AnimationComponent>()->SetAnimationState(AnimationComponent::AnimationState::JumpLeftDown);
+		ActivateJump();
+	}
+	else if (playerPos.x > pos.x && playerPos.y < pos.y) // right top
+	{
+		m_Direction = AnimationComponent::AnimationState::JumpRightTop;
+		m_pGameObject->GetComponent<AnimationComponent>()->SetAnimationState(AnimationComponent::AnimationState::JumpRightTop);
+		ActivateJump();
+	}
+	else if (playerPos.x > pos.x && playerPos.y > pos.y) // right down
+	{
+		m_Direction = AnimationComponent::AnimationState::JumpRightDown;
+		m_pGameObject->GetComponent<AnimationComponent>()->SetAnimationState(AnimationComponent::AnimationState::JumpRightDown);
+		ActivateJump();
+	}
+}
+
+void MovementComponent::ActivateJump()
+{
+	const auto& transform = m_pGameObject->GetComponent<TransformComponent>();
+
+	m_JumpStartPos = transform->GetTransform().GetPosition();
+	m_IsMoving = true;
+	m_FirstHalfOfTheJump = true;
+
+	const auto& CurrentMap = dae::SceneManager::GetInstance().GetCurrentScene()->GetCurrentLevel()->GetComponent<PyramidComponent>();
+
+	if (!CurrentMap->GetNextCubeIndex(m_CurrentCubeIndex, m_Direction))
+	{
+		// Player jumped off the map
+		m_FallingToDeath = true;
+	}
+}
+
+void MovementComponent::Jump()
+{
+	float deltaTime = Time::GetInstance().GetDeltaTime();
+	//
+	const auto& transform = m_pGameObject->GetComponent<TransformComponent>();
+	glm::vec2 pos = transform->GetTransform().GetPosition();
+
+	const float moveDistanceRatio = (m_MoveDistance.y / m_MoveDistance.x);
+	float jumpHeight = m_MoveDistance.y / 2.0f;
+	const glm::vec2 speed = { m_Speed,m_Speed * moveDistanceRatio * (m_MoveDistance.y / jumpHeight) };
+
+	if (m_Direction == AnimationComponent::AnimationState::JumpRightDown || m_Direction == AnimationComponent::AnimationState::JumpRightTop)
+		pos.x += deltaTime * speed.x;
+	else
+		pos.x -= deltaTime * speed.x;
+
+	if ((int)m_Direction >= (int)AnimationComponent::AnimationState::IdleRightDown)
+		jumpHeight = m_MoveDistance.y / 2.0f;
+	else
+		jumpHeight = m_MoveDistance.y * 1.5f;
+
+	if (m_FirstHalfOfTheJump)
+	{
+		pos.y -= deltaTime * speed.y;
+
+		if (abs(pos.y - m_JumpStartPos.y) > jumpHeight)
+			m_FirstHalfOfTheJump = false;
+	}
+	else
+	{
+		pos.y += deltaTime * speed.y;
+	}
+
+	if (abs(pos.x - m_JumpStartPos.x) > m_MoveDistance.x)
+	{
+		// Done with jumping
+
+		// Direction - 1 = not jumping version of sprite
+		int NonJumpingSprite = (int)m_Direction - 1;
+		m_pGameObject->GetComponent<AnimationComponent>()->SetAnimationState(AnimationComponent::AnimationState(NonJumpingSprite));
+		const auto& CurrentMap = dae::SceneManager::GetInstance().GetCurrentScene()->GetCurrentLevel()->GetComponent<PyramidComponent>();
+
+		auto cube = CurrentMap->GetCube(m_CurrentCubeIndex);
+		cube->Color();
+		//offset fix
+		auto cubePos = cube->GetGameObject()->GetComponent<TransformComponent>()->GetTransform().GetPosition();
+		auto srcRect = m_pGameObject->GetComponent<Texture2DComponent>()->GetSrcRect();
+
+		if (m_pGameObject->GetName() == "Coily")
+		{
+			const int offset = 16;
+			srcRect.h += offset;
+		}
+		m_pGameObject->GetComponent<TransformComponent>()->SetPosition(glm::vec2(cubePos.x + srcRect.w, cubePos.y - srcRect.h));
+
+		m_IsMoving = false;
+	}
+	else
+	{
+		transform->SetPosition(pos);
+	}
+}
+
+void MovementComponent::FallToDeath()
+{
+	float deltaTime = Time::GetInstance().GetDeltaTime();
 	//
 
-	m_DesiredPosLeft = m_CurrentPos.x;
-	m_DesiredPosRight = m_CurrentPos.x;
-	m_DesiredPosTop = m_CurrentPos.y;
-	m_DesiredPosBottom = m_CurrentPos.y;
+	const auto& transform = m_pGameObject->GetComponent<TransformComponent>();
+	glm::vec2 pos = transform->GetTransform().GetPosition();
 
-	m_DesiredPosLeft -= 80;
-	m_DesiredPosRight += 80;
-	m_DesiredPosTop -= 120;
-	m_DesiredPosBottom += 120;
-	//
-	//
+	const float moveDistanceRatio = (m_MoveDistance.y / m_MoveDistance.x);
+	float jumpHeight = m_MoveDistance.y / 2.0f;
+	const glm::vec2 speed = { m_Speed,m_Speed * moveDistanceRatio * (m_MoveDistance.y / jumpHeight) };
+
+	if (m_Direction == AnimationComponent::AnimationState::JumpRightDown || m_Direction == AnimationComponent::AnimationState::JumpRightTop)
+		pos.x += deltaTime * speed.x;
+	else
+		pos.x -= deltaTime * speed.x;
+
+	if ((int)m_Direction >= (int)AnimationComponent::AnimationState::IdleRightDown)
+		jumpHeight = m_MoveDistance.y / 2.0f;
+	else
+		jumpHeight = m_MoveDistance.y * 1.5f;
+
+	if (m_FirstHalfOfTheJump)
+	{
+		pos.y -= deltaTime * speed.y;
+
+		if (abs(pos.y - m_JumpStartPos.y) > jumpHeight)
+			m_FirstHalfOfTheJump = false;
+	}
+	else
+	{
+		pos.y += deltaTime * speed.y;
+	}
+
+	if (pos.y > 1540) //width is 1540
+	{
+		int NonJumpingSprite = (int)m_Direction - 1;
+		m_pGameObject->GetComponent<AnimationComponent>()->SetAnimationState(AnimationComponent::AnimationState(NonJumpingSprite));
+		m_IsMoving = false;
+		m_FallingToDeath = false;
+	}
+	else
+	{
+		transform->SetPosition(pos);
+	}
+}
+
+void MovementComponent::Move(InputDirection moveDir)
+{
+	if (m_IsMoving)
+	{
+		return;
+	}
 	m_MoveDirection = moveDir;
 	m_IsKeyPressed[(int)moveDir] = true;
 
-	if (m_IsKeyPressed[(int)MoveDirection::Up] && m_IsKeyPressed[(int)MoveDirection::Left])
+	if (m_IsKeyPressed[(int)InputDirection::Up] && m_IsKeyPressed[(int)InputDirection::Left])
 	{
-		m_JumpDirection.x = -1;
-		m_JumpDirection.y = -1;
-		m_pGameObject->GetComponent<AnimationComponent>()->SetAnimationState(AnimationState::JumpLeftTop);
-		m_Jumped = true;
-		m_JumpingUp = true;
+		m_Direction = AnimationComponent::AnimationState::JumpLeftTop;
+		m_pGameObject->GetComponent<AnimationComponent>()->SetAnimationState(AnimationComponent::AnimationState::JumpLeftTop);
+		ActivateJump();
 	}
-	else if (m_IsKeyPressed[(int)MoveDirection::Up] && m_IsKeyPressed[(int)MoveDirection::Right])
+	else if (m_IsKeyPressed[(int)InputDirection::Up] && m_IsKeyPressed[(int)InputDirection::Right])
 	{
-		m_JumpDirection.x = 1;
-		m_JumpDirection.y = -1;
-		m_pGameObject->GetComponent<AnimationComponent>()->SetAnimationState(AnimationState::JumpRightTop);
-		m_Jumped = true;
-		m_JumpingUp = true;
+		m_Direction = AnimationComponent::AnimationState::JumpRightTop;
+		m_pGameObject->GetComponent<AnimationComponent>()->SetAnimationState(AnimationComponent::AnimationState::JumpRightTop);
+		ActivateJump();
 	}
-	else if (m_IsKeyPressed[(int)MoveDirection::Down] && m_IsKeyPressed[(int)MoveDirection::Right])
+	else if (m_IsKeyPressed[(int)InputDirection::Down] && m_IsKeyPressed[(int)InputDirection::Right])
 	{
-		m_JumpDirection.x = 1;
-		m_JumpDirection.y = 1;
-		m_pGameObject->GetComponent<AnimationComponent>()->SetAnimationState(AnimationState::JumpRightDown);
-		m_Jumped = true;
-		m_JumpingUp = true;
+		m_Direction = AnimationComponent::AnimationState::JumpRightDown;
+		m_pGameObject->GetComponent<AnimationComponent>()->SetAnimationState(AnimationComponent::AnimationState::JumpRightDown);
+		ActivateJump();
 	}
-	else if (m_IsKeyPressed[(int)MoveDirection::Down] && m_IsKeyPressed[(int)MoveDirection::Left])
+	else if (m_IsKeyPressed[(int)InputDirection::Down] && m_IsKeyPressed[(int)InputDirection::Left])
 	{
-		m_JumpDirection.x = -1;
-		m_JumpDirection.y = 1;
-		m_pGameObject->GetComponent<AnimationComponent>()->SetAnimationState(AnimationState::JumpLeftDown);
-		m_Jumped = true;
-		m_JumpingUp = true;
+		m_Direction = AnimationComponent::AnimationState::JumpLeftDown;
+		m_pGameObject->GetComponent<AnimationComponent>()->SetAnimationState(AnimationComponent::AnimationState::JumpLeftDown);
+		ActivateJump();
 	}
 }
 
-void MovementComponent::KeyReleased(MoveDirection moveDir)
+void MovementComponent::KeyReleased(InputDirection moveDir)
 {
 	m_IsKeyPressed[(int)moveDir] = false;
 }

@@ -210,9 +210,10 @@ xcopy "$(SolutionDir)3rdParty\SDL2_Mixer\lib\x64\*.dll" "$(OutputPath)" /R /Y</C
     <ClInclude Include="AnimationComponent.h" />
     <ClInclude Include="AudioService.h" />
     <ClInclude Include="BaseComponent.h" />
+    <ClInclude Include="CollisionDetectionManager.h" />
     <ClInclude Include="Commands.h" />
     <ClInclude Include="ConsoleAudioService.h" />
-    <ClInclude Include="CubeComponent.h" />
+    <ClInclude Include="CubeObject.h" />
     <ClInclude Include="Font.h" />
     <ClInclude Include="FPSTextComponent.h" />
     <ClInclude Include="GameObject.h" />
@@ -248,8 +249,9 @@ xcopy "$(SolutionDir)3rdParty\SDL2_Mixer\lib\x64\*.dll" "$(OutputPath)" /R /Y</C
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AnimationComponent.cpp" />
+    <ClCompile Include="CollisionDetectionManager.cpp" />
     <ClCompile Include="ConsoleAudioService.cpp" />
-    <ClCompile Include="CubeComponent.cpp" />
+    <ClCompile Include="CubeObject.cpp" />
     <ClCompile Include="Font.cpp" />
     <ClCompile Include="FPSTextComponent.cpp" />
     <ClCompile Include="GameObject.cpp" />

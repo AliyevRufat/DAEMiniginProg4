@@ -22,7 +22,7 @@ TextComponent::TextComponent(const std::string& text, const std::shared_ptr<dae:
 	m_SpTexture = std::make_shared<dae::Texture2D>(texture);
 }
 
-void TextComponent::SetPosition(const glm::vec3& pos)
+void TextComponent::SetPosition(const glm::vec2& pos)
 {
 	m_Position = pos;
 }

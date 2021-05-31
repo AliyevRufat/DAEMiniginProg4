@@ -9,6 +9,14 @@ namespace dae
 	{
 		friend Scene& SceneManager::CreateScene(const std::string& name);
 	public:
+
+		enum class GameMode
+		{
+			SinglePlayer,
+			Coop,
+			Versus
+		};
+
 		void Add(const std::shared_ptr<SceneObject>& spObject);
 
 		~Scene() = default;
@@ -31,7 +39,7 @@ namespace dae
 		std::shared_ptr<GameObject> GetLevel(int index) const;
 		//
 		float  GetSceneScale() const;
-
+		GameMode GetCurrentGameMode() const { return m_CurrentGameMode; };
 	private:
 		explicit Scene(const std::string& name);
 
@@ -42,6 +50,7 @@ namespace dae
 		std::shared_ptr<GameObject> m_SpCurrentLevel;
 
 		static unsigned int m_IdCounter;
-		float m_SceneScale = 1.0f;
+		const float m_SceneScale = 2.0f;
+		GameMode m_CurrentGameMode;
 	};
 }

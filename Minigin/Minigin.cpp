@@ -67,6 +67,7 @@ void dae::Minigin::Initialize()
  */
 void dae::Minigin::LoadGame() const
 {
+	SDL_Surface* windowSurface = SDL_GetWindowSurface(m_Window);
 	auto& scene = SceneManager::GetInstance().CreateScene("Qbert");
 	auto font = ResourceManager::GetInstance().LoadFont("Lingua.otf", 36);
 	{
@@ -203,14 +204,14 @@ void dae::Minigin::LoadGame() const
 	//scene.Add(playerOne);
 	//score
 	auto scoreDisplay = std::make_shared<GameObject>("ScoreDisplay");
-	scoreDisplay->AddComponent(new TransformComponent(glm::vec3(150, 50, 0)));
+	scoreDisplay->AddComponent(new TransformComponent(glm::vec2(150, 50)));
 	font = ResourceManager::GetInstance().LoadFont("Lingua.otf", 20);
 	auto scoreCounter = new TextComponent("Score: 0", font, SDL_Color{ 255,255,0 });
 	scoreDisplay->AddComponent(scoreCounter);
 	scene.Add(scoreDisplay);
 	//lives
 	auto livesDisplay = std::make_shared<GameObject>("LivesDisplay");
-	livesDisplay->AddComponent(new TransformComponent(glm::vec3(250, 50, 0)));
+	livesDisplay->AddComponent(new TransformComponent(glm::vec2(250, 50)));
 	font = ResourceManager::GetInstance().LoadFont("Lingua.otf", 20);
 	auto livesCounter = new TextComponent("Remaining lives: 3", font, SDL_Color{ 255,0,0 });
 	livesDisplay->AddComponent(livesCounter);
@@ -218,25 +219,39 @@ void dae::Minigin::LoadGame() const
 	////------------------------------------------------------------------------------------------------GAME
 	//level
 	auto level = std::make_shared<GameObject>("Pyramid");
-	level->AddComponent(new PyramidComponent(scene, glm::vec3(670, 200, 0)));
+	level->AddComponent(new PyramidComponent(glm::vec2(windowSurface->w / 2.0f, windowSurface->h / 2.0f - 10)));
 	scene.Add(level);
 	scene.AddLevel(level);
 	scene.SetCurrentLevel(level);
 	//q*bert
+	const int playerWidth = 16;
+	const int playerHeight = 16;
 	auto qbert = std::make_shared<GameObject>("Q*Bert");
-	qbert->AddComponent(new TransformComponent(glm::vec3(230, 900, 0)));
+	qbert->AddComponent(new TransformComponent(glm::vec2(windowSurface->w / 2 + playerWidth, windowSurface->h / 2 - playerHeight)));
 	qbert->AddComponent(new HealthComponent(3));
 	qbert->AddComponent(new ScoreComponent(0));
 	qbert->AddWatcher(new LivesObserver());
 	qbert->AddWatcher(new ScoreObserver());
-	qbert->AddComponent(new Texture2DComponent("QBERT.png", 5));
+	qbert->AddComponent(new Texture2DComponent("QBERT.png", 2));
 	qbert->AddComponent(new MovementComponent());
 	qbert->AddComponent(new AnimationComponent(8));
 	scene.Add(qbert);
 	scene.AddPlayer(qbert);
+	//enemy
+	const int enemyWidth = 16;
+	const int enemyHeight = 48;
+	auto coily = std::make_shared<GameObject>("Coily");
+	coily->AddComponent(new TransformComponent(glm::vec2(windowSurface->w / 2 + enemyWidth, windowSurface->h / 2 - enemyHeight)));
+	coily->AddComponent(new HealthComponent(1));
+	coily->AddWatcher(new LivesObserver());
+	coily->AddComponent(new Texture2DComponent("Coily.png", 2));
+	coily->AddComponent(new MovementComponent(qbert));
+	coily->AddComponent(new AnimationComponent(8));
+	scene.Add(coily);
+	scene.AddPlayer(coily);
 	//player died text
 	auto playerDied = std::make_shared<GameObject>("Player 1 Died!");
-	playerDied->AddComponent(new TransformComponent(glm::vec3(500, 300, 0)));
+	playerDied->AddComponent(new TransformComponent(glm::vec2(500, 300)));
 	playerDied->AddComponent(new TextComponent("Player 1 Died!", font, SDL_Color{ 255, 0, 0 }, false));
 	scene.Add(playerDied);
 }

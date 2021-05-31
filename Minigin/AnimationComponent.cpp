@@ -16,7 +16,17 @@ SDL_Rect AnimationComponent::Animate()
 		m_spTexture2D = m_pGameObject->GetComponent<Texture2DComponent>()->GetTexture2D();
 	}
 
-	if ((int)m_AnimState <= m_NrOfColumns)
+	int animIndex = 0;
+	if (m_pGameObject->GetName() == "Cube")
+	{
+		animIndex = (int)m_CubeColorState;
+	}
+	else
+	{
+		animIndex = (int)m_AnimState;
+	}
+
+	if (animIndex <= m_NrOfColumns)
 	{
 		int textureWidth, textureHeight;
 		SDL_QueryTexture(m_spTexture2D.get()->GetSDLTexture(), nullptr, nullptr, &textureWidth, &textureHeight);
@@ -24,13 +34,19 @@ SDL_Rect AnimationComponent::Animate()
 		srcRect.h = textureHeight;
 		srcRect.w = textureWidth / m_NrOfColumns;
 		srcRect.y = 0;
-		srcRect.x = srcRect.w * (int)m_AnimState;
+		srcRect.x = srcRect.w * animIndex;
 		return srcRect;
 	}
+
 	return SDL_Rect();
 }
 
 void AnimationComponent::SetAnimationState(AnimationState animState)
 {
 	m_AnimState = animState;
+}
+
+void AnimationComponent::SetAnimationState(CubeColorState cubeAnimState)
+{
+	m_CubeColorState = cubeAnimState;
 }

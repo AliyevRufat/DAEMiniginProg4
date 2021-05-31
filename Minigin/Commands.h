@@ -187,13 +187,13 @@ public:
 	void Execute() const override
 	{
 		auto pPlayerActor = dae::SceneManager::GetInstance().GetCurrentScene().get()->GetPlayer(m_ControllerIndex);
-		pPlayerActor->GetComponent<MovementComponent>()->Move(MoveDirection::Up);
+		pPlayerActor->GetComponent<MovementComponent>()->Move(InputDirection::Up); // TODO : change the name move to detect or something , it doesn't move when this function is called for one input
 	}
 
 	void Release() const override
 	{
 		auto pPlayerActor = dae::SceneManager::GetInstance().GetCurrentScene().get()->GetPlayer(m_ControllerIndex);
-		pPlayerActor->GetComponent<MovementComponent>()->KeyReleased(MoveDirection::Up);
+		pPlayerActor->GetComponent<MovementComponent>()->KeyReleased(InputDirection::Up);
 	};
 
 	void Undo() override {};
@@ -207,13 +207,13 @@ public:
 	void Execute() const override
 	{
 		auto pPlayerActor = dae::SceneManager::GetInstance().GetCurrentScene().get()->GetPlayer(m_ControllerIndex);
-		pPlayerActor->GetComponent<MovementComponent>()->Move(MoveDirection::Down);
+		pPlayerActor->GetComponent<MovementComponent>()->Move(InputDirection::Down);
 	}
 
 	void Release() const override
 	{
 		auto pPlayerActor = dae::SceneManager::GetInstance().GetCurrentScene().get()->GetPlayer(m_ControllerIndex);
-		pPlayerActor->GetComponent<MovementComponent>()->KeyReleased(MoveDirection::Down);
+		pPlayerActor->GetComponent<MovementComponent>()->KeyReleased(InputDirection::Down);
 	};
 	void Undo() override {};
 };
@@ -226,13 +226,13 @@ public:
 	void Execute() const override
 	{
 		auto pPlayerActor = dae::SceneManager::GetInstance().GetCurrentScene().get()->GetPlayer(m_ControllerIndex);
-		pPlayerActor->GetComponent<MovementComponent>()->Move(MoveDirection::Left);
+		pPlayerActor->GetComponent<MovementComponent>()->Move(InputDirection::Left);
 	}
 
 	void Release() const override
 	{
 		auto pPlayerActor = dae::SceneManager::GetInstance().GetCurrentScene().get()->GetPlayer(m_ControllerIndex);
-		pPlayerActor->GetComponent<MovementComponent>()->KeyReleased(MoveDirection::Left);
+		pPlayerActor->GetComponent<MovementComponent>()->KeyReleased(InputDirection::Left);
 	};
 	void Undo() override {};
 };
@@ -245,13 +245,13 @@ public:
 	void Execute() const override
 	{
 		auto pPlayerActor = dae::SceneManager::GetInstance().GetCurrentScene().get()->GetPlayer(m_ControllerIndex);
-		pPlayerActor->GetComponent<MovementComponent>()->Move(MoveDirection::Right);
+		pPlayerActor->GetComponent<MovementComponent>()->Move(InputDirection::Right);
 	}
 
 	void Release() const override
 	{
 		auto pPlayerActor = dae::SceneManager::GetInstance().GetCurrentScene().get()->GetPlayer(m_ControllerIndex);
-		pPlayerActor->GetComponent<MovementComponent>()->KeyReleased(MoveDirection::Right);
+		pPlayerActor->GetComponent<MovementComponent>()->KeyReleased(InputDirection::Right);
 	};
 	void Undo() override {};
 };
