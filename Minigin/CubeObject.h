@@ -5,7 +5,6 @@ class CubeObject
 {
 public:
 	CubeObject();
-	void Color();
 
 	~CubeObject() = default;
 
@@ -18,6 +17,9 @@ public:
 	void Render();
 
 	std::shared_ptr<GameObject> GetGameObject() const { return m_pGameObject; };
+
+	void Color();
+	void ColorBack();
 private:
 
 	std::shared_ptr<GameObject> m_pGameObject;

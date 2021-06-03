@@ -8,7 +8,7 @@ void CollisionDetectionManager::Update()
 	{
 		if (IsOverlapping(m_pQbertTransform->GetRect(), transform->GetRect()))
 		{
-			std::cout << "Player overlapped Coily" << '\n';
+			//player death
 		}
 	}
 }

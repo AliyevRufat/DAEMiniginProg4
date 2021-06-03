@@ -21,6 +21,15 @@ void CubeObject::Color()
 	}
 }
 
+void CubeObject::ColorBack()
+{
+	if (m_Colored)
+	{
+		m_Colored = false;
+		m_pGameObject->GetComponent<AnimationComponent>()->SetAnimationState(AnimationComponent::CubeColorState::Red);
+	}
+}
+
 void CubeObject::Update()
 {
 	m_pGameObject->Update();

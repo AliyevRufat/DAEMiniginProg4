@@ -36,58 +36,7 @@
     <ClInclude Include="MiniginPCH.h">
       <Filter>MiniginEngine\Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Singleton.h">
-      <Filter>MiniginEngine\Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="ResourceManager.h">
-      <Filter>MiniginEngine\Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Renderer.h">
-      <Filter>MiniginEngine\Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Texture2D.h">
-      <Filter>MiniginEngine\Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="GameObject.h">
-      <Filter>MiniginEngine\Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Transform.h">
-      <Filter>MiniginEngine\Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Scene.h">
-      <Filter>MiniginEngine\Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="SceneManager.h">
-      <Filter>MiniginEngine\Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="SceneObject.h">
-      <Filter>MiniginEngine\Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Font.h">
-      <Filter>MiniginEngine\Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Time.h">
-      <Filter>MiniginEngine\Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Observer.h">
-      <Filter>MiniginEngine\Observers</Filter>
-    </ClInclude>
-    <ClInclude Include="Subject.h">
-      <Filter>MiniginEngine\Observers</Filter>
-    </ClInclude>
-    <ClInclude Include="AnalogStickCommand.h">
-      <Filter>MiniginEngine\Input</Filter>
-    </ClInclude>
-    <ClInclude Include="AnalogTriggerCommand.h">
-      <Filter>MiniginEngine\Input</Filter>
-    </ClInclude>
     <ClInclude Include="Commands.h">
-      <Filter>MiniginEngine\Input</Filter>
-    </ClInclude>
-    <ClInclude Include="InputManager.h">
-      <Filter>MiniginEngine\Input</Filter>
-    </ClInclude>
-    <ClInclude Include="Structs.h">
       <Filter>MiniginEngine\Input</Filter>
     </ClInclude>
     <ClInclude Include="LivesObserver.h">
@@ -96,47 +45,14 @@
     <ClInclude Include="ScoreObserver.h">
       <Filter>MiniginEngine\Observers</Filter>
     </ClInclude>
-    <ClInclude Include="BaseComponent.h">
-      <Filter>MiniginEngine\Components</Filter>
-    </ClInclude>
-    <ClInclude Include="FPSTextComponent.h">
-      <Filter>MiniginEngine\Components</Filter>
-    </ClInclude>
     <ClInclude Include="HealthComponent.h">
       <Filter>MiniginEngine\Components</Filter>
     </ClInclude>
     <ClInclude Include="ScoreComponent.h">
       <Filter>MiniginEngine\Components</Filter>
     </ClInclude>
-    <ClInclude Include="TextComponent.h">
-      <Filter>MiniginEngine\Components</Filter>
-    </ClInclude>
-    <ClInclude Include="Texture2DComponent.h">
-      <Filter>MiniginEngine\Components</Filter>
-    </ClInclude>
-    <ClInclude Include="TransformComponent.h">
-      <Filter>MiniginEngine\Components</Filter>
-    </ClInclude>
     <ClInclude Include="ComponentIncludes.h">
       <Filter>MiniginEngine\Components</Filter>
-    </ClInclude>
-    <ClInclude Include="AudioService.h">
-      <Filter>MiniginEngine\Audio</Filter>
-    </ClInclude>
-    <ClInclude Include="ConsoleAudioService.h">
-      <Filter>MiniginEngine\Audio</Filter>
-    </ClInclude>
-    <ClInclude Include="Locator.h">
-      <Filter>MiniginEngine\Audio</Filter>
-    </ClInclude>
-    <ClInclude Include="NullAudio.h">
-      <Filter>MiniginEngine\Audio</Filter>
-    </ClInclude>
-    <ClInclude Include="SoundEffect.h">
-      <Filter>MiniginEngine\Audio</Filter>
-    </ClInclude>
-    <ClInclude Include="SoundStream.h">
-      <Filter>MiniginEngine\Audio</Filter>
     </ClInclude>
     <ClInclude Include="Minigin.h">
       <Filter>QBERTGame</Filter>
@@ -147,55 +63,28 @@
     <ClInclude Include="PyramidComponent.h">
       <Filter>MiniginEngine\Components</Filter>
     </ClInclude>
-    <ClInclude Include="MovementComponent.h">
-      <Filter>MiniginEngine\Components</Filter>
-    </ClInclude>
     <ClInclude Include="CubeObject.h">
       <Filter>QBERTGame</Filter>
     </ClInclude>
     <ClInclude Include="CollisionDetectionManager.h">
       <Filter>QBERTGame</Filter>
     </ClInclude>
+    <ClInclude Include="EnemyMovementComponent.h">
+      <Filter>MiniginEngine\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayerMovementComponent.h">
+      <Filter>MiniginEngine\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="BaseMovementComponent.h">
+      <Filter>MiniginEngine\Components</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="MiniginPCH.cpp">
       <Filter>MiniginEngine\Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="ResourceManager.cpp">
-      <Filter>MiniginEngine\Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Renderer.cpp">
-      <Filter>MiniginEngine\Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Texture2D.cpp">
-      <Filter>MiniginEngine\Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="GameObject.cpp">
-      <Filter>MiniginEngine\Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Transform.cpp">
-      <Filter>MiniginEngine\Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Scene.cpp">
-      <Filter>MiniginEngine\Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="SceneManager.cpp">
-      <Filter>MiniginEngine\Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Font.cpp">
-      <Filter>MiniginEngine\Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Main.cpp">
       <Filter>MiniginEngine\Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Time.cpp">
-      <Filter>MiniginEngine\Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Subject.cpp">
-      <Filter>MiniginEngine\Observers</Filter>
-    </ClCompile>
-    <ClCompile Include="InputManager.cpp">
-      <Filter>MiniginEngine\Input</Filter>
     </ClCompile>
     <ClCompile Include="LivesObserver.cpp">
       <Filter>MiniginEngine\Observers</Filter>
@@ -203,35 +92,11 @@
     <ClCompile Include="ScoreObserver.cpp">
       <Filter>MiniginEngine\Observers</Filter>
     </ClCompile>
-    <ClCompile Include="FPSTextComponent.cpp">
-      <Filter>MiniginEngine\Components</Filter>
-    </ClCompile>
     <ClCompile Include="HealthComponent.cpp">
       <Filter>MiniginEngine\Components</Filter>
     </ClCompile>
     <ClCompile Include="ScoreComponent.cpp">
       <Filter>MiniginEngine\Components</Filter>
-    </ClCompile>
-    <ClCompile Include="TextComponent.cpp">
-      <Filter>MiniginEngine\Components</Filter>
-    </ClCompile>
-    <ClCompile Include="Texture2DComponent.cpp">
-      <Filter>MiniginEngine\Components</Filter>
-    </ClCompile>
-    <ClCompile Include="TransformComponent.cpp">
-      <Filter>MiniginEngine\Components</Filter>
-    </ClCompile>
-    <ClCompile Include="ConsoleAudioService.cpp">
-      <Filter>MiniginEngine\Audio</Filter>
-    </ClCompile>
-    <ClCompile Include="Locator.cpp">
-      <Filter>MiniginEngine\Audio</Filter>
-    </ClCompile>
-    <ClCompile Include="SoundEffect.cpp">
-      <Filter>MiniginEngine\Audio</Filter>
-    </ClCompile>
-    <ClCompile Include="SoundStream.cpp">
-      <Filter>MiniginEngine\Audio</Filter>
     </ClCompile>
     <ClCompile Include="Minigin.cpp">
       <Filter>QBERTGame</Filter>
@@ -242,14 +107,20 @@
     <ClCompile Include="PyramidComponent.cpp">
       <Filter>MiniginEngine\Components</Filter>
     </ClCompile>
-    <ClCompile Include="MovementComponent.cpp">
-      <Filter>MiniginEngine\Components</Filter>
-    </ClCompile>
     <ClCompile Include="CubeObject.cpp">
       <Filter>QBERTGame</Filter>
     </ClCompile>
     <ClCompile Include="CollisionDetectionManager.cpp">
       <Filter>QBERTGame</Filter>
+    </ClCompile>
+    <ClCompile Include="EnemyMovementComponent.cpp">
+      <Filter>MiniginEngine\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayerMovementComponent.cpp">
+      <Filter>MiniginEngine\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="BaseMovementComponent.cpp">
+      <Filter>MiniginEngine\Components</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

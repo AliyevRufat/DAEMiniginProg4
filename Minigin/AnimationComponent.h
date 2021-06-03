@@ -30,7 +30,8 @@ public:
 	};
 
 	AnimationComponent(int nrOfColumns);
-	SDL_Rect Animate();
+	void Animate();
+	void Render() override;
 	void SetAnimationState(AnimationState animState);
 	void SetAnimationState(CubeColorState cubeAnimState);
 private:

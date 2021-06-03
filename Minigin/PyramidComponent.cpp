@@ -64,7 +64,7 @@ void PyramidComponent::CreateCube(const size_t& index, const glm::vec2& pos)
 {
 	auto cube = std::make_shared<CubeObject>();
 	cube->GetGameObject()->AddComponent(new TransformComponent(pos, glm::vec2(m_CubeScale, m_CubeScale)));
-	cube->GetGameObject()->AddComponent(new Texture2DComponent("Cubes.png", m_CubeScale));
+	cube->GetGameObject()->AddComponent(new Texture2DComponent("Cubes.png", m_CubeScale, true));
 	cube->GetGameObject()->AddComponent(new AnimationComponent(3));
 	m_Cubes[index] = cube;
 }

@@ -126,7 +126,7 @@ xcopy "$(SolutionDir)3rdParty\SDL2_Mixer\lib\x86\*.dll" "$(OutputPath)" /R /Y</C
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)3rdParty\SDL2_ttf\include;$(SolutionDir)3rdParty\SDL2_image\include;$(SolutionDir)3rdParty\glm;$(SolutionDir)3rdParty\SDL2\include;$(SolutionDir)3rdParty\SDL2_mixer\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)3rdParty\SDL2_ttf\include;$(SolutionDir)3rdParty\SDL2_image\include;$(SolutionDir)3rdParty\glm;$(SolutionDir)3rdParty\SDL2\include;$(SolutionDir)3rdParty\SDL2_mixer\include;$(SolutionDir)AliEngine;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PrecompiledHeaderFile>MiniginPCH.h</PrecompiledHeaderFile>
       <TreatWarningAsError>true</TreatWarningAsError>
       <LanguageStandard>stdcpp17</LanguageStandard>
@@ -184,7 +184,7 @@ xcopy "$(SolutionDir)3rdParty\SDL2_Mixer\lib\x86\*.dll" "$(OutputPath)" /R /Y</C
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)3rdParty\SDL2_ttf\include;$(SolutionDir)3rdParty\SDL2_image\include;$(SolutionDir)3rdParty\glm;$(SolutionDir)3rdParty\SDL2\include;$(SolutionDir)3rdParty\SDL2_mixer\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)3rdParty\SDL2_ttf\include;$(SolutionDir)3rdParty\SDL2_image\include;$(SolutionDir)3rdParty\glm;$(SolutionDir)3rdParty\SDL2\include;$(SolutionDir)3rdParty\SDL2_mixer\include;$(SolutionDir)AliEngine;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PrecompiledHeaderFile>MiniginPCH.h</PrecompiledHeaderFile>
       <TreatWarningAsError>true</TreatWarningAsError>
       <LanguageStandard>stdcpp17</LanguageStandard>
@@ -205,60 +205,29 @@ xcopy "$(SolutionDir)3rdParty\SDL2_Mixer\lib\x64\*.dll" "$(OutputPath)" /R /Y</C
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="AnalogStickCommand.h" />
-    <ClInclude Include="AnalogTriggerCommand.h" />
     <ClInclude Include="AnimationComponent.h" />
-    <ClInclude Include="AudioService.h" />
-    <ClInclude Include="BaseComponent.h" />
     <ClInclude Include="CollisionDetectionManager.h" />
     <ClInclude Include="Commands.h" />
-    <ClInclude Include="ConsoleAudioService.h" />
     <ClInclude Include="CubeObject.h" />
-    <ClInclude Include="Font.h" />
-    <ClInclude Include="FPSTextComponent.h" />
-    <ClInclude Include="GameObject.h" />
+    <ClInclude Include="EnemyMovementComponent.h" />
     <ClInclude Include="HealthComponent.h" />
     <ClInclude Include="ComponentIncludes.h" />
-    <ClInclude Include="InputManager.h" />
     <ClInclude Include="LivesObserver.h" />
-    <ClInclude Include="Locator.h" />
     <ClInclude Include="Minigin.h" />
     <ClInclude Include="MiniginPCH.h" />
-    <ClInclude Include="MovementComponent.h" />
-    <ClInclude Include="NullAudio.h" />
-    <ClInclude Include="Observer.h" />
+    <ClInclude Include="BaseMovementComponent.h" />
+    <ClInclude Include="PlayerMovementComponent.h" />
     <ClInclude Include="PyramidComponent.h" />
-    <ClInclude Include="SceneObject.h" />
-    <ClInclude Include="Renderer.h" />
-    <ClInclude Include="ResourceManager.h" />
-    <ClInclude Include="Scene.h" />
-    <ClInclude Include="SceneManager.h" />
     <ClInclude Include="ScoreComponent.h" />
     <ClInclude Include="ScoreObserver.h" />
-    <ClInclude Include="Singleton.h" />
-    <ClInclude Include="SoundEffect.h" />
-    <ClInclude Include="SoundStream.h" />
-    <ClInclude Include="Structs.h" />
-    <ClInclude Include="Subject.h" />
-    <ClInclude Include="TextComponent.h" />
-    <ClInclude Include="Texture2D.h" />
-    <ClInclude Include="Texture2DComponent.h" />
-    <ClInclude Include="Time.h" />
-    <ClInclude Include="Transform.h" />
-    <ClInclude Include="TransformComponent.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AnimationComponent.cpp" />
     <ClCompile Include="CollisionDetectionManager.cpp" />
-    <ClCompile Include="ConsoleAudioService.cpp" />
     <ClCompile Include="CubeObject.cpp" />
-    <ClCompile Include="Font.cpp" />
-    <ClCompile Include="FPSTextComponent.cpp" />
-    <ClCompile Include="GameObject.cpp" />
+    <ClCompile Include="EnemyMovementComponent.cpp" />
     <ClCompile Include="HealthComponent.cpp" />
-    <ClCompile Include="InputManager.cpp" />
     <ClCompile Include="LivesObserver.cpp" />
-    <ClCompile Include="Locator.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="Minigin.cpp" />
     <ClCompile Include="MiniginPCH.cpp">
@@ -268,23 +237,16 @@ xcopy "$(SolutionDir)3rdParty\SDL2_Mixer\lib\x64\*.dll" "$(OutputPath)" /R /Y</C
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">MiniginPCH.h</PrecompiledHeaderFile>
     </ClCompile>
-    <ClCompile Include="MovementComponent.cpp" />
+    <ClCompile Include="BaseMovementComponent.cpp" />
+    <ClCompile Include="PlayerMovementComponent.cpp" />
     <ClCompile Include="PyramidComponent.cpp" />
-    <ClCompile Include="Renderer.cpp" />
-    <ClCompile Include="ResourceManager.cpp" />
-    <ClCompile Include="Scene.cpp" />
-    <ClCompile Include="SceneManager.cpp" />
     <ClCompile Include="ScoreComponent.cpp" />
     <ClCompile Include="ScoreObserver.cpp" />
-    <ClCompile Include="SoundEffect.cpp" />
-    <ClCompile Include="SoundStream.cpp" />
-    <ClCompile Include="Subject.cpp" />
-    <ClCompile Include="TextComponent.cpp" />
-    <ClCompile Include="Texture2D.cpp" />
-    <ClCompile Include="Texture2DComponent.cpp" />
-    <ClCompile Include="Time.cpp" />
-    <ClCompile Include="Transform.cpp" />
-    <ClCompile Include="TransformComponent.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\AliEngine\AliEngine.vcxproj">
+      <Project>{f404147d-2dba-4705-8afb-7386594e2053}</Project>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -17,8 +17,10 @@
 #include "AnimationComponent.h"
 #include "ConsoleAudioService.h"
 #include "PyramidComponent.h"
-#include "MovementComponent.h"
+#include "PlayerMovementComponent.h"
+#include "EnemyMovementComponent.h"
 #include "CollisionDetectionManager.h"
+#include "Commands.h"
 
 using namespace std;
 using namespace std::chrono;
@@ -46,8 +48,8 @@ void dae::Minigin::Initialize()
 		"Programming 4 assignment",
 		SDL_WINDOWPOS_CENTERED,
 		SDL_WINDOWPOS_CENTERED,
-		1540,
-		1080,
+		1280,
+		720,
 		SDL_WINDOW_OPENGL
 	);
 	if (m_Window == nullptr)
@@ -233,30 +235,90 @@ void dae::Minigin::LoadGame() const
 	qbert->AddComponent(new ScoreComponent(0));
 	qbert->AddWatcher(new LivesObserver());
 	qbert->AddWatcher(new ScoreObserver());
-	qbert->AddComponent(new Texture2DComponent("QBERT.png", 2));
-	qbert->AddComponent(new MovementComponent());
+	qbert->AddComponent(new Texture2DComponent("QBERT.png", 2, true));
+	qbert->AddComponent(new PlayerMovementComponent());
 	qbert->AddComponent(new AnimationComponent(8));
 	scene.Add(qbert);
 	scene.AddPlayer(qbert);
 	CollisionDetectionManager::GetInstance().AddCollisionObject(qbert);
-	//enemy
-	const int enemyWidth = 16;
-	const int enemyHeight = 48;
+	//---------------------------------ENEMIES
+	//coily
+	int enemyWidth = 16;
+	int enemyHeight = 48;
 	auto coily = std::make_shared<GameObject>("Coily");
 	coily->AddComponent(new TransformComponent(glm::vec2(windowSurface->w / 2 + enemyWidth, windowSurface->h / 2 - enemyHeight), glm::vec2(enemyWidth, enemyHeight)));
 	coily->AddComponent(new HealthComponent(1));
 	coily->AddWatcher(new LivesObserver());
-	coily->AddComponent(new Texture2DComponent("Coily.png", 2));
-	coily->AddComponent(new MovementComponent(qbert));
+	coily->AddComponent(new Texture2DComponent("Coily.png", 2, true));
+	coily->AddComponent(new EnemyMovementComponent(qbert, EnemyMovementComponent::EnemyType::Coily));
 	coily->AddComponent(new AnimationComponent(8));
 	scene.Add(coily);
 	scene.AddPlayer(coily);
 	CollisionDetectionManager::GetInstance().AddCollisionObject(coily);
+	//sam
+	enemyWidth = 15;
+	enemyHeight = 16;
+	auto sam = std::make_shared<GameObject>("Sam");
+	sam->AddComponent(new TransformComponent(glm::vec2(windowSurface->w / 2 + enemyWidth, windowSurface->h / 2 - enemyHeight), glm::vec2(enemyWidth, enemyHeight)));
+	sam->AddComponent(new HealthComponent(1));
+	sam->AddWatcher(new LivesObserver());
+	sam->AddComponent(new Texture2DComponent("Sam.png", 2, true));
+	sam->AddComponent(new EnemyMovementComponent(qbert, EnemyMovementComponent::EnemyType::Sam));
+	sam->AddComponent(new AnimationComponent(8));
+	scene.Add(sam);
+	scene.AddPlayer(sam);
+	CollisionDetectionManager::GetInstance().AddCollisionObject(sam);
+	//slick
+	enemyWidth = 15;
+	enemyHeight = 16;
+	auto slick = std::make_shared<GameObject>("Slick");
+	slick->AddComponent(new TransformComponent(glm::vec2(windowSurface->w / 2 + enemyWidth, windowSurface->h / 2 - enemyHeight), glm::vec2(enemyWidth, enemyHeight)));
+	slick->AddComponent(new HealthComponent(1));
+	slick->AddWatcher(new LivesObserver());
+	slick->AddComponent(new Texture2DComponent("Slick.png", 2, true));
+	slick->AddComponent(new EnemyMovementComponent(qbert, EnemyMovementComponent::EnemyType::Slick));
+	slick->AddComponent(new AnimationComponent(8));
+	scene.Add(slick);
+	scene.AddPlayer(slick);
+	CollisionDetectionManager::GetInstance().AddCollisionObject(slick);
 	//player died text
 	auto playerDied = std::make_shared<GameObject>("Player 1 Died!");
 	playerDied->AddComponent(new TransformComponent(glm::vec2(500, 300)));
 	playerDied->AddComponent(new TextComponent("Player 1 Died!", font, SDL_Color{ 255, 0, 0 }, false));
 	scene.Add(playerDied);
+}
+
+void dae::Minigin::BindCommands()
+{
+	auto& inputManager = InputManager::GetInstance();
+	//assign buttons
+	inputManager.AssignKey<DieCommand>(ControllerButton::ButtonA);
+	inputManager.AssignKey<IncreasePointsCommand>(ControllerButton::ButtonB);
+	inputManager.AssignKey<DieCommand>(ControllerButton::ButtonX, 0);
+	inputManager.AssignKey<IncreasePointsCommand>(ControllerButton::ButtonY, 0);
+	//move
+	inputManager.AssignKey<JumpUp>(ControllerButton::ButtonUp);
+	inputManager.AssignKey<JumpDown>(ControllerButton::ButtonDown);
+	inputManager.AssignKey<JumpLeft>(ControllerButton::ButtonLeft);
+	inputManager.AssignKey<JumpRight>(ControllerButton::ButtonRight);
+	//keyboard
+	inputManager.AssignKey<JumpUp>(KeyboardButton::W);
+	inputManager.AssignKey<JumpDown>(KeyboardButton::S);
+	inputManager.AssignKey<JumpLeft>(KeyboardButton::A);
+	inputManager.AssignKey<JumpRight>(KeyboardButton::D);
+	//
+	inputManager.AssignKey<ExitCommand>(ControllerButton::ButtonSelect);
+	inputManager.AssignKey<FartCommand>(ControllerButton::ButtonStart);
+	inputManager.AssignKey<FartCommand>(ControllerButton::ButtonLeftThumb);
+	inputManager.AssignKey<FartCommand>(ControllerButton::ButtonRightThumb);
+	inputManager.AssignKey<FartCommand>(ControllerButton::ButtonLeftShoulder);
+	inputManager.AssignKey<FartCommand>(ControllerButton::ButtonRightShoulder);
+	////assign triggers
+	//inputManager.AssignTrigger<AimCommand>(m_Triggers[0].first);
+	//inputManager.AssignTrigger<ShootCommand>(m_Triggers[1].first);
+	////assign sticks
+	//inputManager.AssignStick<MoveCommand>(m_Sticks[0].first);
+	//inputManager.AssignStick<LookCommand>(m_Sticks[1].first);
 }
 
 void dae::Minigin::Cleanup()
@@ -285,9 +347,9 @@ void dae::Minigin::Run()
 	bool doContinue{ true };
 	auto lastTime{ high_resolution_clock::now() };
 
-	input.BindCommands();
-
 	std::thread soundThread(&AudioService::Update, &Locator::GetAudio());
+
+	BindCommands();
 
 	while (doContinue)
 	{
@@ -297,8 +359,8 @@ void dae::Minigin::Run()
 
 		input.ProcessInput();
 		input.ControllerAnalogs();
-		input.KeyboardInput();
-		doContinue = input.InputHandler();
+		input.InputHandler();
+		doContinue = input.KeyboardInput();
 
 		Time::GetInstance().SetDeltaTime(deltaTime);
 
