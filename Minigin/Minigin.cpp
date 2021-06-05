@@ -226,6 +226,7 @@ void dae::Minigin::LoadGame() const
 	scene.Add(level);
 	scene.AddLevel(level);
 	scene.SetCurrentLevel(level);
+	//---------------------------------PLAYER
 	//q*bert
 	const int playerWidth = 16;
 	const int playerHeight = 16;
@@ -255,32 +256,85 @@ void dae::Minigin::LoadGame() const
 	scene.Add(coily);
 	scene.AddPlayer(coily);
 	CollisionDetectionManager::GetInstance().AddCollisionObject(coily);
-	//sam
-	enemyWidth = 15;
-	enemyHeight = 16;
-	auto sam = std::make_shared<GameObject>("Sam");
-	sam->AddComponent(new TransformComponent(glm::vec2(windowSurface->w / 2 + enemyWidth, windowSurface->h / 2 - enemyHeight), glm::vec2(enemyWidth, enemyHeight)));
-	sam->AddComponent(new HealthComponent(1));
-	sam->AddWatcher(new LivesObserver());
-	sam->AddComponent(new Texture2DComponent("Sam.png", 2, true));
-	sam->AddComponent(new EnemyMovementComponent(qbert, EnemyMovementComponent::EnemyType::Sam));
-	sam->AddComponent(new AnimationComponent(8));
-	scene.Add(sam);
-	scene.AddPlayer(sam);
-	CollisionDetectionManager::GetInstance().AddCollisionObject(sam);
-	//slick
-	enemyWidth = 15;
-	enemyHeight = 16;
-	auto slick = std::make_shared<GameObject>("Slick");
-	slick->AddComponent(new TransformComponent(glm::vec2(windowSurface->w / 2 + enemyWidth, windowSurface->h / 2 - enemyHeight), glm::vec2(enemyWidth, enemyHeight)));
-	slick->AddComponent(new HealthComponent(1));
-	slick->AddWatcher(new LivesObserver());
-	slick->AddComponent(new Texture2DComponent("Slick.png", 2, true));
-	slick->AddComponent(new EnemyMovementComponent(qbert, EnemyMovementComponent::EnemyType::Slick));
-	slick->AddComponent(new AnimationComponent(8));
-	scene.Add(slick);
-	scene.AddPlayer(slick);
-	CollisionDetectionManager::GetInstance().AddCollisionObject(slick);
+	////sam
+	//enemyWidth = 15;
+	//enemyHeight = 16;
+	//auto sam = std::make_shared<GameObject>("Sam");
+	//sam->AddComponent(new TransformComponent(glm::vec2(windowSurface->w / 2 + enemyWidth, windowSurface->h / 2 - enemyHeight), glm::vec2(enemyWidth, enemyHeight)));
+	//sam->AddComponent(new HealthComponent(1));
+	//sam->AddWatcher(new LivesObserver());
+	//sam->AddComponent(new Texture2DComponent("Sam.png", 2, true));
+	//sam->AddComponent(new EnemyMovementComponent(qbert, EnemyMovementComponent::EnemyType::Sam));
+	//sam->AddComponent(new AnimationComponent(8));
+	//scene.Add(sam);
+	//scene.AddPlayer(sam);
+	//CollisionDetectionManager::GetInstance().AddCollisionObject(sam);
+	////slick
+	//enemyWidth = 15;
+	//enemyHeight = 16;
+	//auto slick = std::make_shared<GameObject>("Slick");
+	//slick->AddComponent(new TransformComponent(glm::vec2(windowSurface->w / 2 + enemyWidth, windowSurface->h / 2 - enemyHeight), glm::vec2(enemyWidth, enemyHeight)));
+	//slick->AddComponent(new HealthComponent(1));
+	//slick->AddWatcher(new LivesObserver());
+	//slick->AddComponent(new Texture2DComponent("Slick.png", 2, true));
+	//slick->AddComponent(new EnemyMovementComponent(qbert, EnemyMovementComponent::EnemyType::Slick));
+	//slick->AddComponent(new AnimationComponent(8));
+	//scene.Add(slick);
+	//scene.AddPlayer(slick);
+	//CollisionDetectionManager::GetInstance().AddCollisionObject(slick);
+	////wrongway
+	//enemyWidth = 15;
+	//enemyHeight = 16;
+	//
+	////const int randNr = rand() % 2;
+	//bool startOnLeftSide = false;
+	//TransformComponent* transfComp;
+	////if (randNr == 0)
+	////{
+	////	transfComp = new TransformComponent(glm::vec2(464 - enemyWidth * 1.5f, 622 + enemyHeight * 3), glm::vec2(enemyWidth, enemyHeight));
+	////	startOnLeftSide = true;
+	////}
+	////else
+	//{
+	//	transfComp = new TransformComponent(glm::vec2(848 + enemyWidth * 1.5f, 622 + enemyHeight * 3), glm::vec2(enemyWidth, enemyHeight));
+	//	//	startOnLeftSide = false;
+	//}
+	//auto wrongWay = std::make_shared<GameObject>("WrongWay");
+	//wrongWay->AddComponent(transfComp);
+	//wrongWay->AddComponent(new HealthComponent(1));
+	//wrongWay->AddWatcher(new LivesObserver());
+	//wrongWay->AddComponent(new Texture2DComponent("WrongWay.png", 2, true));
+	//wrongWay->AddComponent(new EnemyMovementComponent(qbert, EnemyMovementComponent::EnemyType::WrongWay, startOnLeftSide));
+	//wrongWay->AddComponent(new AnimationComponent(8));
+	//scene.Add(wrongWay);
+	//scene.AddPlayer(wrongWay);
+	//CollisionDetectionManager::GetInstance().AddCollisionObject(wrongWay);
+	////ugg
+	//enemyWidth = 15;
+	//enemyHeight = 16;
+	//
+	////const int randNr = rand() % 2;
+	//startOnLeftSide = true;
+	////if (randNr == 0)
+	//{
+	//	transfComp = new TransformComponent(glm::vec2(464 - enemyWidth * 1.5f, 622 + enemyHeight * 3), glm::vec2(enemyWidth, enemyHeight));
+	//	//startOnLeftSide = true;
+	//}
+	////else
+	////{
+	////	transfComp = new TransformComponent(glm::vec2(848 + enemyWidth * 1.5f, 622 + enemyHeight * 3), glm::vec2(enemyWidth, enemyHeight));
+	////	startOnLeftSide = false;
+	////}
+	//auto ugg = std::make_shared<GameObject>("Ugg");
+	//ugg->AddComponent(transfComp);
+	//ugg->AddComponent(new HealthComponent(1));
+	//ugg->AddWatcher(new LivesObserver());
+	//ugg->AddComponent(new Texture2DComponent("Ugg.png", 2, true));
+	//ugg->AddComponent(new EnemyMovementComponent(qbert, EnemyMovementComponent::EnemyType::Ugg, startOnLeftSide));
+	//ugg->AddComponent(new AnimationComponent(8));
+	//scene.Add(ugg);
+	//scene.AddPlayer(ugg);
+	//CollisionDetectionManager::GetInstance().AddCollisionObject(ugg);
 	//player died text
 	auto playerDied = std::make_shared<GameObject>("Player 1 Died!");
 	playerDied->AddComponent(new TransformComponent(glm::vec2(500, 300)));

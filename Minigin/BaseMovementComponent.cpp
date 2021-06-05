@@ -15,6 +15,11 @@ BaseMovementComponent::BaseMovementComponent()
 	, m_CurrentCubeIndex{ 0 }
 	, m_FallingToDeath{ false }
 	, m_Direction{ AnimationComponent::AnimationState::IdleLeftDown }
+	, m_FirstHalfOfTheJump{}
+	, m_JumpStartPos{}
+	, m_SourceHeightOffset{}
+	, m_CurrentColumn{ 0 }
+	, m_CurrentRow{ 0 }
 {
 	const glm::vec2& cubeOffset = dae::SceneManager::GetInstance().GetCurrentScene()->GetCurrentLevel()->GetComponent<PyramidComponent>()->GetCubeOffset();
 	m_MoveDistance = cubeOffset;
@@ -32,7 +37,7 @@ void BaseMovementComponent::Update()
 	}
 }
 
-void BaseMovementComponent::ActivateJump()
+void BaseMovementComponent::ActivateJump(bool isSideWaysJump)
 {
 	const auto& transform = m_pGameObject->GetComponent<TransformComponent>();
 
@@ -42,7 +47,7 @@ void BaseMovementComponent::ActivateJump()
 
 	const auto& CurrentMap = dae::SceneManager::GetInstance().GetCurrentScene()->GetCurrentLevel()->GetComponent<PyramidComponent>();
 
-	if (!CurrentMap->GetNextCubeIndex(m_CurrentCubeIndex, m_Direction))
+	if (!CurrentMap->GetNextCubeIndex(m_CurrentCubeIndex, m_Direction, isSideWaysJump, m_CurrentColumn, m_CurrentRow))
 	{
 		// Player jumped off the map
 		m_FallingToDeath = true;

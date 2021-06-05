@@ -12,7 +12,7 @@ protected:
 	//Methods
 	bool GetIsFallingToDeathBehindMap() const { return m_FallingToDeath && !m_FirstHalfOfTheJump && (m_Direction == AnimationComponent::AnimationState::JumpLeftTop || m_Direction == AnimationComponent::AnimationState::JumpRightTop); };
 	void SetCurrentCubeIndex(int index) { m_CurrentCubeIndex = index; };
-	void ActivateJump();
+	void ActivateJump(bool isSideWaysJump = false);
 	void FallToDeath();
 	void Jump();
 	//
@@ -25,4 +25,6 @@ protected:
 	glm::vec2 m_JumpStartPos;
 	int m_CurrentCubeIndex;
 	int m_SourceHeightOffset;
+	int m_CurrentColumn;
+	int m_CurrentRow;
 };

@@ -7,25 +7,12 @@
 #include "SceneManager.h"
 
 PyramidComponent::PyramidComponent(const glm::vec2& topCubePos)
-	:m_FirstRowCubeCount(7)
-	, m_CubeColumnCount(7)
+	:m_RowAmount(7)
 	, m_CubeSrcRect{ 0,160,32,32 }
 	, m_CubeDistance{ 16,24 }
 	, m_HighestCubePos{ topCubePos }
 	, m_CubeScale{ 2.0f }
 {
-	int mostLeftBlockIndex = 0;
-	int lowestBlockIndex = 6;
-	for (int i = 0; i < m_SideLength; i++)
-	{
-		m_MostLeftBlocks[i] = mostLeftBlockIndex;
-		mostLeftBlockIndex += m_SideLength - i;
-
-		m_MostRightBlocks[i] = i;
-
-		m_LowestBlocks[i] = lowestBlockIndex; // +1 because its the bottom
-		lowestBlockIndex += 6 - i;
-	}
 	m_CubeDistance.x *= dae::SceneManager::GetInstance().GetCurrentScene()->GetSceneScale();
 	m_CubeDistance.y *= dae::SceneManager::GetInstance().GetCurrentScene()->GetSceneScale();
 	Initialize();
@@ -39,10 +26,10 @@ void PyramidComponent::Initialize()
 void PyramidComponent::CreateMap()
 {
 	int indexCounter = 0;
-	int rowCubeCount = m_FirstRowCubeCount;
+	int rowCubeCount = m_RowAmount;
 	glm::vec2 highestCubePos = m_HighestCubePos;
 
-	for (size_t j = 0; j < m_CubeColumnCount; j++)
+	for (size_t j = 0; j < m_RowAmount; j++)
 	{
 		for (size_t i = 0; i < rowCubeCount; i++)
 		{
@@ -69,79 +56,96 @@ void PyramidComponent::CreateCube(const size_t& index, const glm::vec2& pos)
 	m_Cubes[index] = cube;
 }
 
-int PyramidComponent::GetColumnNumber(const int& currentTileIndex) const
+bool PyramidComponent::GetNextCubeIndex(int& currentIndex, AnimationComponent::AnimationState jumpDir, bool isSidewaysJump, int currentColumn, int currentRow) const
 {
-	int cubeCount = m_FirstRowCubeCount;
-
-	for (int i = 0; i < m_CubeColumnCount; i++)
+	if (isSidewaysJump)
 	{
-		if (currentTileIndex < cubeCount)
-			return i;
-
-		cubeCount += (m_FirstRowCubeCount - (i + 1)); // + i because it's not an index but a count
-	}
-
-	return -1;
-}
-
-bool PyramidComponent::GetNextCubeIndex(int& currentIndex, AnimationComponent::AnimationState jumpDir) const
-{
-	int columnIndex = GetColumnNumber(currentIndex);
-
-	switch (jumpDir)
-	{
-	case AnimationComponent::AnimationState::JumpLeftDown:
-	{
-		for (size_t i = 0; i < m_SideLength; i++)
+		switch (jumpDir)
 		{
-			if (currentIndex == m_LowestBlocks[i])
+		case AnimationComponent::AnimationState::JumpLeftDown:
+		{
+			if (currentColumn == 0)
 			{
 				return false;
 			}
+			currentIndex += m_RowAmount - currentRow + currentColumn - 1;
+			break;
 		}
-		currentIndex += m_FirstRowCubeCount - columnIndex;
-		break;
-	}
-	case AnimationComponent::AnimationState::JumpRightTop:
-	{
-		for (size_t i = 0; i < m_SideLength; i++)
+		case AnimationComponent::AnimationState::JumpRightTop:
 		{
-			if (currentIndex == m_MostRightBlocks[i])
+			if (currentColumn == currentRow)
 			{
 				return false;
 			}
+			currentIndex -= m_RowAmount - currentRow + currentColumn + 1;
+			break;
 		}
-		int columnIndexAfterJump = columnIndex - 1;
-		currentIndex -= m_FirstRowCubeCount - columnIndexAfterJump;
-		break;
-	}
-	case AnimationComponent::AnimationState::JumpLeftTop:
-	{
-		for (size_t i = 0; i < m_SideLength; i++)
+		case AnimationComponent::AnimationState::JumpLeftTop:
 		{
-			if (currentIndex == m_MostLeftBlocks[i])
+			if (currentColumn == 0)
 			{
 				return false;
 			}
+			--currentIndex;
+			break;
 		}
-		currentIndex--;
-		break;
-	}
-	case AnimationComponent::AnimationState::JumpRightDown:
-	{
-		for (size_t i = 0; i < m_SideLength; i++)
+		case AnimationComponent::AnimationState::JumpRightDown:
 		{
-			if (currentIndex == m_LowestBlocks[i])
+			if (currentColumn == currentRow)
 			{
 				return false;
 			}
+			currentIndex -= m_RowAmount - currentRow + currentColumn;
+			break;
 		}
-		currentIndex++;
-		break;
-	}
-	}
+		}
 
-	return true;
+		return true;
+	}
+	else
+	{
+		switch (jumpDir)
+		{
+		case AnimationComponent::AnimationState::JumpLeftDown:
+		{
+			if (currentRow == m_RowAmount - 1)
+			{
+				return false;
+			}
+			currentIndex += m_RowAmount - currentRow + currentColumn;
+			break;
+		}
+		case AnimationComponent::AnimationState::JumpRightTop:
+		{
+			if (currentColumn == currentRow)
+			{
+				return false;
+			}
+			currentIndex -= m_RowAmount - currentRow + currentColumn + 1;
+			break;
+		}
+		case AnimationComponent::AnimationState::JumpLeftTop:
+		{
+			if (currentColumn == 0)
+			{
+				return false;
+			}
+			currentIndex--;
+			break;
+		}
+		case AnimationComponent::AnimationState::JumpRightDown:
+		{
+			if (currentRow == m_RowAmount - 1)
+			{
+				return false;
+			}
+			currentIndex++;
+			break;
+		}
+		}
+
+		return true;
+	}
 }
 
 void PyramidComponent::Update()
