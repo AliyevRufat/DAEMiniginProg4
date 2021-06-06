@@ -4,6 +4,7 @@
 #include "SceneManager.h"
 #include "PyramidComponent.h"
 #include "HealthComponent.h"
+#include "Scene.h"
 #include "PlayerMovementComponent.h"
 #include "EnemyManager.h"
 #include "EnemyMovementComponent.h"
@@ -21,31 +22,41 @@ void CollisionDetectionManager::Update()
 			}
 			else if (m_pOtherEntities[i]->GetName() == "Ugg" || m_pOtherEntities[i]->GetName() == "WrongWay" || m_pOtherEntities[i]->GetName() == "Coily")
 			{
-				m_pQbert->GetComponent<HealthComponent>()->Die();
 				m_pQbert->GetComponent<PlayerMovementComponent>()->SetPlayerKilled(true);
-				EnemyManager::GetInstance().DeleteAllEnemies();
+				if (dae::SceneManager::GetInstance().GetCurrentScene()->GetCurrentGameMode() == dae::Scene::GameMode::Versus)
+				{
+					dae::SceneManager::GetInstance().GetCurrentScene()->GetCurrentLevel()->GetComponent<PyramidComponent>()->TeleportPlayersToCorrectPos(dae::Scene::GameMode::Versus);
+				}
+				else
+				{
+					EnemyManager::GetInstance().DeleteAllEnemies();
+				}
+				break;
 			}
 			else if (m_pOtherEntities[i]->GetName() == "Sam" || m_pOtherEntities[i]->GetName() == "Slick")
 			{
 				m_pOtherEntities[i]->GetComponent<EnemyMovementComponent>()->SetIsDead(true);
 			}
 		}
-		else if (IsOverlapping(m_pQbertTransform2->GetRect(), m_pOtherEntityTransforms[i]->GetRect()))
+		if (dae::SceneManager::GetInstance().GetCurrentScene()->GetCurrentGameMode() == dae::Scene::GameMode::Coop)
 		{
-			if (m_pOtherEntities[i]->GetName() == "Disc")
+			if (IsOverlapping(m_pQbertTransform2->GetRect(), m_pOtherEntityTransforms[i]->GetRect()))
 			{
-				m_pQbert2->GetComponent<PlayerMovementComponent>()->SetDiscTransform(m_pOtherEntities[i]->GetComponent<TransformComponent>());
-				dae::SceneManager::GetInstance().GetCurrentScene()->GetCurrentLevel()->GetComponent<PyramidComponent>()->GetDisc(m_pOtherEntities[i])->SetIsMovingToTop(true);
-			}
-			else if (m_pOtherEntities[i]->GetName() == "Ugg" || m_pOtherEntities[i]->GetName() == "WrongWay" || m_pOtherEntities[i]->GetName() == "Coily")
-			{
-				m_pQbert2->GetComponent<HealthComponent>()->Die();
-				m_pQbert2->GetComponent<PlayerMovementComponent>()->SetPlayerKilled(true);
-				EnemyManager::GetInstance().DeleteAllEnemies();
-			}
-			else if (m_pOtherEntities[i]->GetName() == "Sam" || m_pOtherEntities[i]->GetName() == "Slick")
-			{
-				m_pOtherEntities[i]->GetComponent<EnemyMovementComponent>()->SetIsDead(true);
+				if (m_pOtherEntities[i]->GetName() == "Disc")
+				{
+					m_pQbert2->GetComponent<PlayerMovementComponent>()->SetDiscTransform(m_pOtherEntities[i]->GetComponent<TransformComponent>());
+					dae::SceneManager::GetInstance().GetCurrentScene()->GetCurrentLevel()->GetComponent<PyramidComponent>()->GetDisc(m_pOtherEntities[i])->SetIsMovingToTop(true);
+				}
+				else if (m_pOtherEntities[i]->GetName() == "Ugg" || m_pOtherEntities[i]->GetName() == "WrongWay" || m_pOtherEntities[i]->GetName() == "Coily")
+				{
+					m_pQbert2->GetComponent<PlayerMovementComponent>()->SetPlayerKilled(true);
+					EnemyManager::GetInstance().DeleteAllEnemies();
+					break;
+				}
+				else if (m_pOtherEntities[i]->GetName() == "Sam" || m_pOtherEntities[i]->GetName() == "Slick")
+				{
+					m_pOtherEntities[i]->GetComponent<EnemyMovementComponent>()->SetIsDead(true);
+				}
 			}
 		}
 	}

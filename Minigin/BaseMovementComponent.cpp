@@ -13,15 +13,13 @@ BaseMovementComponent::BaseMovementComponent()
 	: m_Speed{ 100 }
 	, m_IsMoving{ false }
 	, m_CurrentCubeIndex{ 0 }
-	, m_FallingToDeath{ false }
+	, m_IsFalling{ false }
 	, m_Direction{ AnimationComponent::AnimationState::IdleLeftDown }
 	, m_FirstHalfOfTheJump{}
 	, m_JumpStartPos{}
 	, m_SourceHeightOffset{}
 	, m_CurrentColumn{ 0 }
 	, m_CurrentRow{ 0 }
-	, m_FallingTimer{ 0.0f }
-	, m_FallingTime{ 3.0f }
 	, m_IsOffScreen{ false }
 {
 	const glm::vec2& cubeOffset = dae::SceneManager::GetInstance().GetCurrentScene()->GetCurrentLevel()->GetComponent<PyramidComponent>()->GetCubeOffset();
@@ -30,7 +28,7 @@ BaseMovementComponent::BaseMovementComponent()
 
 void BaseMovementComponent::Update()
 {
-	if (m_FallingToDeath)
+	if (m_IsFalling)
 	{
 		FallToDeath();
 	}
@@ -52,8 +50,11 @@ void BaseMovementComponent::ActivateJump(bool isSideWaysJump)
 
 	if (!CurrentMap->GetNextCubeIndex(m_CurrentCubeIndex, m_Direction, isSideWaysJump, m_CurrentColumn, m_CurrentRow))
 	{
-		// Player jumped off the map
-		m_FallingToDeath = true;
+		m_IsFalling = true;
+	}
+	else
+	{
+		m_IsFalling = false;
 	}
 }
 
@@ -161,22 +162,16 @@ void BaseMovementComponent::FallToDeath()
 		pos.y += deltaTime * speed.y;
 	}
 
-	if (pos.y > 1540) //width is 1540
+	if (pos.y > 720)
 	{
 		int NonJumpingSprite = (int)m_Direction - 1;
 		m_pGameObject->GetComponent<AnimationComponent>()->SetAnimationState(AnimationComponent::AnimationState(NonJumpingSprite));
 		m_IsMoving = false;
-		m_FallingToDeath = false;
+		m_IsFalling = false;
+		m_IsOffScreen = true;
 	}
 	else
 	{
 		transform->SetPosition(pos);
-	}
-
-	m_FallingTimer += Time::GetInstance().GetDeltaTime();
-	if (m_FallingTimer >= m_FallingTime)
-	{
-		m_IsOffScreen = true;
-		m_FallingTimer -= m_FallingTimer;
 	}
 }

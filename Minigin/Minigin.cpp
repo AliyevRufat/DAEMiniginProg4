@@ -159,6 +159,8 @@ void dae::Minigin::LoadSinglePlayerScene() const
 {
 	SDL_Surface* windowSurface = SDL_GetWindowSurface(m_Window);
 	auto& scene = SceneManager::GetInstance().CreateScene("Qbert");
+	scene.SetCurrentGameMode(dae::Scene::GameMode::SinglePlayer);
+
 	auto font = ResourceManager::GetInstance().LoadFont("Lingua.otf", 36);
 	{
 		//fps counter
@@ -505,6 +507,8 @@ void dae::Minigin::LoadCoOpScene() const
 
 	SDL_Surface* windowSurface = SDL_GetWindowSurface(m_Window);
 	auto& scene = SceneManager::GetInstance().CreateScene("Qbert");
+	scene.SetCurrentGameMode(dae::Scene::GameMode::Coop);
+
 	auto font = ResourceManager::GetInstance().LoadFont("Lingua.otf", 36);
 	{
 		///background
@@ -707,6 +711,8 @@ void dae::Minigin::LoadVersusScene() const
 {
 	SDL_Surface* windowSurface = SDL_GetWindowSurface(m_Window);
 	auto& scene = SceneManager::GetInstance().CreateScene("Qbert");
+	scene.SetCurrentGameMode(dae::Scene::GameMode::Versus);
+
 	auto font = ResourceManager::GetInstance().LoadFont("Lingua.otf", 36);
 	{
 		///background
@@ -865,28 +871,27 @@ void dae::Minigin::LoadVersusScene() const
 	//q*bert
 	const int playerWidth = 16;
 	const int playerHeight = 16;
+	glm::vec2 qBertSpawnPos = glm::vec2(level->GetComponent<PyramidComponent>()->GetSpecificCube(27)->GetPosition().x + playerWidth, level->GetComponent<PyramidComponent>()->GetSpecificCube(27)->GetPosition().y - playerHeight);
 	auto qbert = std::make_shared<GameObject>("Q*Bert");
-	qbert->AddComponent(new TransformComponent(glm::vec2(windowSurface->w / 2 + playerWidth, windowSurface->h / 2 - playerHeight), glm::vec2(playerWidth, playerHeight)));
+	qbert->AddComponent(new TransformComponent(qBertSpawnPos, glm::vec2(playerWidth, playerHeight)));
 	qbert->AddComponent(new HealthComponent(3));
 	qbert->AddComponent(new ScoreComponent(0));
 	qbert->AddWatcher(new LivesObserver());
 	qbert->AddWatcher(new ScoreObserver());
 	qbert->AddComponent(new Texture2DComponent("QBERT.png", 2, true));
-	qbert->AddComponent(new PlayerMovementComponent("Q*Bert"));
+	qbert->AddComponent(new PlayerMovementComponent("Q*Bert", dae::Scene::GameMode::Versus));
 	qbert->AddComponent(new AnimationComponent(8));
 	scene.Add(qbert);
 	scene.AddPlayer(qbert);
 	CollisionDetectionManager::GetInstance().AddCollisionObject(qbert);
 	//-----------------------------------COILY VERSUS
-	//coily
 	int enemyWidth = 16;
 	int enemyHeight = 48;
+	glm::vec2 coilySpawnPos = glm::vec2(level->GetComponent<PyramidComponent>()->GetSpecificCube(0)->GetPosition().x + enemyWidth, level->GetComponent<PyramidComponent>()->GetSpecificCube(0)->GetPosition().y - enemyHeight);
 	auto coily = std::make_shared<GameObject>("Coily");
-	coily->AddComponent(new TransformComponent(glm::vec2(windowSurface->w / 2 + enemyWidth, windowSurface->h / 2 - enemyHeight), glm::vec2(enemyWidth, enemyHeight)));
-	coily->AddComponent(new HealthComponent(1));
-	coily->AddWatcher(new LivesObserver());
+	coily->AddComponent(new TransformComponent(coilySpawnPos, glm::vec2(enemyWidth, enemyHeight)));
 	coily->AddComponent(new Texture2DComponent("CoilyPlayer.png", 2, true));
-	coily->AddComponent(new PlayerMovementComponent("Q*Bert", dae::Scene::GameMode::Versus, true));
+	coily->AddComponent(new PlayerMovementComponent("Coily", dae::Scene::GameMode::Versus, true));
 	coily->AddComponent(new AnimationComponent(8));
 	scene.Add(coily);
 	scene.AddPlayer(coily);
@@ -905,6 +910,6 @@ void dae::Minigin::LoadVersusScene() const
 void dae::Minigin::LoadGame() const
 {
 	//LoadSinglePlayerScene();
-	LoadCoOpScene();
-	//LoadVersusScene();
+	//LoadCoOpScene();
+	LoadVersusScene();
 }

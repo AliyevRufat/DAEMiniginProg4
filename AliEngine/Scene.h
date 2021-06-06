@@ -20,7 +20,10 @@ namespace dae
 		{
 			FirstLevel = 0,
 			SecondLevel = 1,
-			ThirdLevel = 2
+			ThirdLevel = 2,
+			WonGame,
+			LostGame,
+			Menu
 		};
 
 		void Add(const std::shared_ptr<SceneObject>& spObject);
@@ -46,6 +49,7 @@ namespace dae
 		//
 		float  GetSceneScale() const;
 		GameMode GetCurrentGameMode() const { return m_CurrentGameMode; };
+		void SetCurrentGameMode(GameMode gameMode) { m_CurrentGameMode = gameMode; };
 		//
 		Level GetGameLevel() const { return m_CurrentLevel; }
 		void SetGameLevel(Level level) { m_CurrentLevel = level; }

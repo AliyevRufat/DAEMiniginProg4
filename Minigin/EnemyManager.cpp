@@ -7,6 +7,7 @@
 #include "LivesObserver.h"
 #include "Minigin.h"
 #include "TransformComponent.h"
+#include "PlayerMovementComponent.h"
 #include "Texture2DComponent.h"
 #include "PyramidComponent.h"
 #include "EnemyMovementComponent.h"
@@ -14,6 +15,11 @@
 
 void EnemyManager::Update()
 {
+	if (dae::SceneManager::GetInstance().GetCurrentScene()->GetCurrentGameMode() == dae::Scene::GameMode::Versus)
+	{
+		return;
+	}
+
 	DeleteFallenEnemies();
 	auto deltaTime = Time::GetInstance().GetDeltaTime();
 	if (!m_CoilySpawned)
@@ -28,7 +34,7 @@ void EnemyManager::Update()
 
 	const int randNr = rand() % 2;
 
-	if (m_SpawnTimerCoily >= m_SpawnTimeCoily && !m_CoilySpawned)
+	if (m_SpawnTimerCoily >= m_SpawnTimeCoily && !m_CoilySpawned && dae::SceneManager::GetInstance().GetCurrentScene()->GetCurrentGameMode() != dae::Scene::GameMode::Versus)
 	{
 		SpawnEnemy(EnemyType::Coily);
 		m_CoilySpawned = true;
@@ -177,10 +183,11 @@ void EnemyManager::SpawnCoily(dae::Scene::GameMode gameMode)
 
 	glm::vec2 coilySpawnPos = glm::vec2(m_LevelObject->GetComponent<PyramidComponent>()->GetSpecificCube(1)->GetPosition().x + coilyWidth, m_LevelObject->GetComponent<PyramidComponent>()->GetSpecificCube(1)->GetPosition().y - coilyHeight);
 
+	auto scene = dae::SceneManager::GetInstance().GetCurrentScene();
 	auto coily = std::make_shared<GameObject>("Coily");
 	coily->AddComponent(new TransformComponent(glm::vec2(coilySpawnPos.x, coilySpawnPos.y - spawnOffset), glm::vec2(coilyWidth, coilyHeight)));
-	coily->AddWatcher(new LivesObserver());
 	coily->AddComponent(new Texture2DComponent("Coily.png", 2, true));
+	coily->AddComponent(new AnimationComponent(8));
 	if (gameMode == dae::Scene::GameMode::Coop)
 	{
 		coily->AddComponent(new EnemyMovementComponent(EnemyManager::EnemyType::Coily, m_SpPlayer, m_SpPlayer2));
@@ -189,8 +196,6 @@ void EnemyManager::SpawnCoily(dae::Scene::GameMode gameMode)
 	{
 		coily->AddComponent(new EnemyMovementComponent(EnemyManager::EnemyType::Coily, m_SpPlayer));
 	}
-	coily->AddComponent(new AnimationComponent(8));
-	auto scene = dae::SceneManager::GetInstance().GetCurrentScene();
 	scene->Add(coily);
 	CollisionDetectionManager::GetInstance().AddCollisionObject(coily);
 	m_SpEnemies.push_back(coily);
@@ -208,7 +213,6 @@ void EnemyManager::SpawnSamOrSlick(EnemyType enemyType)
 	{
 		auto sam = std::make_shared<GameObject>("Sam");
 		sam->AddComponent(new TransformComponent(glm::vec2(samSpawnPos.x, samSpawnPos.y - spawnOffset), glm::vec2(m_EnemyWidth, m_EnemyHeight)));
-		sam->AddWatcher(new LivesObserver());
 		sam->AddComponent(new Texture2DComponent("Sam.png", 2, true));
 		sam->AddComponent(new EnemyMovementComponent(EnemyManager::EnemyType::Sam));
 		sam->AddComponent(new AnimationComponent(8));
@@ -220,7 +224,6 @@ void EnemyManager::SpawnSamOrSlick(EnemyType enemyType)
 	{
 		auto slick = std::make_shared<GameObject>("Slick");
 		slick->AddComponent(new TransformComponent(glm::vec2(slickSpawnPos.x, slickSpawnPos.y - spawnOffset), glm::vec2(m_EnemyWidth, m_EnemyHeight)));
-		slick->AddWatcher(new LivesObserver());
 		slick->AddComponent(new Texture2DComponent("Slick.png", 2, true));
 		slick->AddComponent(new EnemyMovementComponent(EnemyManager::EnemyType::Slick));
 		slick->AddComponent(new AnimationComponent(8));
@@ -242,7 +245,6 @@ void EnemyManager::SpawnWrongWayOrUgg(EnemyType enemyType)
 	{
 		auto ugg = std::make_shared<GameObject>("Ugg");
 		ugg->AddComponent(new TransformComponent(glm::vec2(uggSpawnPos.x + spawnOffset, uggSpawnPos.y - 30), glm::vec2(m_EnemyWidth, m_EnemyHeight)));
-		ugg->AddWatcher(new LivesObserver());
 		ugg->AddComponent(new Texture2DComponent("Ugg.png", 2, true));
 		ugg->AddComponent(new EnemyMovementComponent(EnemyManager::EnemyType::Ugg));
 		ugg->AddComponent(new AnimationComponent(8));
@@ -255,7 +257,6 @@ void EnemyManager::SpawnWrongWayOrUgg(EnemyType enemyType)
 	{
 		auto wrongWay = std::make_shared<GameObject>("WrongWay");
 		wrongWay->AddComponent(new TransformComponent(glm::vec2(wrongwaySpawnPos.x - spawnOffset, wrongwaySpawnPos.y - 30), glm::vec2(m_EnemyWidth, m_EnemyHeight)));
-		wrongWay->AddWatcher(new LivesObserver());
 		wrongWay->AddComponent(new Texture2DComponent("WrongWay.png", 2, true));
 		wrongWay->AddComponent(new EnemyMovementComponent(EnemyManager::EnemyType::WrongWay));
 		wrongWay->AddComponent(new AnimationComponent(8));

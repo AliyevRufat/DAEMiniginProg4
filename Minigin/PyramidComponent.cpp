@@ -4,6 +4,7 @@
 #include "Renderer.h"
 #include "TransformComponent.h"
 #include "Texture2DComponent.h"
+#include "HealthComponent.h"
 #include "SceneManager.h"
 #include "CollisionDetectionManager.h"
 #include "PlayerMovementComponent.h"
@@ -223,12 +224,11 @@ void PyramidComponent::TeleportPlayersToCorrectPos(dae::Scene::GameMode gameMode
 {
 	const int playerWidth = 16;
 	const int playerHeight = 16;
-	if (gameMode == dae::Scene::GameMode::SinglePlayer || gameMode == dae::Scene::GameMode::Versus)
+	if (gameMode == dae::Scene::GameMode::SinglePlayer)
 	{
 		auto cube = GetSpecificCube(0);
 
-		auto currentScene = dae::SceneManager::GetInstance().GetCurrentScene();
-		auto player = currentScene->GetPlayer(0);
+		auto player = dae::SceneManager::GetInstance().GetCurrentScene()->GetPlayer(0);
 
 		glm::vec2 startingPosition{ 0,0 };
 
@@ -238,7 +238,7 @@ void PyramidComponent::TeleportPlayersToCorrectPos(dae::Scene::GameMode gameMode
 		player->GetComponent<TransformComponent>()->SetPosition(startingPosition);
 		player->GetComponent<PlayerMovementComponent>()->SetCubeIndexColumnAndRow(0, 0, 0);
 	}
-	else
+	else if (gameMode == dae::Scene::GameMode::Coop)
 	{
 		auto currentScene = dae::SceneManager::GetInstance().GetCurrentScene();
 		auto player1 = currentScene->GetPlayer(0);
@@ -251,38 +251,58 @@ void PyramidComponent::TeleportPlayersToCorrectPos(dae::Scene::GameMode gameMode
 		{
 			desPosPlayer1.x = GetSpecificCube(0)->GetGameObject()->GetComponent<TransformComponent>()->GetTransform().GetPosition().x + playerWidth;
 			desPosPlayer1.y = GetSpecificCube(0)->GetGameObject()->GetComponent<TransformComponent>()->GetTransform().GetPosition().y - playerHeight;
+			player1->GetComponent<TransformComponent>()->SetPosition(desPosPlayer1);
+			player1->GetComponent<PlayerMovementComponent>()->SetCubeIndexColumnAndRow(0, 0, 0);
+
 			desPosPlayer2.x = GetSpecificCube(6)->GetGameObject()->GetComponent<TransformComponent>()->GetTransform().GetPosition().x + playerWidth;
 			desPosPlayer2.y = GetSpecificCube(6)->GetGameObject()->GetComponent<TransformComponent>()->GetTransform().GetPosition().y - playerHeight;
 
-			player1->GetComponent<TransformComponent>()->SetPosition(desPosPlayer1);
-			player1->GetComponent<PlayerMovementComponent>()->SetCubeIndexColumnAndRow(0, 0, 0);
 			player2->GetComponent<TransformComponent>()->SetPosition(desPosPlayer2);
 			player2->GetComponent<PlayerMovementComponent>()->SetCubeIndexColumnAndRow(6, 6, 6);
 		}
 		else if (player2->GetComponent<PlayerMovementComponent>()->GetIsOnDisc())
 		{
-			desPosPlayer1.x = GetSpecificCube(27)->GetGameObject()->GetComponent<TransformComponent>()->GetTransform().GetPosition().x + playerWidth;
-			desPosPlayer1.y = GetSpecificCube(27)->GetGameObject()->GetComponent<TransformComponent>()->GetTransform().GetPosition().y - playerHeight;
 			desPosPlayer2.x = GetSpecificCube(0)->GetGameObject()->GetComponent<TransformComponent>()->GetTransform().GetPosition().x + playerWidth;
 			desPosPlayer2.y = GetSpecificCube(0)->GetGameObject()->GetComponent<TransformComponent>()->GetTransform().GetPosition().y - playerHeight;
-
-			player1->GetComponent<TransformComponent>()->SetPosition(desPosPlayer1);
-			player1->GetComponent<PlayerMovementComponent>()->SetCubeIndexColumnAndRow(27, 0, 6);
 			player2->GetComponent<TransformComponent>()->SetPosition(desPosPlayer2);
 			player2->GetComponent<PlayerMovementComponent>()->SetCubeIndexColumnAndRow(0, 0, 0);
+
+			desPosPlayer1.x = GetSpecificCube(27)->GetGameObject()->GetComponent<TransformComponent>()->GetTransform().GetPosition().x + playerWidth;
+			desPosPlayer1.y = GetSpecificCube(27)->GetGameObject()->GetComponent<TransformComponent>()->GetTransform().GetPosition().y - playerHeight;
+			player1->GetComponent<TransformComponent>()->SetPosition(desPosPlayer1);
+			player1->GetComponent<PlayerMovementComponent>()->SetCubeIndexColumnAndRow(27, 0, 6);
 		}
 		else if (!player1->GetComponent<PlayerMovementComponent>()->GetIsOnDisc() && !player2->GetComponent<PlayerMovementComponent>()->GetIsOnDisc())
 		{
 			desPosPlayer1.x = GetSpecificCube(27)->GetGameObject()->GetComponent<TransformComponent>()->GetTransform().GetPosition().x + playerWidth;
 			desPosPlayer1.y = GetSpecificCube(27)->GetGameObject()->GetComponent<TransformComponent>()->GetTransform().GetPosition().y - playerHeight;
-			desPosPlayer2.x = GetSpecificCube(6)->GetGameObject()->GetComponent<TransformComponent>()->GetTransform().GetPosition().x + playerWidth;
-			desPosPlayer2.y = GetSpecificCube(6)->GetGameObject()->GetComponent<TransformComponent>()->GetTransform().GetPosition().y - playerHeight;
-
 			player1->GetComponent<TransformComponent>()->SetPosition(desPosPlayer1);
 			player1->GetComponent<PlayerMovementComponent>()->SetCubeIndexColumnAndRow(27, 0, 6);
+			desPosPlayer2.x = GetSpecificCube(6)->GetGameObject()->GetComponent<TransformComponent>()->GetTransform().GetPosition().x + playerWidth;
+			desPosPlayer2.y = GetSpecificCube(6)->GetGameObject()->GetComponent<TransformComponent>()->GetTransform().GetPosition().y - playerHeight;
 			player2->GetComponent<TransformComponent>()->SetPosition(desPosPlayer2);
 			player2->GetComponent<PlayerMovementComponent>()->SetCubeIndexColumnAndRow(6, 6, 6);
 		}
+	}
+	else
+	{
+		auto currentScene = dae::SceneManager::GetInstance().GetCurrentScene();
+		auto player1 = currentScene->GetPlayer(0);
+		auto player2 = currentScene->GetPlayer(1);
+
+		glm::vec2 desPosPlayer1{ 0,0 };
+		glm::vec2 desPosPlayer2{ 0,0 };
+
+		desPosPlayer1.x = GetSpecificCube(27)->GetGameObject()->GetComponent<TransformComponent>()->GetTransform().GetPosition().x + playerWidth;
+		desPosPlayer1.y = GetSpecificCube(27)->GetGameObject()->GetComponent<TransformComponent>()->GetTransform().GetPosition().y - playerHeight;
+		player1->GetComponent<TransformComponent>()->SetPosition(desPosPlayer1);
+		player1->GetComponent<PlayerMovementComponent>()->SetCubeIndexColumnAndRow(27, 0, 6);
+
+		desPosPlayer2.x = GetSpecificCube(0)->GetGameObject()->GetComponent<TransformComponent>()->GetTransform().GetPosition().x + playerWidth;
+		desPosPlayer2.y = GetSpecificCube(0)->GetGameObject()->GetComponent<TransformComponent>()->GetTransform().GetPosition().y - playerHeight;
+
+		player2->GetComponent<TransformComponent>()->SetPosition(desPosPlayer2);
+		player2->GetComponent<PlayerMovementComponent>()->SetCubeIndexColumnAndRow(0, 0, 0);
 	}
 }
 

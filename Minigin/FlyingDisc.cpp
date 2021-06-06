@@ -94,7 +94,12 @@ void FlyingDisc::MoveToTheTop()
 			m_IsMovingToTop = false;
 			m_IsUsed = true;
 			dae::SceneManager::GetInstance().GetCurrentScene()->GetPlayer(0)->GetComponent<PlayerMovementComponent>()->SetDiscTransform(nullptr);
-			dae::SceneManager::GetInstance().GetCurrentScene()->GetPlayer(1)->GetComponent<PlayerMovementComponent>()->SetDiscTransform(nullptr);
+
+			auto player2 = dae::SceneManager::GetInstance().GetCurrentScene()->GetPlayer(1);
+			if (player2)
+			{
+				player2->GetComponent<PlayerMovementComponent>()->SetDiscTransform(nullptr);
+			}
 		}
 	}
 }

@@ -9,15 +9,16 @@ public:
 	virtual void Update() = 0;
 	void SetCubeIndexColumnAndRow(int index, int column, int row) { m_CurrentCubeIndex = index; m_CurrentColumn = column; m_CurrentRow = row; };
 	bool GetIsOffScreen() const { return m_IsOffScreen; };
+
 protected:
 	//Methods
-	bool GetIsFallingToDeathBehindMap() const { return m_FallingToDeath && !m_FirstHalfOfTheJump && (m_Direction == AnimationComponent::AnimationState::JumpLeftTop || m_Direction == AnimationComponent::AnimationState::JumpRightTop); };
+	bool GetIsFallingToDeathBehindMap() const { return m_IsFalling && !m_FirstHalfOfTheJump && (m_Direction == AnimationComponent::AnimationState::JumpLeftTop || m_Direction == AnimationComponent::AnimationState::JumpRightTop); };
 	virtual void ActivateJump(bool isSideWaysJump = false);
 	void FallToDeath();
 	void Jump();
 	//
 	bool m_IsMoving;
-	bool m_FallingToDeath;
+	bool m_IsFalling;
 	float m_Speed;
 	glm::vec2 m_MoveDistance;
 	bool m_FirstHalfOfTheJump;
@@ -28,7 +29,5 @@ protected:
 	int m_CurrentColumn;
 	int m_CurrentRow;
 
-	float m_FallingTimer;
-	const float m_FallingTime;
 	bool m_IsOffScreen;
 };

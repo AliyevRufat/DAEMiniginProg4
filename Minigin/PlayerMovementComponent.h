@@ -27,6 +27,7 @@ public:
 private:
 	//Method
 	void OffScreenCheck();
+	void GoingDownThePyramid();
 	void ActivateJump(bool isSideWaysJump = false) override;
 	//Datamember
 	const static int m_AmountOfMoves = 4;
@@ -40,7 +41,9 @@ private:
 	//
 	const float m_FreezeTime;
 	float m_FreezeTimer;
+	bool m_JumpedRightDown;
 	bool m_IsKilled;
+	bool m_JumpDown;
 	//
 	dae::Scene::GameMode m_GameMode;
 };

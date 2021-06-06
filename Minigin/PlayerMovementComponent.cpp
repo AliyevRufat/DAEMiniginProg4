@@ -2,6 +2,7 @@
 #include "PlayerMovementComponent.h"
 #include "PyramidComponent.h"
 #include "SceneManager.h"
+#include "EnemyManager.h"
 #include "Transform.h"
 #include "HealthComponent.h"
 
@@ -11,11 +12,14 @@ PlayerMovementComponent::PlayerMovementComponent(const std::string& name, dae::S
 	, m_FreezeTime{ 2.0f }
 	, m_FreezeTimer{ 0.0f }
 	, m_IsKilled{ false }
+	, m_JumpedRightDown{ false }
+	, m_JumpDown{ false }
 	, m_GameMode{ gameMode }
 {
 	if (m_IsEnemy)
 	{
 		m_Speed *= 0.8f;
+		m_JumpDown = true;
 	}
 	if (gameMode == dae::Scene::GameMode::Coop)
 	{
@@ -32,11 +36,25 @@ PlayerMovementComponent::PlayerMovementComponent(const std::string& name, dae::S
 			m_CurrentCubeIndex = 6;
 		}
 	}
+	if (gameMode == dae::Scene::GameMode::Versus)
+	{
+		if (name == "Q*Bert")
+		{
+			m_CurrentColumn = 0;
+			m_CurrentRow = 6;
+			m_CurrentCubeIndex = 27;
+		}
+	}
 	m_SourceHeightOffset = 0;
 }
 
 void PlayerMovementComponent::Update()
 {
+	if (m_JumpDown)
+	{
+		GoingDownThePyramid();
+	}
+
 	if (m_IsKilled)
 	{
 		m_FreezeTimer += Time::GetInstance().GetDeltaTime();
@@ -50,7 +68,7 @@ void PlayerMovementComponent::Update()
 
 	OffScreenCheck();
 
-	if (m_FallingToDeath)
+	if (m_IsFalling)
 	{
 		FallToDeath();
 	}
@@ -74,14 +92,13 @@ void PlayerMovementComponent::OffScreenCheck()
 {
 	if (m_IsOffScreen)
 	{
-		m_FreezeTimer += Time::GetInstance().GetDeltaTime();
-		if (m_FreezeTimer >= m_FreezeTime)
+		dae::SceneManager::GetInstance().GetCurrentScene()->GetCurrentLevel()->GetComponent<PyramidComponent>()->TeleportPlayersToCorrectPos(m_GameMode);
+		if (!m_IsEnemy)
 		{
-			dae::SceneManager::GetInstance().GetCurrentScene()->GetCurrentLevel()->GetComponent<PyramidComponent>()->TeleportPlayersToCorrectPos(m_GameMode);
 			m_pGameObject->GetComponent<HealthComponent>()->Die();
-			m_IsOffScreen = false;
-			m_FreezeTimer -= m_FreezeTimer;
 		}
+		EnemyManager::GetInstance().DeleteAllEnemies();
+		m_IsOffScreen = false;
 	}
 }
 
@@ -148,7 +165,7 @@ void PlayerMovementComponent::JumpOnDisc()
 			m_CurrentCubeIndex = 0;
 			m_IsOnDisc = false;
 			m_JumpingOnDisc = false;
-			m_FallingToDeath = false;
+			m_IsFalling = false;
 		}
 		else
 		{
@@ -181,7 +198,7 @@ void PlayerMovementComponent::JumpOnDisc()
 			if (pos.y > 720)
 			{
 				m_IsMoving = false;
-				m_FallingToDeath = false;
+				m_IsFalling = false;
 			}
 			else transform->SetPosition(glm::vec2(pos.x, pos.y));
 		}
@@ -210,10 +227,40 @@ void PlayerMovementComponent::ActivateJump(bool isSideWaysJump)
 
 	if (!fallOfMap && !CurrentMap->GetSpecificCube(m_CurrentCubeIndex)->GetHasDiscNextToIt())
 	{
-		m_FallingToDeath = true;
+		m_IsFalling = true;
 	}
 	else if (!fallOfMap && CurrentMap->GetSpecificCube(m_CurrentCubeIndex)->GetHasDiscNextToIt())
 	{
 		m_JumpingOnDisc = true;
 	}
+}
+
+void PlayerMovementComponent::GoingDownThePyramid()
+{
+	if (m_IsMoving)
+	{
+		return;
+	}
+
+	if (m_CurrentRow == 5)
+	{
+		m_JumpDown = false;
+	}
+
+	if (m_JumpedRightDown)
+	{
+		m_Direction = AnimationComponent::AnimationState::JumpLeftDown;
+		m_pGameObject->GetComponent<AnimationComponent>()->SetAnimationState(AnimationComponent::AnimationState::JumpLeftDown);
+		ActivateJump();
+		++m_CurrentRow;
+	}
+	else
+	{
+		m_Direction = AnimationComponent::AnimationState::JumpRightDown;
+		m_pGameObject->GetComponent<AnimationComponent>()->SetAnimationState(AnimationComponent::AnimationState::JumpRightDown);
+		ActivateJump();
+		++m_CurrentColumn;
+		++m_CurrentRow;
+	}
+	m_JumpedRightDown = !m_JumpedRightDown;
 }

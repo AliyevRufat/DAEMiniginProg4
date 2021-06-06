@@ -11,7 +11,6 @@ public:
 	void Update();
 	void AddCollisionObject(std::shared_ptr<GameObject> gameObject);
 	void DeleteGameObject(std::shared_ptr<GameObject> gameObject);
-
 private:
 	//Methods
 	bool IsOverlapping(const SDL_Rect& r1, const SDL_Rect& r2);

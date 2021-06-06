@@ -67,7 +67,7 @@ void EnemyMovementComponent::Update()
 
 	if (m_EnemyType == EnemyManager::EnemyType::WrongWay || m_EnemyType == EnemyManager::EnemyType::Ugg)
 	{
-		if (m_FallingToDeath)
+		if (m_IsFalling)
 		{
 			SidewaysFall();
 		}
@@ -377,10 +377,18 @@ void EnemyMovementComponent::SidewaysFall()
 
 	transform->SetPosition(pos);
 
-	m_FallingTimer += Time::GetInstance().GetDeltaTime();
-	if (m_FallingTimer >= m_FallingTime)
+	if (m_EnemyType == EnemyManager::EnemyType::WrongWay)
 	{
-		m_IsOffScreen = true;
-		m_FallingTimer -= m_FallingTimer;
+		if (pos.x >= 1300)
+		{
+			m_IsOffScreen = true;
+		}
+	}
+	else if (m_EnemyType == EnemyManager::EnemyType::WrongWay)
+	{
+		if (pos.x <= 0)
+		{
+			m_IsOffScreen = true;
+		}
 	}
 }

@@ -21,15 +21,15 @@ void ScoreObserver::OnNotify(const GameObject* actor, Event event)
 void ScoreObserver::ChangeScore(const GameObject* actor)
 {
 	std::shared_ptr<dae::SceneObject> spPointsDisplay = nullptr;
-	//if (actor->GetName() == "Q*Bert")
+	if (actor->GetName() == "Q*Bert")
 	{
 		spPointsDisplay = dae::SceneManager::GetInstance().GetCurrentScene().get()->GetObjectByName("ScoreDisplay");
 	}
-	//else
-	//{
-	//	spPointsDisplay = dae::SceneManager::GetInstance().GetCurrentScene().get()->GetObjectByName("ScoreDisplay2");
-	//}
-	//
+	else
+	{
+		spPointsDisplay = dae::SceneManager::GetInstance().GetCurrentScene().get()->GetObjectByName("ScoreDisplay2");
+	}
+
 	if (!spPointsDisplay) {
 		std::cout << "WARNING: pointsDisplay not found after player death" << std::endl;
 		return;
