@@ -20,6 +20,9 @@ BaseMovementComponent::BaseMovementComponent()
 	, m_SourceHeightOffset{}
 	, m_CurrentColumn{ 0 }
 	, m_CurrentRow{ 0 }
+	, m_FallingTimer{ 0.0f }
+	, m_FallingTime{ 3.0f }
+	, m_IsOffScreen{ false }
 {
 	const glm::vec2& cubeOffset = dae::SceneManager::GetInstance().GetCurrentScene()->GetCurrentLevel()->GetComponent<PyramidComponent>()->GetCubeOffset();
 	m_MoveDistance = cubeOffset;
@@ -168,5 +171,12 @@ void BaseMovementComponent::FallToDeath()
 	else
 	{
 		transform->SetPosition(pos);
+	}
+
+	m_FallingTimer += Time::GetInstance().GetDeltaTime();
+	if (m_FallingTimer >= m_FallingTime)
+	{
+		m_IsOffScreen = true;
+		m_FallingTimer -= m_FallingTimer;
 	}
 }

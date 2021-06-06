@@ -18,7 +18,7 @@ public:
 
 	const glm::vec2& GetCubeOffset() const;
 	bool GetNextCubeIndex(int& currentIndex, AnimationComponent::AnimationState jumpDir, bool isSidewaysJump, int currentColumn, int currentRow) const; // Returns false if the player jumps off the map
-	void TeleportPlayersToSpawnPos();
+	void TeleportPlayersToCorrectPos(dae::Scene::GameMode gameMode);
 	std::shared_ptr<CubeObject> GetSpecificCube(int index) const;
 	std::shared_ptr<FlyingDisc> GetDisc(std::shared_ptr<GameObject> gameObject);
 private:

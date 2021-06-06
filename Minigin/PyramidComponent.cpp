@@ -8,6 +8,7 @@
 #include "CollisionDetectionManager.h"
 #include "PlayerMovementComponent.h"
 #include <iomanip>
+#include "EnemyManager.h"
 
 PyramidComponent::PyramidComponent(const glm::vec2& topCubePos)
 	:m_RowAmount(7)
@@ -175,23 +176,30 @@ void PyramidComponent::Update()
 	}
 	DeleteUsedDiscs();
 
+	auto currScene = dae::SceneManager::GetInstance().GetCurrentScene();
+
 	if (m_IsLevelFinished)
 	{
 		m_CurrentCubesColorChangeTime += Time::GetInstance().GetDeltaTime();
 		CubesColorChangeOnLevelComplete();
 
-		if (dae::SceneManager::GetInstance().GetCurrentScene()->AreAllObjectsActive())
+		if (currScene->AreAllObjectsActive())
 		{
-			dae::SceneManager::GetInstance().GetCurrentScene()->SetObjectsIsActive(false);
+			currScene->SetObjectsIsActive(false);
 		}
 	}
 	else
 	{
-		if (!dae::SceneManager::GetInstance().GetCurrentScene()->AreAllObjectsActive())
+		if (!currScene->AreAllObjectsActive())
 		{
-			dae::SceneManager::GetInstance().GetCurrentScene()->SetObjectsIsActive(true);
+			currScene->SetObjectsIsActive(true);
 		}
 		m_IsLevelFinished = LevelCompletedCheck();
+		if (m_IsLevelFinished)
+		{
+			EnemyManager::GetInstance().SetParametersAccordingToTheLevel(currScene->GetGameLevel());
+			EnemyManager::GetInstance().DeleteAllEnemies();
+		}
 	}
 }
 
@@ -211,21 +219,71 @@ const glm::vec2& PyramidComponent::GetCubeOffset() const
 	return m_CubeDistance;
 }
 
-void PyramidComponent::TeleportPlayersToSpawnPos()
+void PyramidComponent::TeleportPlayersToCorrectPos(dae::Scene::GameMode gameMode)
 {
-	//gamemodes switch here
-	auto cube = GetSpecificCube(0);
+	const int playerWidth = 16;
+	const int playerHeight = 16;
+	if (gameMode == dae::Scene::GameMode::SinglePlayer || gameMode == dae::Scene::GameMode::Versus)
+	{
+		auto cube = GetSpecificCube(0);
 
-	auto currentScene = dae::SceneManager::GetInstance().GetCurrentScene();
-	auto player1 = currentScene->GetPlayer(0);
+		auto currentScene = dae::SceneManager::GetInstance().GetCurrentScene();
+		auto player = currentScene->GetPlayer(0);
 
-	glm::vec2 startingPosition{ 0,0 };
+		glm::vec2 startingPosition{ 0,0 };
 
-	startingPosition.x = cube->GetGameObject()->GetComponent<TransformComponent>()->GetTransform().GetPosition().x + (dae::SceneManager::GetInstance().GetCurrentScene()->GetSceneScale() * 8.f);
-	startingPosition.y = cube->GetGameObject()->GetComponent<TransformComponent>()->GetTransform().GetPosition().y - (dae::SceneManager::GetInstance().GetCurrentScene()->GetSceneScale() * 10.f);
+		startingPosition.x = cube->GetGameObject()->GetComponent<TransformComponent>()->GetTransform().GetPosition().x + (dae::SceneManager::GetInstance().GetCurrentScene()->GetSceneScale() * 8.f);
+		startingPosition.y = cube->GetGameObject()->GetComponent<TransformComponent>()->GetTransform().GetPosition().y - (dae::SceneManager::GetInstance().GetCurrentScene()->GetSceneScale() * 10.f);
 
-	player1->GetComponent<TransformComponent>()->SetPosition(startingPosition);
-	player1->GetComponent<PlayerMovementComponent>()->SetCubeIndexColumnAndRow(0, 0, 0);
+		player->GetComponent<TransformComponent>()->SetPosition(startingPosition);
+		player->GetComponent<PlayerMovementComponent>()->SetCubeIndexColumnAndRow(0, 0, 0);
+	}
+	else
+	{
+		auto currentScene = dae::SceneManager::GetInstance().GetCurrentScene();
+		auto player1 = currentScene->GetPlayer(0);
+		auto player2 = currentScene->GetPlayer(1);
+
+		glm::vec2 desPosPlayer1{ 0,0 };
+		glm::vec2 desPosPlayer2{ 0,0 };
+
+		if (player1->GetComponent<PlayerMovementComponent>()->GetIsOnDisc())
+		{
+			desPosPlayer1.x = GetSpecificCube(0)->GetGameObject()->GetComponent<TransformComponent>()->GetTransform().GetPosition().x + playerWidth;
+			desPosPlayer1.y = GetSpecificCube(0)->GetGameObject()->GetComponent<TransformComponent>()->GetTransform().GetPosition().y - playerHeight;
+			desPosPlayer2.x = GetSpecificCube(6)->GetGameObject()->GetComponent<TransformComponent>()->GetTransform().GetPosition().x + playerWidth;
+			desPosPlayer2.y = GetSpecificCube(6)->GetGameObject()->GetComponent<TransformComponent>()->GetTransform().GetPosition().y - playerHeight;
+
+			player1->GetComponent<TransformComponent>()->SetPosition(desPosPlayer1);
+			player1->GetComponent<PlayerMovementComponent>()->SetCubeIndexColumnAndRow(0, 0, 0);
+			player2->GetComponent<TransformComponent>()->SetPosition(desPosPlayer2);
+			player2->GetComponent<PlayerMovementComponent>()->SetCubeIndexColumnAndRow(6, 6, 6);
+		}
+		else if (player2->GetComponent<PlayerMovementComponent>()->GetIsOnDisc())
+		{
+			desPosPlayer1.x = GetSpecificCube(27)->GetGameObject()->GetComponent<TransformComponent>()->GetTransform().GetPosition().x + playerWidth;
+			desPosPlayer1.y = GetSpecificCube(27)->GetGameObject()->GetComponent<TransformComponent>()->GetTransform().GetPosition().y - playerHeight;
+			desPosPlayer2.x = GetSpecificCube(0)->GetGameObject()->GetComponent<TransformComponent>()->GetTransform().GetPosition().x + playerWidth;
+			desPosPlayer2.y = GetSpecificCube(0)->GetGameObject()->GetComponent<TransformComponent>()->GetTransform().GetPosition().y - playerHeight;
+
+			player1->GetComponent<TransformComponent>()->SetPosition(desPosPlayer1);
+			player1->GetComponent<PlayerMovementComponent>()->SetCubeIndexColumnAndRow(27, 0, 6);
+			player2->GetComponent<TransformComponent>()->SetPosition(desPosPlayer2);
+			player2->GetComponent<PlayerMovementComponent>()->SetCubeIndexColumnAndRow(0, 0, 0);
+		}
+		else if (!player1->GetComponent<PlayerMovementComponent>()->GetIsOnDisc() && !player2->GetComponent<PlayerMovementComponent>()->GetIsOnDisc())
+		{
+			desPosPlayer1.x = GetSpecificCube(27)->GetGameObject()->GetComponent<TransformComponent>()->GetTransform().GetPosition().x + playerWidth;
+			desPosPlayer1.y = GetSpecificCube(27)->GetGameObject()->GetComponent<TransformComponent>()->GetTransform().GetPosition().y - playerHeight;
+			desPosPlayer2.x = GetSpecificCube(6)->GetGameObject()->GetComponent<TransformComponent>()->GetTransform().GetPosition().x + playerWidth;
+			desPosPlayer2.y = GetSpecificCube(6)->GetGameObject()->GetComponent<TransformComponent>()->GetTransform().GetPosition().y - playerHeight;
+
+			player1->GetComponent<TransformComponent>()->SetPosition(desPosPlayer1);
+			player1->GetComponent<PlayerMovementComponent>()->SetCubeIndexColumnAndRow(27, 0, 6);
+			player2->GetComponent<TransformComponent>()->SetPosition(desPosPlayer2);
+			player2->GetComponent<PlayerMovementComponent>()->SetCubeIndexColumnAndRow(6, 6, 6);
+		}
+	}
 }
 
 std::shared_ptr<CubeObject> PyramidComponent::GetSpecificCube(int index) const
@@ -310,7 +368,6 @@ bool PyramidComponent::LevelCompletedCheck()
 				return false;
 			}
 		}
-		//TeleportPlayersToSpawnPos();
 
 		currentScene->SetGameLevel(dae::Scene::Level(int(currentScene->GetGameLevel()) + 1));
 
@@ -319,7 +376,6 @@ bool PyramidComponent::LevelCompletedCheck()
 			cube->ResetColor();
 		}
 		return true;
-		//SpawnDiscs();
 	}
 	else if (currentScene->GetGameLevel() == dae::Scene::Level::SecondLevel)
 	{
@@ -331,8 +387,6 @@ bool PyramidComponent::LevelCompletedCheck()
 			}
 		}
 
-		//TeleportPlayersToSpawnPos();
-
 		currentScene->SetGameLevel(dae::Scene::Level(int(currentScene->GetGameLevel()) + 1));
 
 		for (auto& cube : m_Cubes)
@@ -340,8 +394,6 @@ bool PyramidComponent::LevelCompletedCheck()
 			cube->ResetColor();
 		}
 		return true;
-
-		//SpawnDiscs();
 	}
 	else if (currentScene->GetGameLevel() == dae::Scene::Level::ThirdLevel)
 	{
@@ -353,8 +405,6 @@ bool PyramidComponent::LevelCompletedCheck()
 			}
 		}
 
-		//TeleportPlayersToSpawnPos();
-
 		currentScene->SetGameLevel(dae::Scene::Level(0));
 
 		for (auto& cube : m_Cubes)
@@ -362,8 +412,6 @@ bool PyramidComponent::LevelCompletedCheck()
 			cube->ResetColor();
 		}
 		return true;
-
-		//SpawnDiscs();
 	}
 	return false;
 }
@@ -379,7 +427,7 @@ void PyramidComponent::CubesColorChangeOnLevelComplete()
 	{
 		m_CurrentCubesColorChangeTime -= m_CurrentCubesColorChangeTime;
 		SpawnDiscs();
-		TeleportPlayersToSpawnPos();
+		TeleportPlayersToCorrectPos(dae::SceneManager::GetInstance().GetCurrentScene()->GetCurrentGameMode());
 		m_IsLevelFinished = false;
 		for (auto& cube : m_Cubes)
 		{

@@ -20,7 +20,9 @@ private:
 	//Datamembers
 	std::vector<TransformComponent*> m_pOtherEntityTransforms;
 	TransformComponent* m_pQbertTransform;
+	TransformComponent* m_pQbertTransform2;
 	//
 	std::vector<std::shared_ptr<GameObject>> m_pOtherEntities;
 	std::shared_ptr<GameObject> m_pQbert;
+	std::shared_ptr<GameObject> m_pQbert2;
 };

@@ -21,14 +21,14 @@ void LivesObserver::OnNotify(const GameObject* actor, Event event)
 void LivesObserver::ChangeLives(const GameObject* actor)
 {
 	std::shared_ptr<dae::SceneObject> spLivesDisplay = nullptr;
-	if (actor->GetName() == "Q*Bert")
+	//if (actor->GetName() == "Q*Bert")
 	{
 		spLivesDisplay = dae::SceneManager::GetInstance().GetCurrentScene().get()->GetObjectByName("LivesDisplay");
 	}
-	else
-	{
-		spLivesDisplay = dae::SceneManager::GetInstance().GetCurrentScene().get()->GetObjectByName("LivesDisplay2");
-	}
+	//else
+	//{
+	//	spLivesDisplay = dae::SceneManager::GetInstance().GetCurrentScene().get()->GetObjectByName("LivesDisplay2");
+	//}
 	//
 	if (!spLivesDisplay) {
 		std::cout << "WARNING: livesDisplay not found after player death" << std::endl;

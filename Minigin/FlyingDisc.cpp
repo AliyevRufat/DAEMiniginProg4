@@ -4,6 +4,7 @@
 #include "Scene.h"
 #include "Time.h"
 #include "Transform.h"
+#include "EnemyManager.h"
 #include "AnimationComponent.h"
 #include "PlayerMovementComponent.h"
 #include <cmath>
@@ -63,18 +64,20 @@ void FlyingDisc::SwitchColors()
 
 void FlyingDisc::MoveToTheTop()
 {
-	if (m_Direction == glm::vec2{ 0,0 })
-	{
-		auto dist = m_FinalPos - m_pGameObject->GetComponent<TransformComponent>()->GetTransform().GetPosition();
-
-		auto length = sqrt((dist.x * dist.x) + (dist.y * dist.y));
-
-		m_Direction.x = dist.x / length;
-		m_Direction.y = dist.y / length;
-	}
-
 	if (m_IsMovingToTop)
 	{
+		if (m_Direction == glm::vec2{ 0,0 })
+		{
+			auto dist = m_FinalPos - m_pGameObject->GetComponent<TransformComponent>()->GetTransform().GetPosition();
+
+			auto length = sqrt((dist.x * dist.x) + (dist.y * dist.y));
+
+			m_Direction.x = dist.x / length;
+			m_Direction.y = dist.y / length;
+
+			EnemyManager::GetInstance().DeleteAllEnemies();
+		}
+
 		m_pTransformComponent = m_pGameObject->GetComponent<TransformComponent>();
 
 		glm::vec2 discPosition = m_pTransformComponent->GetTransform().GetPosition();
@@ -91,6 +94,7 @@ void FlyingDisc::MoveToTheTop()
 			m_IsMovingToTop = false;
 			m_IsUsed = true;
 			dae::SceneManager::GetInstance().GetCurrentScene()->GetPlayer(0)->GetComponent<PlayerMovementComponent>()->SetDiscTransform(nullptr);
+			dae::SceneManager::GetInstance().GetCurrentScene()->GetPlayer(1)->GetComponent<PlayerMovementComponent>()->SetDiscTransform(nullptr);
 		}
 	}
 }

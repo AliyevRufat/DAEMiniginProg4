@@ -81,6 +81,9 @@
     <ClInclude Include="FlyingDisc.h">
       <Filter>MiniginEngine\Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="EnemyManager.h">
+      <Filter>MiniginEngine\Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="MiniginPCH.cpp">
@@ -126,6 +129,9 @@
       <Filter>MiniginEngine\Components</Filter>
     </ClCompile>
     <ClCompile Include="FlyingDisc.cpp">
+      <Filter>MiniginEngine\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="EnemyManager.cpp">
       <Filter>MiniginEngine\Source Files</Filter>
     </ClCompile>
   </ItemGroup>

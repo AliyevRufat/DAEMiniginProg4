@@ -8,7 +8,7 @@ public:
 	explicit BaseMovementComponent();
 	virtual void Update() = 0;
 	void SetCubeIndexColumnAndRow(int index, int column, int row) { m_CurrentCubeIndex = index; m_CurrentColumn = column; m_CurrentRow = row; };
-
+	bool GetIsOffScreen() const { return m_IsOffScreen; };
 protected:
 	//Methods
 	bool GetIsFallingToDeathBehindMap() const { return m_FallingToDeath && !m_FirstHalfOfTheJump && (m_Direction == AnimationComponent::AnimationState::JumpLeftTop || m_Direction == AnimationComponent::AnimationState::JumpRightTop); };
@@ -27,4 +27,8 @@ protected:
 	int m_SourceHeightOffset;
 	int m_CurrentColumn;
 	int m_CurrentRow;
+
+	float m_FallingTimer;
+	const float m_FallingTime;
+	bool m_IsOffScreen;
 };

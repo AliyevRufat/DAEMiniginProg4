@@ -3,20 +3,53 @@
 #include "PyramidComponent.h"
 #include "SceneManager.h"
 #include "Transform.h"
+#include "HealthComponent.h"
 
-PlayerMovementComponent::PlayerMovementComponent(bool isEnemy)
+PlayerMovementComponent::PlayerMovementComponent(const std::string& name, dae::Scene::GameMode gameMode, bool isEnemy)
 	: m_IsKeyPressed{ false }
 	, m_IsEnemy{ isEnemy }
+	, m_FreezeTime{ 2.0f }
+	, m_FreezeTimer{ 0.0f }
+	, m_IsKilled{ false }
+	, m_GameMode{ gameMode }
 {
 	if (m_IsEnemy)
 	{
-		m_Speed *= 0.6f;
+		m_Speed *= 0.8f;
+	}
+	if (gameMode == dae::Scene::GameMode::Coop)
+	{
+		if (name == "Q*Bert")
+		{
+			m_CurrentColumn = 0;
+			m_CurrentRow = 6;
+			m_CurrentCubeIndex = 27;
+		}
+		else if (name == "Q*Bert2")
+		{
+			m_CurrentColumn = 6;
+			m_CurrentRow = 6;
+			m_CurrentCubeIndex = 6;
+		}
 	}
 	m_SourceHeightOffset = 0;
 }
 
 void PlayerMovementComponent::Update()
 {
+	if (m_IsKilled)
+	{
+		m_FreezeTimer += Time::GetInstance().GetDeltaTime();
+		if (m_FreezeTimer >= m_FreezeTime)
+		{
+			m_FreezeTimer -= m_FreezeTimer;
+			m_IsKilled = false;
+		}
+		return;
+	}
+
+	OffScreenCheck();
+
 	if (m_FallingToDeath)
 	{
 		FallToDeath();
@@ -28,6 +61,27 @@ void PlayerMovementComponent::Update()
 	else if (m_IsMoving)
 	{
 		Jump();
+	}
+}
+
+void PlayerMovementComponent::SetPlayerKilled(bool isKilled)
+{
+	m_IsKilled = isKilled;
+	m_pGameObject->GetComponent<HealthComponent>()->Die();
+}
+
+void PlayerMovementComponent::OffScreenCheck()
+{
+	if (m_IsOffScreen)
+	{
+		m_FreezeTimer += Time::GetInstance().GetDeltaTime();
+		if (m_FreezeTimer >= m_FreezeTime)
+		{
+			dae::SceneManager::GetInstance().GetCurrentScene()->GetCurrentLevel()->GetComponent<PyramidComponent>()->TeleportPlayersToCorrectPos(m_GameMode);
+			m_pGameObject->GetComponent<HealthComponent>()->Die();
+			m_IsOffScreen = false;
+			m_FreezeTimer -= m_FreezeTimer;
+		}
 	}
 }
 
@@ -90,7 +144,7 @@ void PlayerMovementComponent::JumpOnDisc()
 	{
 		if (m_IsOnDisc)
 		{
-			dae::SceneManager::GetInstance().GetCurrentScene()->GetCurrentLevel()->GetComponent<PyramidComponent>()->TeleportPlayersToSpawnPos();
+			dae::SceneManager::GetInstance().GetCurrentScene()->GetCurrentLevel()->GetComponent<PyramidComponent>()->TeleportPlayersToCorrectPos(m_GameMode);
 			m_CurrentCubeIndex = 0;
 			m_IsOnDisc = false;
 			m_JumpingOnDisc = false;

@@ -1,23 +1,16 @@
 #pragma once
 #include "GameObject.h"
+#include "EnemyManager.h"
 #include "BaseMovementComponent.h"
 
 class EnemyMovementComponent final : public BaseMovementComponent
 {
 public:
 
-	enum class EnemyType
-	{
-		Coily,
-		Sam,
-		Slick,
-		Ugg,
-		WrongWay
-	};
-
-	EnemyMovementComponent(const std::shared_ptr<GameObject>& pPlayer, EnemyType enemyType);
+	EnemyMovementComponent(EnemyManager::EnemyType enemyType, const std::shared_ptr<GameObject>& pPlayer = nullptr, const std::shared_ptr<GameObject>& pPlayer2 = nullptr);
 	void Update();
-
+	bool GetIsDead() const { return m_IsDead; };
+	void SetIsDead(bool isDead) { m_IsDead = isDead; };
 private:
 	//Methods
 	void FollowPlayer();
@@ -25,10 +18,15 @@ private:
 	void SidewaysMovement();
 	void SidewaysJump();
 	void SidewaysFall();
+	bool IsOnSpawnCube();
 
 	//Datamembers
-	EnemyType m_EnemyType;
+	EnemyManager::EnemyType m_EnemyType;
 	std::shared_ptr<GameObject> m_pPlayer;
+	std::shared_ptr<GameObject> m_pPlayer2;
 	float m_CurrentJumpTime;
-	const float m_MaxJumpTime;
+	float m_MaxJumpTime;
+	float m_SpeedMultiplier;
+	bool m_IsDead;
+	bool m_IsOnSpawnCube;
 };

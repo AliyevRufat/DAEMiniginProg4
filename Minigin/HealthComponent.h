@@ -9,9 +9,6 @@ public:
 	const unsigned int& GetLives() const;
 	void SetLives(const unsigned int&);
 	void Die();
-	void Respawn();
-	bool IsAlive() const;
 private:
 	unsigned int m_Lives;
-	bool m_Dead;
 };

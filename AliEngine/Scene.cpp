@@ -105,7 +105,8 @@ void dae::Scene::DeleteMarkedObjects()
 	{
 		if (m_SpObjects[i]->GetMarkForDelete())
 		{
-			m_SpObjects.erase(m_SpObjects.begin() + i);
+			m_SpObjects.erase(std::remove(m_SpObjects.begin(), m_SpObjects.end(), *(m_SpObjects.begin() + i)));
+			--i;
 		}
 	}
 }
