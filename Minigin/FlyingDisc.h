@@ -1,7 +1,7 @@
 #pragma once
-#include "GameObject.h"
+#include "../AliEngine/GameObject.h"
 #include "glm\vec2.hpp"
-#include "TransformComponent.h"
+#include "../AliEngine/TransformComponent.h"
 
 class FlyingDisc
 {

@@ -1,6 +1,6 @@
 #pragma once
-#include "Singleton.h"
-#include "GameObject.h"
+#include "../AliEngine/Singleton.h"
+#include "../AliEngine/GameObject.h"
 #include "ComponentIncludes.h"
 
 class TransformComponent;

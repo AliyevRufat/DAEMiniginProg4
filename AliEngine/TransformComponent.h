@@ -1,6 +1,6 @@
 #pragma once
-#include "BaseComponent.h"
-#include "Transform.h"
+#include "../AliEngine/BaseComponent.h"
+#include "../AliEngine/Transform.h"
 #include <SDL.h>
 
 class TransformComponent final : public BaseComponent

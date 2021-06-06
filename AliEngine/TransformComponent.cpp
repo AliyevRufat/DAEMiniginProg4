@@ -1,8 +1,8 @@
 #include "pch.h"
 #include <SDL.h>
 #include "glm\vec2.hpp"
-#include "Transform.h"
-#include "TransformComponent.h"
+#include "../AliEngine/Transform.h"
+#include "../AliEngine/TransformComponent.h"
 
 TransformComponent::TransformComponent(const glm::vec2& pos, const glm::vec2& scale)
 	:m_SDLRect{ SDL_Rect{(int)pos.x,(int)pos.y,(int)scale.x,(int)scale.y} }

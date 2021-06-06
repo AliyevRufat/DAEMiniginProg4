@@ -1,9 +1,9 @@
 #include "MiniginPCH.h"
 #include "FlyingDisc.h"
-#include "SceneManager.h"
-#include "Scene.h"
-#include "Time.h"
-#include "Transform.h"
+#include "../AliEngine/SceneManager.h"
+#include "../AliEngine/Scene.h"
+#include "../AliEngine/EngineTime.h"
+#include "../AliEngine/Transform.h"
 #include "EnemyManager.h"
 #include "AnimationComponent.h"
 #include "PlayerMovementComponent.h"
@@ -44,7 +44,7 @@ void FlyingDisc::SwitchColors()
 {
 	if (m_AnimTimer > 0)
 	{
-		m_AnimTimer -= Time::GetInstance().GetDeltaTime();
+		m_AnimTimer -= EngineTime::GetInstance().GetDeltaTime();
 	}
 	else
 	{

@@ -1,9 +1,9 @@
 #pragma once
-#include "Singleton.h"
+#include "../AliEngine/Singleton.h"
 #include <vector>
-#include "GameObject.h"
+#include "../AliEngine/GameObject.h"
 #include <SDL.h>
-#include "Scene.h"
+#include "../AliEngine/Scene.h"
 
 class EnemyManager : public dae::Singleton<EnemyManager>
 {

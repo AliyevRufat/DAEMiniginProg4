@@ -1,6 +1,6 @@
 #pragma once
-#include "Scene.h"
-#include "GameObject.h"
+#include "../AliEngine/Scene.h"
+#include "../AliEngine/GameObject.h"
 #include "glm/vec2.hpp"
 
 class CubeObject

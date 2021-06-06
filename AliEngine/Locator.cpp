@@ -1,5 +1,5 @@
 #include "pch.h"
-#include "Locator.h"
+#include "../AliEngine/Locator.h"
 
 AudioService* Locator::m_pService = nullptr;
 NullAudio Locator::m_NullService{};

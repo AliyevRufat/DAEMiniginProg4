@@ -1,14 +1,14 @@
 #include "pch.h"
 #include <string>
 #include <iostream>
-#include "ResourceManager.h"
+#include "../AliEngine/ResourceManager.h"
 #include <SDL.h>
 #include <SDL_image.h>
 #include <SDL_ttf.h>
 
-#include "Renderer.h"
-#include "Texture2D.h"
-#include "Font.h"
+#include "../AliEngine/Renderer.h"
+#include "../AliEngine/Texture2D.h"
+#include "../AliEngine/Font.h"
 
 void dae::ResourceManager::Init(const std::string& dataPath)
 {

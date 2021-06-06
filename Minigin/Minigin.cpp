@@ -2,20 +2,20 @@
 #include "Minigin.h"
 #include <chrono>
 #include <thread>
-#include "InputManager.h"
-#include "SceneManager.h"
-#include "Renderer.h"
-#include "ResourceManager.h"
+#include "../AliEngine/InputManager.h"
+#include "../AliEngine/SceneManager.h"
+#include "../AliEngine/Renderer.h"
+#include "../AliEngine/ResourceManager.h"
 #include <SDL.h>
-#include "GameObject.h"
-#include "Scene.h"
-#include "Time.h"
+#include "../AliEngine/GameObject.h"
+#include "../AliEngine/Scene.h"
+#include "../AliEngine/EngineTime.h"
 #include "ScoreObserver.h"
 #include "LivesObserver.h"
-#include "AudioService.h"
-#include "Locator.h"
+#include "../AliEngine/AudioService.h"
+#include "../AliEngine/Locator.h"
 #include "AnimationComponent.h"
-#include "ConsoleAudioService.h"
+#include "../AliEngine/ConsoleAudioService.h"
 #include "PyramidComponent.h"
 #include "PlayerMovementComponent.h"
 #include "EnemyMovementComponent.h"
@@ -142,7 +142,7 @@ void dae::Minigin::Run()
 		input.ControllerAnalogs();
 		input.InputHandler();
 		doContinue = input.KeyboardInput();
-		Time::GetInstance().SetDeltaTime(deltaTime);
+		EngineTime::GetInstance().SetDeltaTime(deltaTime);
 
 		sceneManager.Update();
 		renderer.Render();
@@ -909,7 +909,7 @@ void dae::Minigin::LoadVersusScene() const
 
 void dae::Minigin::LoadGame() const
 {
-	//LoadSinglePlayerScene();
+	LoadSinglePlayerScene();
 	//LoadCoOpScene();
-	LoadVersusScene();
+	//LoadVersusScene();
 }

@@ -1,11 +1,12 @@
 #pragma once
 #include "MiniginPCH.h"
 #include "PyramidComponent.h"
-#include "Renderer.h"
-#include "TransformComponent.h"
-#include "Texture2DComponent.h"
+#include "../AliEngine/Renderer.h"
+#include "../AliEngine/TransformComponent.h"
+#include "../AliEngine/Texture2DComponent.h"
 #include "HealthComponent.h"
-#include "SceneManager.h"
+#include "../AliEngine/EngineTime.h"
+#include "../AliEngine/SceneManager.h"
 #include "CollisionDetectionManager.h"
 #include "PlayerMovementComponent.h"
 #include <iomanip>
@@ -37,9 +38,9 @@ void PyramidComponent::CreateMap()
 	int rowCubeCount = m_RowAmount;
 	glm::vec2 highestCubePos = m_HighestCubePos;
 
-	for (size_t j = 0; j < m_RowAmount; j++)
+	for (int j = 0; j < m_RowAmount; j++)
 	{
-		for (size_t i = 0; i < rowCubeCount; i++)
+		for (int i = 0; i < rowCubeCount; i++)
 		{
 			glm::vec2 pos = highestCubePos;
 			pos.x += m_CubeDistance.x * i;
@@ -181,7 +182,7 @@ void PyramidComponent::Update()
 
 	if (m_IsLevelFinished)
 	{
-		m_CurrentCubesColorChangeTime += Time::GetInstance().GetDeltaTime();
+		m_CurrentCubesColorChangeTime += EngineTime::GetInstance().GetDeltaTime();
 		CubesColorChangeOnLevelComplete();
 
 		if (currScene->AreAllObjectsActive())

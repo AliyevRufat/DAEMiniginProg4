@@ -1,9 +1,9 @@
 #include "MiniginPCH.h"
 #include "EnemyMovementComponent.h"
-#include "TransformComponent.h"
-#include "Texture2DComponent.h"
+#include "../AliEngine/TransformComponent.h"
+#include "../AliEngine/Texture2DComponent.h"
 #include "EnemyManager.h"
-#include "SceneManager.h"
+#include "../AliEngine/SceneManager.h"
 #include "PyramidComponent.h"
 
 EnemyMovementComponent::EnemyMovementComponent(EnemyManager::EnemyType enemyType, const std::shared_ptr<GameObject>& pPlayer, const std::shared_ptr<GameObject>& pPlayer2)
@@ -81,7 +81,7 @@ void EnemyMovementComponent::Update()
 		BaseMovementComponent::Update();
 	}
 
-	m_CurrentJumpTime += Time::GetInstance().GetDeltaTime();
+	m_CurrentJumpTime += EngineTime::GetInstance().GetDeltaTime();
 
 	if (m_CurrentJumpTime >= m_MaxJumpTime)
 	{
@@ -107,7 +107,7 @@ bool EnemyMovementComponent::IsOnSpawnCube()
 	const auto& currentMap = dae::SceneManager::GetInstance().GetCurrentScene()->GetCurrentLevel()->GetComponent<PyramidComponent>();
 	auto pos = m_pGameObject->GetComponent<TransformComponent>()->GetTransform().GetPosition();
 	const auto& transform = m_pGameObject->GetComponent<TransformComponent>();
-	auto deltaTime = Time::GetInstance().GetDeltaTime();
+	auto deltaTime = EngineTime::GetInstance().GetDeltaTime();
 	const float posOffset = 400.0f;
 	const int srcOffset = 40;
 
@@ -289,7 +289,7 @@ void EnemyMovementComponent::SidewaysMovement()
 
 void EnemyMovementComponent::SidewaysJump()
 {
-	float deltaTime = Time::GetInstance().GetDeltaTime();
+	float deltaTime = EngineTime::GetInstance().GetDeltaTime();
 	//
 	const auto& transform = m_pGameObject->GetComponent<TransformComponent>();
 	glm::vec2 pos = transform->GetTransform().GetPosition();
@@ -361,7 +361,7 @@ void EnemyMovementComponent::SidewaysJump()
 
 void EnemyMovementComponent::SidewaysFall()
 {
-	float deltaTime = Time::GetInstance().GetDeltaTime();
+	float deltaTime = EngineTime::GetInstance().GetDeltaTime();
 
 	const auto& transform = m_pGameObject->GetComponent<TransformComponent>();
 	glm::vec2 pos = transform->GetTransform().GetPosition();

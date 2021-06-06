@@ -1,11 +1,11 @@
 #include "pch.h"
-#include "Texture2DComponent.h"
-#include "TransformComponent.h"
+#include "../AliEngine/Texture2DComponent.h"
+#include "../AliEngine/TransformComponent.h"
 #include <string>
-#include "ResourceManager.h"
-#include "GameObject.h"
-#include "Renderer.h"
-#include "Texture2D.h"
+#include "../AliEngine/ResourceManager.h"
+#include "../AliEngine/GameObject.h"
+#include "../AliEngine/Renderer.h"
+#include "../AliEngine/Texture2D.h"
 
 Texture2DComponent::Texture2DComponent(const std::string& filename, float scale, bool hasAnimations)
 	:m_spTexture2D(dae::ResourceManager::GetInstance().LoadTexture(filename))

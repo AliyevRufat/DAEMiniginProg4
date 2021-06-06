@@ -1,6 +1,6 @@
 #pragma once
-#include "BaseComponent.h"
-#include "Texture2D.h"
+#include "../AliEngine/BaseComponent.h"
+#include "../AliEngine/Texture2D.h"
 #include <glm\vec2.hpp>
 #include <SDL.h>
 

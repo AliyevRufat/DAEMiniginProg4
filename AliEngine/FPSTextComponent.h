@@ -1,6 +1,6 @@
 #pragma once
-#include "BaseComponent.h"
-#include "Font.h"
+#include "../AliEngine/BaseComponent.h"
+#include "../AliEngine/Font.h"
 
 class TextComponent;
 

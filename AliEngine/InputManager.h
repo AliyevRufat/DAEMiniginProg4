@@ -3,12 +3,12 @@
 #include <iostream>
 #include <Windows.h>
 #include <Xinput.h>
-#include "BaseCommand.h"
+#include "../AliEngine/BaseCommand.h"
 #include "AnalogStickCommand.h"
 #include "AnalogTriggerCommand.h"
 #include <vector>
 #include <map>
-#include "Singleton.h"
+#include "../AliEngine/Singleton.h"
 #include <SDL.h>
 #pragma comment(lib, "XInput.lib")
 

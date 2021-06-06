@@ -3,14 +3,14 @@
 #include <memory>
 #include <iostream>
 #include <SDL.h>
-#include "Renderer.h"
+#include "../AliEngine/Renderer.h"
 #include "glm\vec2.hpp"
-#include "Font.h"
-#include "TextComponent.h"
-#include "TransformComponent.h"
+#include "../AliEngine/Font.h"
+#include "../AliEngine/TextComponent.h"
+#include "../AliEngine/TransformComponent.h"
 #include <SDL_ttf.h>
-#include "Time.h"
-#include "GameObject.h"
+#include "../AliEngine/EngineTime.h"
+#include "../AliEngine/GameObject.h"
 
 TextComponent::TextComponent(const std::string& text, const std::shared_ptr<dae::Font>& spFont, const SDL_Color& color, bool isVisible)
 	:m_Text{ text }
@@ -57,7 +57,7 @@ void TextComponent::Update()
 {
 	if (m_SetTimer)
 	{
-		m_SetVisibleFalseTimer -= Time::GetInstance().GetDeltaTime();
+		m_SetVisibleFalseTimer -= EngineTime::GetInstance().GetDeltaTime();
 
 		if (m_SetVisibleFalseTimer <= 0.0f)
 		{

@@ -1,7 +1,7 @@
 #pragma once
 #include "BaseMovementComponent.h"
-#include "Scene.h"
-#include "TransformComponent.h"
+#include "../AliEngine/Scene.h"
+#include "../AliEngine/TransformComponent.h"
 
 enum class InputDirection
 {

@@ -1,12 +1,12 @@
 #include "MiniginPCH.h"
 #include "CubeObject.h"
 #include <memory>
-#include "Texture2DComponent.h"
-#include "Scene.h"
-#include "TransformComponent.h"
+#include "../AliEngine/Texture2DComponent.h"
+#include "../AliEngine/Scene.h"
+#include "../AliEngine/TransformComponent.h"
 #include "AnimationComponent.h"
-#include "Transform.h"
-#include "SceneManager.h"
+#include "../AliEngine/Transform.h"
+#include "../AliEngine/SceneManager.h"
 
 using namespace dae;
 
@@ -92,7 +92,7 @@ void CubeObject::Render()
 
 void CubeObject::ColorFlash()
 {
-	m_CurrentColorSwitchTime += Time::GetInstance().GetDeltaTime();
+	m_CurrentColorSwitchTime += EngineTime::GetInstance().GetDeltaTime();
 
 	if (m_CurrentColorSwitchTime >= m_MaxColorSwitchTime)
 	{

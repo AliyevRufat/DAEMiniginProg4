@@ -1,7 +1,7 @@
 #pragma once
 #include "ComponentIncludes.h"
-#include "GameObject.h"
-#include "Scene.h"
+#include "../AliEngine/GameObject.h"
+#include "../AliEngine/Scene.h"
 #include <glm\vec2.hpp>
 #include "CubeObject.h"
 #include "AnimationComponent.h"

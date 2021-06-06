@@ -1,9 +1,9 @@
 #pragma once
-#include "BaseComponent.h"
+#include "../AliEngine/BaseComponent.h"
 #include <SDL.h>
 #include "glm\vec2.hpp"
 #include <memory>
-#include "Texture2D.h"
+#include "../AliEngine/Texture2D.h"
 
 class Texture2DComponent final : public BaseComponent
 {

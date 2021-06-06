@@ -1,6 +1,6 @@
 #pragma once
-#include "GameObject.h"
-#include "Observer.h"
+#include "../AliEngine/GameObject.h"
+#include "../AliEngine/Observer.h"
 
 class Subject
 {

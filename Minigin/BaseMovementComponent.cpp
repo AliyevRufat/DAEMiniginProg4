@@ -1,13 +1,13 @@
 #include "MiniginPCH.h"
 #include "BaseMovementComponent.h"
-#include "TransformComponent.h"
+#include "../AliEngine/TransformComponent.h"
 #include "AnimationComponent.h"
-#include "SceneManager.h"
+#include "../AliEngine/SceneManager.h"
 #include "PyramidComponent.h"
-#include "SceneManager.h"
-#include "Scene.h"
-#include "Time.h"
-#include "Texture2DComponent.h"
+#include "../AliEngine/SceneManager.h"
+#include "../AliEngine/Scene.h"
+#include "../AliEngine/EngineTime.h"
+#include "../AliEngine/Texture2DComponent.h"
 
 BaseMovementComponent::BaseMovementComponent()
 	: m_Speed{ 100 }
@@ -60,7 +60,7 @@ void BaseMovementComponent::ActivateJump(bool isSideWaysJump)
 
 void BaseMovementComponent::Jump()
 {
-	float deltaTime = Time::GetInstance().GetDeltaTime();
+	float deltaTime = EngineTime::GetInstance().GetDeltaTime();
 	//
 	const auto& transform = m_pGameObject->GetComponent<TransformComponent>();
 	glm::vec2 pos = transform->GetTransform().GetPosition();
@@ -130,7 +130,7 @@ void BaseMovementComponent::Jump()
 
 void BaseMovementComponent::FallToDeath()
 {
-	float deltaTime = Time::GetInstance().GetDeltaTime();
+	float deltaTime = EngineTime::GetInstance().GetDeltaTime();
 	//
 
 	const auto& transform = m_pGameObject->GetComponent<TransformComponent>();

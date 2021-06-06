@@ -1,6 +1,6 @@
 #include "pch.h"
-#include "Scene.h"
-#include "GameObject.h"
+#include "../AliEngine/Scene.h"
+#include "../AliEngine/GameObject.h"
 #include <algorithm>
 #include <string>
 

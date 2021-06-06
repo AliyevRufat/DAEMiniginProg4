@@ -1,15 +1,15 @@
 #pragma once
 #include "MiniginPCH.h"
-#include "GameObject.h"
+#include "../AliEngine/GameObject.h"
 
-#include "Texture2D.h"
-#include "Transform.h"
-#include "ResourceManager.h"
-#include "BaseComponent.h"
+#include "../AliEngine/Texture2D.h"
+#include "../AliEngine/Transform.h"
+#include "../AliEngine/ResourceManager.h"
+#include "../AliEngine/BaseComponent.h"
 
-#include "Renderer.h"
-#include "Font.h"
-#include "Time.h"
+#include "../AliEngine/Renderer.h"
+#include "../AliEngine/Font.h"
+#include "../AliEngine/EngineTime.h"
 #include <SDL.h>
 
 #include <SDL_ttf.h>

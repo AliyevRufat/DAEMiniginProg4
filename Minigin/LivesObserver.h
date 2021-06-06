@@ -1,6 +1,6 @@
 #pragma once
-#include "Observer.h"
-#include "GameObject.h"
+#include "../AliEngine/Observer.h"
+#include "../AliEngine/GameObject.h"
 
 class LivesObserver : public Observer
 {

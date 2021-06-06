@@ -1,6 +1,6 @@
 #pragma once
-#include "SceneManager.h"
-#include "GameObject.h"
+#include "../AliEngine/SceneManager.h"
+#include "../AliEngine/GameObject.h"
 
 namespace dae
 {

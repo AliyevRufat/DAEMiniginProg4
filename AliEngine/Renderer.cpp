@@ -1,8 +1,8 @@
 #include "pch.h"
-#include "Renderer.h"
+#include "../AliEngine/Renderer.h"
 #include <SDL.h>
-#include "SceneManager.h"
-#include "Texture2D.h"
+#include "../AliEngine/SceneManager.h"
+#include "../AliEngine/Texture2D.h"
 #include "string"
 #include <iostream>
 

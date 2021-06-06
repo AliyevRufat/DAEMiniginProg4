@@ -1,9 +1,9 @@
 #include "pch.h"
-#include "FPSTextComponent.h"
-#include "TransformComponent.h"
-#include "TextComponent.h"
-#include "GameObject.h"
-#include "Time.h"
+#include "../AliEngine/FPSTextComponent.h"
+#include "../AliEngine/TransformComponent.h"
+#include "../AliEngine/TextComponent.h"
+#include "../AliEngine/GameObject.h"
+#include "../AliEngine/EngineTime.h"
 #include <iostream>
 #include <SDL.h>
 #include <string>
@@ -26,7 +26,7 @@ void FPSTextComponent::Update()
 		m_pText->SetPosition(m_pGameObject->GetComponent<TransformComponent>()->GetTransform().GetPosition());
 	}
 	//
-	m_FPS = "FPS: " + std::to_string(int(1.f / Time::GetInstance().GetDeltaTime()));
+	m_FPS = "FPS: " + std::to_string(int(1.f / EngineTime::GetInstance().GetDeltaTime()));
 	m_pText->UpdateText(m_FPS);
 };
 

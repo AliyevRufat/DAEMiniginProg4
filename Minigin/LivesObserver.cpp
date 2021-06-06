@@ -1,14 +1,14 @@
 #include "MiniginPCH.h"
 #include "LivesObserver.h"
-#include "SceneManager.h"
-#include "Scene.h"
+#include "../AliEngine/SceneManager.h"
+#include "../AliEngine/Scene.h"
 
 #include "HealthComponent.h"
-#include "FPSTextComponent.h"
+#include "../AliEngine/FPSTextComponent.h"
 #include "ScoreComponent.h"
-#include "TextComponent.h"
-#include "Texture2DComponent.h"
-#include "TransformComponent.h"
+#include "../AliEngine/TextComponent.h"
+#include "../AliEngine/Texture2DComponent.h"
+#include "../AliEngine/TransformComponent.h"
 
 void LivesObserver::OnNotify(const GameObject* actor, Event event)
 {

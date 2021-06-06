@@ -1,17 +1,17 @@
 #pragma once
 #include <iostream>
-#include "BaseCommand.h"
+#include "../AliEngine/BaseCommand.h"
 #include "HealthComponent.h"
-#include "FPSTextComponent.h"
+#include "../AliEngine/FPSTextComponent.h"
 #include "ScoreComponent.h"
-#include "TextComponent.h"
-#include "Texture2DComponent.h"
-#include "TransformComponent.h"
+#include "../AliEngine/TextComponent.h"
+#include "../AliEngine/Texture2DComponent.h"
+#include "../AliEngine/TransformComponent.h"
 #include "AnimationComponent.h"
 #include "PlayerMovementComponent.h"
 #include "EnemyMovementComponent.h"
-#include "SceneManager.h"
-#include "Scene.h"
+#include "../AliEngine/SceneManager.h"
+#include "../AliEngine/Scene.h"
 
 class FireCommand final : public Command
 {

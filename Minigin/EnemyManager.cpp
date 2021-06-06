@@ -1,14 +1,14 @@
 #include "MiniginPCH.h"
 #include "EnemyManager.h"
 #include "EnemyManager.h"
-#include "SceneManager.h"
+#include "../AliEngine/SceneManager.h"
 #include "EnemyMovementComponent.h"
 #include "CollisionDetectionManager.h"
 #include "LivesObserver.h"
 #include "Minigin.h"
-#include "TransformComponent.h"
+#include "../AliEngine/TransformComponent.h"
 #include "PlayerMovementComponent.h"
-#include "Texture2DComponent.h"
+#include "../AliEngine/Texture2DComponent.h"
 #include "PyramidComponent.h"
 #include "EnemyMovementComponent.h"
 #include "HealthComponent.h"
@@ -21,7 +21,7 @@ void EnemyManager::Update()
 	}
 
 	DeleteFallenEnemies();
-	auto deltaTime = Time::GetInstance().GetDeltaTime();
+	auto deltaTime = EngineTime::GetInstance().GetDeltaTime();
 	if (!m_CoilySpawned)
 	{
 		m_SpawnTimerCoily += deltaTime;

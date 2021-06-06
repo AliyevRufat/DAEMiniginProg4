@@ -1,9 +1,9 @@
 #include "MiniginPCH.h"
 #include "PlayerMovementComponent.h"
 #include "PyramidComponent.h"
-#include "SceneManager.h"
+#include "../AliEngine/SceneManager.h"
 #include "EnemyManager.h"
-#include "Transform.h"
+#include "../AliEngine/Transform.h"
 #include "HealthComponent.h"
 
 PlayerMovementComponent::PlayerMovementComponent(const std::string& name, dae::Scene::GameMode gameMode, bool isEnemy)
@@ -57,7 +57,7 @@ void PlayerMovementComponent::Update()
 
 	if (m_IsKilled)
 	{
-		m_FreezeTimer += Time::GetInstance().GetDeltaTime();
+		m_FreezeTimer += EngineTime::GetInstance().GetDeltaTime();
 		if (m_FreezeTimer >= m_FreezeTime)
 		{
 			m_FreezeTimer -= m_FreezeTimer;
@@ -169,7 +169,7 @@ void PlayerMovementComponent::JumpOnDisc()
 		}
 		else
 		{
-			float elapsedTime = Time::GetInstance().GetDeltaTime();
+			float elapsedTime = EngineTime::GetInstance().GetDeltaTime();
 
 			glm::vec2 pos = transform->GetTransform().GetPosition();
 

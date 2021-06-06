@@ -1,10 +1,10 @@
 #include "pch.h"
 #include "Subject.h"
 
-#include "FPSTextComponent.h"
-#include "TextComponent.h"
-#include "Texture2DComponent.h"
-#include "TransformComponent.h"
+#include "../AliEngine/FPSTextComponent.h"
+#include "../AliEngine/TextComponent.h"
+#include "../AliEngine/Texture2DComponent.h"
+#include "../AliEngine/TransformComponent.h"
 
 Subject::Subject()
 	:m_ObserverCount{ 0 }, m_pObservers{ nullptr }

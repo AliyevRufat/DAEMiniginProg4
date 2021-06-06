@@ -1,6 +1,6 @@
 #include "MiniginPCH.h"
 #include "AnimationComponent.h"
-#include "Texture2DComponent.h"
+#include "../AliEngine/Texture2DComponent.h"
 
 AnimationComponent::AnimationComponent(int nrOfColumns)
 	:m_NrOfColumns{ nrOfColumns }
