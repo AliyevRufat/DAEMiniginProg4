@@ -19,14 +19,14 @@ public:
 		IdleRight = 2,
 		JumpRight = 3,
 		//
-		Cycle = 8,
+		Cycle = 0,
 	};
 
 	enum class CubeColorState
 	{
-		Red,
-		Yellow,
-		Blue
+		Red = 0,
+		Yellow = 1,
+		Blue = 2
 	};
 
 	AnimationComponent(int nrOfColumns);
@@ -34,6 +34,9 @@ public:
 	void Render() override;
 	void SetAnimationState(AnimationState animState);
 	void SetAnimationState(CubeColorState cubeAnimState);
+	AnimationState GetAnimationState() const;
+	CubeColorState GetCubeColorState() const;
+	int GetNrOfColumns() const;
 private:
 	std::shared_ptr<dae::Texture2D> m_spTexture2D{};
 	int m_NrOfColumns;

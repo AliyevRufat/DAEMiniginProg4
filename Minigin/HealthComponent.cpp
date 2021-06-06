@@ -17,7 +17,10 @@ void HealthComponent::Die()
 	m_Dead = true;
 
 	if ((int)m_Lives - 1 < 0)
+	{
+		m_pGameObject->SetMarkForDelete(true);
 		return;
+	}
 
 	m_Lives--;
 	m_pGameObject->Notify(Event::ActorDied);

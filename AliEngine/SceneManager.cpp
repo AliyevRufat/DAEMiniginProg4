@@ -5,6 +5,11 @@
 void dae::SceneManager::Update()
 {
 	m_SpCurrentScene->Update();
+
+	for (size_t i = 0; i < m_SpScenes.size(); i++)
+	{
+		m_SpScenes[i]->DeleteMarkedObjects();
+	}
 }
 
 void dae::SceneManager::Render()
@@ -20,6 +25,16 @@ dae::Scene& dae::SceneManager::CreateScene(const std::string& name)
 	m_SpCurrentScene = spScene;
 
 	return *spScene;
+}
+
+void dae::SceneManager::ClearScene(std::shared_ptr<dae::Scene> spScene)
+{
+	auto sceneIt = std::find_if(m_SpScenes.begin(), m_SpScenes.end(), [&](auto scene) { return spScene == scene; });
+
+	if (sceneIt != m_SpScenes.end())
+	{
+		sceneIt->get()->ClearScene();
+	}
 }
 
 std::shared_ptr<dae::Scene> dae::SceneManager::GetSceneByName(const std::string& n) const

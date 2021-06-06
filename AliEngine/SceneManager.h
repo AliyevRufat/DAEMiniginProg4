@@ -11,6 +11,7 @@ namespace dae
 	{
 	public:
 		Scene& CreateScene(const std::string& name);
+		void ClearScene(std::shared_ptr<dae::Scene> spScene);
 
 		void Update();
 		void Render();

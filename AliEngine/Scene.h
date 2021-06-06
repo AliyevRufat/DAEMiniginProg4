@@ -16,6 +16,12 @@ namespace dae
 			Coop,
 			Versus
 		};
+		enum class Level
+		{
+			FirstLevel = 0,
+			SecondLevel = 1,
+			ThirdLevel = 2
+		};
 
 		void Add(const std::shared_ptr<SceneObject>& spObject);
 
@@ -40,6 +46,15 @@ namespace dae
 		//
 		float  GetSceneScale() const;
 		GameMode GetCurrentGameMode() const { return m_CurrentGameMode; };
+		//
+		Level GetGameLevel() const { return m_CurrentLevel; }
+		void SetGameLevel(Level level) { m_CurrentLevel = level; }
+		//
+		bool AreAllObjectsActive() const;
+		void SetObjectsIsActive(bool isActive);
+		void ClearScene();
+
+		void DeleteMarkedObjects();
 	private:
 		explicit Scene(const std::string& name);
 
@@ -52,5 +67,8 @@ namespace dae
 		static unsigned int m_IdCounter;
 		const float m_SceneScale = 2.0f;
 		GameMode m_CurrentGameMode;
+		Level m_CurrentLevel;
+
+		bool m_AreAllObjectsActive;
 	};
 }

@@ -55,3 +55,18 @@ void AnimationComponent::SetAnimationState(CubeColorState cubeAnimState)
 {
 	m_CubeColorState = cubeAnimState;
 }
+
+AnimationComponent::AnimationState AnimationComponent::GetAnimationState() const
+{
+	return m_AnimState;
+}
+
+AnimationComponent::CubeColorState AnimationComponent::GetCubeColorState() const
+{
+	return m_CubeColorState;
+}
+
+int AnimationComponent::GetNrOfColumns() const
+{
+	return m_NrOfColumns;
+}

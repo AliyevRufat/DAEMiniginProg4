@@ -78,6 +78,9 @@
     <ClInclude Include="BaseMovementComponent.h">
       <Filter>MiniginEngine\Components</Filter>
     </ClInclude>
+    <ClInclude Include="FlyingDisc.h">
+      <Filter>MiniginEngine\Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="MiniginPCH.cpp">
@@ -121,6 +124,9 @@
     </ClCompile>
     <ClCompile Include="BaseMovementComponent.cpp">
       <Filter>MiniginEngine\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="FlyingDisc.cpp">
+      <Filter>MiniginEngine\Source Files</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

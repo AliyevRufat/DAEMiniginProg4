@@ -15,7 +15,7 @@ public:
 		WrongWay
 	};
 
-	EnemyMovementComponent(const std::shared_ptr<GameObject>& pPlayer, EnemyType enemyType, bool startOnLeftSide = false);
+	EnemyMovementComponent(const std::shared_ptr<GameObject>& pPlayer, EnemyType enemyType);
 	void Update();
 
 private:
@@ -31,5 +31,4 @@ private:
 	std::shared_ptr<GameObject> m_pPlayer;
 	float m_CurrentJumpTime;
 	const float m_MaxJumpTime;
-	bool  m_StartOnLeftSide;
 };

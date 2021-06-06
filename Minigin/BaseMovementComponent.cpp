@@ -94,15 +94,21 @@ void BaseMovementComponent::Jump()
 		m_pGameObject->GetComponent<AnimationComponent>()->SetAnimationState(AnimationComponent::AnimationState(NonJumpingSprite));
 		const auto& CurrentMap = dae::SceneManager::GetInstance().GetCurrentScene()->GetCurrentLevel()->GetComponent<PyramidComponent>();
 
-		auto cube = CurrentMap->GetCube(m_CurrentCubeIndex);
+		auto cube = CurrentMap->GetSpecificCube(m_CurrentCubeIndex);
 
 		if (m_pGameObject->GetName() == "Q*Bert") // TODO : should not be here , add it to player movement component or something
 		{
-			cube->Color();
+			cube->ChangeColor();
+			//TODO : add score
+		}
+		else if (m_pGameObject->GetName() == "Q*Bert2") // TODO : should not be here , add it to player movement component or something
+		{
+			cube->ChangeColor();
+			//TODO : add score
 		}
 		else if (m_pGameObject->GetName() == "Sam" || m_pGameObject->GetName() == "Slick")
 		{
-			cube->ColorBack();
+			cube->ResetColor();
 		}
 		//offset fix
 		auto cubePos = cube->GetGameObject()->GetComponent<TransformComponent>()->GetTransform().GetPosition();

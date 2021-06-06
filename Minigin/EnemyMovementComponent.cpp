@@ -5,12 +5,11 @@
 #include "SceneManager.h"
 #include "PyramidComponent.h"
 
-EnemyMovementComponent::EnemyMovementComponent(const std::shared_ptr<GameObject>& pPlayer, EnemyType enemyType, bool startOnLeftSide)
+EnemyMovementComponent::EnemyMovementComponent(const std::shared_ptr<GameObject>& pPlayer, EnemyType enemyType)
 	:m_pPlayer{ pPlayer }
 	, m_CurrentJumpTime{ 0.0f }
 	, m_MaxJumpTime{ 1.5f }
 	, m_EnemyType{ enemyType }
-	, m_StartOnLeftSide{ startOnLeftSide }
 {
 	if (m_EnemyType == EnemyType::Coily)
 	{
@@ -19,25 +18,36 @@ EnemyMovementComponent::EnemyMovementComponent(const std::shared_ptr<GameObject>
 		m_CurrentCubeIndex = 0;
 		m_SourceHeightOffset = -8;
 	}
-	else if (m_EnemyType == EnemyType::Sam || m_EnemyType == EnemyType::Slick)
+	else if (m_EnemyType == EnemyType::Sam)
 	{
+		m_CurrentColumn = 0;
+		m_CurrentRow = 1;
+		m_CurrentCubeIndex = 7;
 		m_SourceHeightOffset = 0;
 	}
-	else if (m_EnemyType == EnemyType::WrongWay || m_EnemyType == EnemyType::Ugg)
+	else if (m_EnemyType == EnemyType::Slick)
+	{
+		m_CurrentColumn = 1;
+		m_CurrentRow = 1;
+		m_CurrentCubeIndex = 1;
+		m_SourceHeightOffset = 0;
+	}
+	else if (m_EnemyType == EnemyType::WrongWay)
 	{
 		m_Speed *= 2;
-		if (startOnLeftSide)
-		{
-			m_CurrentColumn = 0;
-			m_CurrentRow = 6;
-			m_CurrentCubeIndex = 27;
-		}
-		else
-		{
-			m_CurrentColumn = 6;
-			m_CurrentRow = 6;
-			m_CurrentCubeIndex = 6;
-		}
+
+		m_CurrentColumn = 0;
+		m_CurrentRow = 6;
+		m_CurrentCubeIndex = 27;
+		m_SourceHeightOffset = 0;
+	}
+	else if (m_EnemyType == EnemyType::Ugg)
+	{
+		m_Speed *= 2;
+
+		m_CurrentColumn = 6;
+		m_CurrentRow = 6;
+		m_CurrentCubeIndex = 6;
 		m_SourceHeightOffset = 0;
 	}
 }
@@ -138,7 +148,7 @@ void EnemyMovementComponent::Descend()
 		m_Direction = AnimationComponent::AnimationState::JumpLeftDown;
 		m_pGameObject->GetComponent<AnimationComponent>()->SetAnimationState(AnimationComponent::AnimationState::JumpLeftDown);
 		ActivateJump();
-		--m_CurrentColumn;
+		++m_CurrentRow;
 	}
 	else
 	{
@@ -146,6 +156,7 @@ void EnemyMovementComponent::Descend()
 		m_pGameObject->GetComponent<AnimationComponent>()->SetAnimationState(AnimationComponent::AnimationState::JumpRightDown);
 		ActivateJump();
 		++m_CurrentColumn;
+		++m_CurrentRow;
 	}
 }
 
@@ -157,7 +168,7 @@ void EnemyMovementComponent::SidewaysMovement()
 	}
 	int randNr = rand() % 2;
 
-	if (m_StartOnLeftSide)
+	if (m_EnemyType == EnemyType::WrongWay)
 	{
 		if (randNr == 0)
 		{
@@ -243,13 +254,13 @@ void EnemyMovementComponent::SidewaysJump()
 		m_pGameObject->GetComponent<AnimationComponent>()->SetAnimationState(AnimationComponent::AnimationState(NonJumpingSprite));
 		const auto& CurrentMap = dae::SceneManager::GetInstance().GetCurrentScene()->GetCurrentLevel()->GetComponent<PyramidComponent>();
 
-		auto cube = CurrentMap->GetCube(m_CurrentCubeIndex);
+		auto cube = CurrentMap->GetSpecificCube(m_CurrentCubeIndex);
 
 		//offset fix
 		auto cubePos = cube->GetGameObject()->GetComponent<TransformComponent>()->GetTransform().GetPosition();
 		auto srcRect = m_pGameObject->GetComponent<Texture2DComponent>()->GetSrcRect();
 
-		if (m_StartOnLeftSide)
+		if (m_EnemyType == EnemyType::WrongWay)
 		{
 			m_pGameObject->GetComponent<TransformComponent>()->SetPosition(glm::vec2(cubePos.x - srcRect.w, cubePos.y + srcRect.h * 2 + m_SourceHeightOffset));
 		}
@@ -273,7 +284,7 @@ void EnemyMovementComponent::SidewaysFall()
 	const auto& transform = m_pGameObject->GetComponent<TransformComponent>();
 	glm::vec2 pos = transform->GetTransform().GetPosition();
 
-	if (m_StartOnLeftSide)
+	if (m_EnemyType == EnemyType::WrongWay)
 	{
 		pos.x += deltaTime * m_Speed * 4;
 	}

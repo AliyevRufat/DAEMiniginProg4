@@ -8,7 +8,8 @@
 
 GameObject::GameObject(const std::string& name)
 	:SceneObject(name), m_pActorChanged{ new Subject() }
-{}
+{
+}
 
 GameObject::~GameObject()
 {
@@ -20,6 +21,10 @@ GameObject::~GameObject()
 
 void GameObject::Update()
 {
+	if (!m_IsActive)
+	{
+		return;
+	}
 	for (size_t i = 0; i < m_pComponents.size(); i++)
 	{
 		m_pComponents[i]->Update();

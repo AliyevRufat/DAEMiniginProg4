@@ -1,9 +1,18 @@
 #pragma once
+#include "Scene.h"
 #include "GameObject.h"
+#include "glm/vec2.hpp"
 
 class CubeObject
 {
 public:
+	enum class ColorState
+	{
+		FirstColor,
+		SecondColor,
+		ThirdColor
+	};
+
 	CubeObject();
 
 	~CubeObject() = default;
@@ -18,11 +27,24 @@ public:
 
 	std::shared_ptr<GameObject> GetGameObject() const { return m_pGameObject; };
 
-	void Color();
-	void ColorBack();
+	void ChangeColor();
+	void ResetColor();
+
+	ColorState GetCurrentColorState() const { return m_ColorState; }
+
+	bool GetHasDiscNextToIt() const;
+	void SetHasDiscNextToIt(bool hasDisc);
+
+	void ColorFlash();
+	const glm::vec2& GetPosition() const;
 private:
 
 	std::shared_ptr<GameObject> m_pGameObject;
 
-	bool m_Colored;
+	ColorState m_ColorState;
+	dae::Scene::Level m_CurrentLevel;
+	bool m_HasDiscNextToIt;
+
+	const float m_MaxColorSwitchTime;
+	float m_CurrentColorSwitchTime;
 };

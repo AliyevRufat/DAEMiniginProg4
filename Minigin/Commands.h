@@ -157,7 +157,7 @@ public:
 class JumpUp final : public Command
 {
 public:
-	JumpUp(int index) :Command(index) {};
+	JumpUp(int index) :Command(index) { m_ControllerIndex = index; };
 
 	void Execute() const override
 	{
@@ -177,7 +177,7 @@ public:
 class JumpDown final : public Command
 {
 public:
-	JumpDown(int index) :Command(index) {};
+	JumpDown(int index) :Command(index) { m_ControllerIndex = index; };
 
 	void Execute() const override
 	{
@@ -196,7 +196,7 @@ public:
 class JumpLeft final : public Command
 {
 public:
-	JumpLeft(int index) :Command(index) {};
+	JumpLeft(int index) :Command(index) { m_ControllerIndex = index; };
 
 	void Execute() const override
 	{
@@ -215,7 +215,7 @@ public:
 class JumpRight final : public Command
 {
 public:
-	JumpRight(int index) :Command(index) {};
+	JumpRight(int index) :Command(index) { m_ControllerIndex = index; };
 
 	void Execute() const override
 	{

@@ -8,8 +8,6 @@ namespace dae
 	public:
 		virtual void Update() = 0;
 		virtual void Render() const = 0;
-
-		bool GetDeleteLater() { return m_DeleteLater; };
 		//
 		SceneObject(const std::string& name) :m_Name{ name } {};
 		virtual ~SceneObject() = default;
@@ -20,8 +18,14 @@ namespace dae
 		//
 		const std::string& GetName() const { return m_Name; };
 
+		void SetIsActive(bool isActive) { m_IsActive = isActive; }
+		bool GetIsActive() const { return m_IsActive; }
+
+		void SetMarkForDelete(bool markFordelete) { m_MarkForDelete = markFordelete; }
+		bool GetMarkForDelete() const { return m_MarkForDelete; }
 	protected:
-		bool  m_DeleteLater = false;
+		bool m_IsActive = true;
 		const std::string m_Name;
+		bool m_MarkForDelete = false;
 	};
 }

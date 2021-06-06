@@ -15,6 +15,8 @@ Scene::Scene(const std::string& name)
 	, m_SpObjects{}
 	, m_SpPlayers{}
 	, m_CurrentGameMode{}
+	, m_CurrentLevel{ Level::FirstLevel }
+	, m_AreAllObjectsActive{ true }
 {
 }
 
@@ -25,9 +27,9 @@ void Scene::Add(const std::shared_ptr<SceneObject>& spObject)
 
 void Scene::Update()
 {
-	for (const auto& object : m_SpObjects)
+	for (size_t i = 0; i < m_SpObjects.size(); i++)
 	{
-		object->Update();
+		m_SpObjects[i]->Update();
 	}
 }
 
@@ -95,4 +97,46 @@ std::shared_ptr<GameObject> Scene::GetLevel(int index) const
 float dae::Scene::GetSceneScale() const
 {
 	return m_SceneScale;
+}
+
+void dae::Scene::DeleteMarkedObjects()
+{
+	for (size_t i = 0; i < m_SpObjects.size(); i++)
+	{
+		if (m_SpObjects[i]->GetMarkForDelete())
+		{
+			m_SpObjects.erase(m_SpObjects.begin() + i);
+		}
+	}
+}
+
+bool dae::Scene::AreAllObjectsActive() const
+{
+	return m_AreAllObjectsActive;
+}
+
+void dae::Scene::SetObjectsIsActive(bool isActive)
+{
+	for (auto& object : m_SpObjects)
+	{
+		if (object->GetName() != "Cube" && object->GetName() != "Pyramid")
+		{
+			object->SetIsActive(isActive);
+		}
+	}
+
+	for (auto& player : m_SpPlayers)
+	{
+		player->SetIsActive(isActive);
+	}
+
+	m_AreAllObjectsActive = !m_AreAllObjectsActive;
+}
+
+void dae::Scene::ClearScene()
+{
+	m_SpObjects.clear();
+	m_SpPlayers.clear();
+	m_SpLevels.clear();
+	m_SpCurrentLevel = nullptr;
 }

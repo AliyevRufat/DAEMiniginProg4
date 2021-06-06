@@ -7,12 +7,12 @@ class BaseMovementComponent : public BaseComponent
 public:
 	explicit BaseMovementComponent();
 	virtual void Update() = 0;
+	void SetCubeIndexColumnAndRow(int index, int column, int row) { m_CurrentCubeIndex = index; m_CurrentColumn = column; m_CurrentRow = row; };
 
 protected:
 	//Methods
 	bool GetIsFallingToDeathBehindMap() const { return m_FallingToDeath && !m_FirstHalfOfTheJump && (m_Direction == AnimationComponent::AnimationState::JumpLeftTop || m_Direction == AnimationComponent::AnimationState::JumpRightTop); };
-	void SetCurrentCubeIndex(int index) { m_CurrentCubeIndex = index; };
-	void ActivateJump(bool isSideWaysJump = false);
+	virtual void ActivateJump(bool isSideWaysJump = false);
 	void FallToDeath();
 	void Jump();
 	//
