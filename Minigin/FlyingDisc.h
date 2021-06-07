@@ -35,7 +35,7 @@ private:
 	float m_AnimTime = 0.2f;
 
 	float m_MoveFactor = 0.f;
-	float m_Speed = 3.f;
+	float m_Speed = 130.0f;
 
 	glm::vec2 m_FinalPos;
 	glm::vec2 m_Direction = glm::vec2{ 0,0 };

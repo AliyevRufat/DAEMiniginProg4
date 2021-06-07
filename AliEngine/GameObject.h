@@ -8,7 +8,7 @@ enum class Event
 	ActorDied,
 	ScoreSet,
 	ColorChanged = 25,
-	CoilyHitWithFlyingDisc = 500,
+	CoilyBaitededWithFlyingDisc = 500,
 	DiscLeftAtEndOfTheStage = 50,
 	CatchSlickOrSam = 300
 };

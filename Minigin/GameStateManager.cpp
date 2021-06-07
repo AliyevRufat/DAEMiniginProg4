@@ -12,6 +12,10 @@ using namespace dae;
 
 void GameStateManager::LoadGameMode(dae::Scene::GameMode gameMode)
 {
+	if (!m_IsInMenu)
+	{
+		return;
+	}
 	dae::SceneManager::GetInstance().ClearScene(dae::SceneManager::GetInstance().GetCurrentScene());
 	EnemyManager::GetInstance().DeleteAllEnemies();
 	CollisionDetectionManager::GetInstance().ClearCollisions();
@@ -28,10 +32,13 @@ void GameStateManager::LoadGameMode(dae::Scene::GameMode gameMode)
 		Versus();
 		break;
 	}
+	m_IsInMenu = false;
 }
 
 void GameStateManager::LoadWinScreen()
 {
+	m_IsInMenu = false;
+
 	dae::SceneManager::GetInstance().ClearScene(dae::SceneManager::GetInstance().GetCurrentScene());
 	EnemyManager::GetInstance().DeleteAllEnemies();
 	CollisionDetectionManager::GetInstance().ClearCollisions();
@@ -64,6 +71,7 @@ void GameStateManager::LoadWinScreen()
 
 void GameStateManager::LoadLoseScreen()
 {
+	m_IsInMenu = false;
 	dae::SceneManager::GetInstance().ClearScene(dae::SceneManager::GetInstance().GetCurrentScene());
 	EnemyManager::GetInstance().DeleteAllEnemies();
 	CollisionDetectionManager::GetInstance().ClearCollisions();
@@ -95,6 +103,8 @@ void GameStateManager::LoadLoseScreen()
 
 void GameStateManager::LoadMenuScreen()
 {
+	m_IsInMenu = true;
+
 	dae::SceneManager::GetInstance().ClearScene(dae::SceneManager::GetInstance().GetCurrentScene());
 	EnemyManager::GetInstance().DeleteAllEnemies();
 	CollisionDetectionManager::GetInstance().ClearCollisions();
@@ -108,14 +118,14 @@ void GameStateManager::LoadMenuScreen()
 	auto textDisplay = std::make_shared<GameObject>("Text");
 	textDisplay->AddComponent(new TransformComponent(glm::vec2(m_WindowSurface->w / 2.0f - 350, m_WindowSurface->h / 2.0f)));
 	font = ResourceManager::GetInstance().LoadFont("Lingua.otf", 20);
-	auto text = new TextComponent("Controller : Press X for singleplayer, A for Coop and B for Versus Mode.", font, SDL_Color{ 255,255,0 });
+	auto text = new TextComponent("Controller : Press X for singleplayer, A for Coop and B for Versus Mode. Press Select to QUIT.", font, SDL_Color{ 255,255,0 });
 	textDisplay->AddComponent(text);
 	scene.Add(textDisplay);
 	//
 	textDisplay = std::make_shared<GameObject>("Text");
 	textDisplay->AddComponent(new TransformComponent(glm::vec2(m_WindowSurface->w / 2.0f - 350, m_WindowSurface->h / 2.0f + 50)));
 	font = ResourceManager::GetInstance().LoadFont("Lingua.otf", 20);
-	text = new TextComponent("Keyboard : Press I for singleplayer, O for Coop and P for Versus Mode.", font, SDL_Color{ 255,255,0 });
+	text = new TextComponent("Keyboard : Press I for singleplayer, O for Coop and P for Versus Mode. Press ESCAPE to QUIT.", font, SDL_Color{ 255,255,0 });
 	textDisplay->AddComponent(text);
 	scene.Add(textDisplay);
 
@@ -215,21 +225,21 @@ void GameStateManager::Coop()
 	scene->Add(scoreDisplay);
 	//lives
 	auto livesDisplay = std::make_shared<GameObject>("LivesDisplay");
-	livesDisplay->AddComponent(new TransformComponent(glm::vec2(250, 50)));
+	livesDisplay->AddComponent(new TransformComponent(glm::vec2(400, 50)));
 	font = ResourceManager::GetInstance().LoadFont("Lingua.otf", 20);
 	auto livesCounter = new TextComponent("Remaining lives: 3", font, SDL_Color{ 255,255,255 });
 	livesDisplay->AddComponent(livesCounter);
 	scene->Add(livesDisplay);
 	//score2
 	auto scoreDisplay2 = std::make_shared<GameObject>("ScoreDisplay2");
-	scoreDisplay2->AddComponent(new TransformComponent(glm::vec2(150, 50)));
+	scoreDisplay2->AddComponent(new TransformComponent(glm::vec2(150, 150)));
 	font = ResourceManager::GetInstance().LoadFont("Lingua.otf", 20);
 	auto scoreCounter2 = new TextComponent("Score: 0", font, SDL_Color{ 255,255,255 });
 	scoreDisplay2->AddComponent(scoreCounter2);
 	scene->Add(scoreDisplay2);
 	//lives2
 	auto livesDisplay2 = std::make_shared<GameObject>("LivesDisplay2");
-	livesDisplay2->AddComponent(new TransformComponent(glm::vec2(250, 50)));
+	livesDisplay2->AddComponent(new TransformComponent(glm::vec2(400, 150)));
 	font = ResourceManager::GetInstance().LoadFont("Lingua.otf", 20);
 	auto livesCounter2 = new TextComponent("Remaining lives: 3", font, SDL_Color{ 255,255,255 });
 	livesDisplay2->AddComponent(livesCounter2);
@@ -264,7 +274,7 @@ void GameStateManager::Coop()
 	CollisionDetectionManager::GetInstance().AddCollisionObject(qbert);
 	//player died text
 	auto playerDied = std::make_shared<GameObject>("Player 1 Died!");
-	playerDied->AddComponent(new TransformComponent(glm::vec2(500, 150)));
+	playerDied->AddComponent(new TransformComponent(glm::vec2(800, 50)));
 	playerDied->AddComponent(new TextComponent("Player 1 Died!", font, SDL_Color{ 255,255,255 }, false));
 	scene->Add(playerDied);
 	//q*bert2
@@ -282,12 +292,12 @@ void GameStateManager::Coop()
 	CollisionDetectionManager::GetInstance().AddCollisionObject(qbert2);
 	//player 2 died text
 	auto player2Died = std::make_shared<GameObject>("Player 2 Died!");
-	player2Died->AddComponent(new TransformComponent(glm::vec2(500, 150)));
+	player2Died->AddComponent(new TransformComponent(glm::vec2(800, 150)));
 	player2Died->AddComponent(new TextComponent("Player 2 Died!", font, SDL_Color{ 255,255,255 }, false));
 	scene->Add(player2Died);
 	//---------------------------------ENEMIES
 	EnemyManager::GetInstance().SetWindowSurface(m_WindowSurface);
-	EnemyManager::GetInstance().SetPlayers(qbert);
+	EnemyManager::GetInstance().SetPlayers(qbert, qbert2);
 	EnemyManager::GetInstance().SetLevelObject(level);
 }
 

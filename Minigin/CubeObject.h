@@ -27,7 +27,7 @@ public:
 
 	std::shared_ptr<GameObject> GetGameObject() const { return m_pGameObject; };
 
-	void ChangeColor();
+	void ChangeColor(bool& hasColored);
 	void ResetColor();
 
 	ColorState GetCurrentColorState() const { return m_ColorState; }

@@ -2,6 +2,7 @@
 #include "EnemyMovementComponent.h"
 #include "../AliEngine/TransformComponent.h"
 #include "../AliEngine/Texture2DComponent.h"
+#include "PlayerMovementComponent.h"
 #include "EnemyManager.h"
 #include "../AliEngine/SceneManager.h"
 #include "PyramidComponent.h"
@@ -15,6 +16,8 @@ EnemyMovementComponent::EnemyMovementComponent(EnemyManager::EnemyType enemyType
 	, m_SpeedMultiplier{ EnemyManager::GetInstance().GetEnemySpeedMultiplier() }
 	, m_IsDead{ false }
 	, m_IsOnSpawnCube{ false }
+	, m_PlayerPos{}
+	, m_Pos{}
 {
 	m_Speed *= m_SpeedMultiplier;
 	m_MaxJumpTime -= m_SpeedMultiplier / 4.0f;
@@ -110,7 +113,6 @@ bool EnemyMovementComponent::IsOnSpawnCube()
 	auto deltaTime = EngineTime::GetInstance().GetDeltaTime();
 	const float posOffset = 400.0f;
 	const int srcOffset = 40;
-
 	switch (m_EnemyType)
 	{
 	case EnemyManager::EnemyType::Coily:
@@ -179,12 +181,41 @@ void EnemyMovementComponent::FollowPlayer()
 	{
 		return;
 	}
-
 	const int yOffset = 30;
-	auto playerPos = m_pPlayer->GetComponent<TransformComponent>()->GetTransform().GetPosition();
-	auto pos = m_pGameObject->GetComponent<TransformComponent>()->GetTransform().GetPosition();
 
-	if (playerPos.x <= pos.x && playerPos.y - yOffset <= pos.y) // left top
+	if (!m_pPlayer->GetComponent<PlayerMovementComponent>()->GetIsOnDisc())
+	{
+		if (m_pPlayer2)
+		{
+			auto player1Pos = m_pPlayer->GetComponent<TransformComponent>()->GetTransform().GetPosition();
+			auto player2Pos = m_pPlayer2->GetComponent<TransformComponent>()->GetTransform().GetPosition();
+			m_Pos = m_pGameObject->GetComponent<TransformComponent>()->GetTransform().GetPosition();
+
+			auto xDistance = abs(player1Pos.x - m_Pos.x);
+			auto yDistance = abs(player1Pos.y - m_Pos.y);
+			auto magnitudePlayer1 = xDistance * xDistance + yDistance * yDistance;
+
+			auto xDistance2 = abs(player2Pos.x - m_Pos.x);
+			auto yDistance2 = abs(player2Pos.y - m_Pos.y);
+			auto magnitudePlayer2 = xDistance2 * xDistance2 + yDistance2 * yDistance2;
+
+			if (magnitudePlayer1 < magnitudePlayer2)
+			{
+				m_PlayerPos = player1Pos;
+			}
+			else
+			{
+				m_PlayerPos = player2Pos;
+			}
+		}
+		else
+		{
+			m_Pos = m_pGameObject->GetComponent<TransformComponent>()->GetTransform().GetPosition();
+			m_PlayerPos = m_pPlayer->GetComponent<TransformComponent>()->GetTransform().GetPosition();
+		}
+	}
+
+	if (m_PlayerPos.x <= m_Pos.x && m_PlayerPos.y - yOffset <= m_Pos.y) // left top
 	{
 		m_Direction = AnimationComponent::AnimationState::JumpLeftTop;
 		m_pGameObject->GetComponent<AnimationComponent>()->SetAnimationState(AnimationComponent::AnimationState::JumpLeftTop);
@@ -192,21 +223,21 @@ void EnemyMovementComponent::FollowPlayer()
 		--m_CurrentColumn;
 		--m_CurrentRow;
 	}
-	else if (playerPos.x >= pos.x && playerPos.y - yOffset <= pos.y) // right top
+	else if (m_PlayerPos.x >= m_Pos.x && m_PlayerPos.y - yOffset <= m_Pos.y) // right top
 	{
 		m_Direction = AnimationComponent::AnimationState::JumpRightTop;
 		m_pGameObject->GetComponent<AnimationComponent>()->SetAnimationState(AnimationComponent::AnimationState::JumpRightTop);
 		ActivateJump();
 		--m_CurrentRow;
 	}
-	else if (playerPos.x <= pos.x && playerPos.y >= pos.y) // left bottom
+	else if (m_PlayerPos.x <= m_Pos.x && m_PlayerPos.y >= m_Pos.y) // left bottom
 	{
 		m_Direction = AnimationComponent::AnimationState::JumpLeftDown;
 		m_pGameObject->GetComponent<AnimationComponent>()->SetAnimationState(AnimationComponent::AnimationState::JumpLeftDown);
 		ActivateJump();
 		++m_CurrentRow;
 	}
-	else if (playerPos.x >= pos.x && playerPos.y >= pos.y) // right down
+	else if (m_PlayerPos.x >= m_Pos.x && m_PlayerPos.y >= m_Pos.y) // right down
 	{
 		m_Direction = AnimationComponent::AnimationState::JumpRightDown;
 		m_pGameObject->GetComponent<AnimationComponent>()->SetAnimationState(AnimationComponent::AnimationState::JumpRightDown);

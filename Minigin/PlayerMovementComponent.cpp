@@ -5,6 +5,7 @@
 #include "EnemyManager.h"
 #include "../AliEngine/Transform.h"
 #include "HealthComponent.h"
+#include "Locator.h"
 
 PlayerMovementComponent::PlayerMovementComponent(const std::string& name, dae::Scene::GameMode gameMode, bool isEnemy)
 	: m_IsKeyPressed{ false }
@@ -228,6 +229,7 @@ void PlayerMovementComponent::ActivateJump(bool isSideWaysJump)
 	if (!fallOfMap && !CurrentMap->GetSpecificCube(m_CurrentCubeIndex)->GetHasDiscNextToIt())
 	{
 		m_IsFalling = true;
+		Locator::GetAudio().QueueSound(AudioService::SoundIds::FallEffect, true, 50);
 	}
 	else if (!fallOfMap && CurrentMap->GetSpecificCube(m_CurrentCubeIndex)->GetHasDiscNextToIt())
 	{

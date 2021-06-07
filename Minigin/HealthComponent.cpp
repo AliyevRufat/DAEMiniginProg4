@@ -16,6 +16,8 @@ void HealthComponent::SetLives(const unsigned int& health)
 
 void HealthComponent::Die()
 {
+	Locator::GetAudio().QueueSound(AudioService::SoundIds::Hurt, true, 50);
+
 	if ((int)m_Lives - 1 < 0)
 	{
 		if (dae::SceneManager::GetInstance().GetCurrentScene()->GetCurrentGameMode() == dae::Scene::GameMode::Coop)

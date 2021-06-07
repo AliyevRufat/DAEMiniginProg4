@@ -33,6 +33,8 @@ private:
 	void Coop();
 	void Versus();
 	SDL_Surface* m_WindowSurface;
+	bool m_IsInMenu = true;
+
 	friend class dae::Singleton<GameStateManager>;
 	GameStateManager() = default;
 };

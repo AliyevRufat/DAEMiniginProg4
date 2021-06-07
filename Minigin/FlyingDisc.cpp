@@ -74,8 +74,6 @@ void FlyingDisc::MoveToTheTop()
 
 			m_Direction.x = dist.x / length;
 			m_Direction.y = dist.y / length;
-
-			EnemyManager::GetInstance().DeleteAllEnemies();
 		}
 
 		m_pTransformComponent = m_pGameObject->GetComponent<TransformComponent>();
@@ -84,7 +82,7 @@ void FlyingDisc::MoveToTheTop()
 
 		if (abs(discPosition.x - m_FinalPos.x) > 2)
 		{
-			auto newPos = discPosition + m_Direction * m_Speed;
+			auto newPos = discPosition + m_Direction * m_Speed * EngineTime::GetInstance().GetDeltaTime();
 
 			m_pTransformComponent->SetPosition(newPos);
 		}

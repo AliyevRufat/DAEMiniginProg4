@@ -29,4 +29,7 @@ private:
 	float m_SpeedMultiplier;
 	bool m_IsDead;
 	bool m_IsOnSpawnCube;
+	//
+	glm::vec2 m_PlayerPos;
+	glm::vec2 	m_Pos;
 };

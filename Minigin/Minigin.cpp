@@ -42,10 +42,13 @@ void dae::Minigin::Initialize()
 	Renderer::GetInstance().Init(m_Window);
 
 	Locator::Provide(new ConsoleAudioService());
-	//Locator::GetAudio().AddSound(AudioService::SoundIds::AttackEffect, "Resources/Sounds/Attack.wav", true);
-	//Locator::GetAudio().AddSound(AudioService::SoundIds::MainMenuStream, "Resources/Sounds/Music.mp3", false);
-	//Locator::GetAudio().QueueSound(AudioService::SoundIds::MainMenuStream, false, 100);
-	//Locator::GetAudio().QueueSound(AudioService::SoundIds::AttackEffect, true, 100);
+	Locator::GetAudio().AddSound(AudioService::SoundIds::FallEffect, "Resources/Sounds/Fall.wav", true);
+	Locator::GetAudio().AddSound(AudioService::SoundIds::JumpEffect, "Resources/Sounds/Jump.wav", true);
+	Locator::GetAudio().AddSound(AudioService::SoundIds::LiftEffect, "Resources/Sounds/Lift.wav", true);
+	Locator::GetAudio().AddSound(AudioService::SoundIds::VictoryEffect, "Resources/Sounds/Victory.wav", true);
+	Locator::GetAudio().AddSound(AudioService::SoundIds::Hurt, "Resources/Sounds/Hurt.wav", true);
+
+	//where second parameter = volume
 }
 
 void dae::Minigin::BindCommands()
@@ -58,22 +61,30 @@ void dae::Minigin::BindCommands()
 		inputManager.AssignKey<ChooseCoOpGameMode>(ControllerButton::ButtonA, i);
 		inputManager.AssignKey<ChooseVersusGameMode>(ControllerButton::ButtonB, i);
 		inputManager.AssignKey<ChooseSinglePlayerGameMode>(ControllerButton::ButtonX, i);
-		inputManager.AssignKey<ExitCommand>(ControllerButton::ButtonY, i);
+		inputManager.AssignKey<GoToMenu>(ControllerButton::ButtonY, i);
+		inputManager.AssignKey<ExitCommand>(ControllerButton::ButtonSelect, i);
 		//move
 		inputManager.AssignKey<JumpUp>(ControllerButton::ButtonUp, i);
 		inputManager.AssignKey<JumpDown>(ControllerButton::ButtonDown, i);
 		inputManager.AssignKey<JumpLeft>(ControllerButton::ButtonLeft, i);
 		inputManager.AssignKey<JumpRight>(ControllerButton::ButtonRight, i);
-		//keyboard
-		inputManager.AssignKey<JumpUp>(KeyboardButton::W, i);
-		inputManager.AssignKey<JumpDown>(KeyboardButton::S, i);
-		inputManager.AssignKey<JumpLeft>(KeyboardButton::A, i);
-		inputManager.AssignKey<JumpRight>(KeyboardButton::D, i);
-		inputManager.AssignKey<ChooseCoOpGameMode>(KeyboardButton::O, i);
-		inputManager.AssignKey<ChooseVersusGameMode>(KeyboardButton::P, i);
-		inputManager.AssignKey<ChooseSinglePlayerGameMode>(KeyboardButton::I, i);
-		inputManager.AssignKey<ExitCommand>(KeyboardButton::ESCAPE, i);
 	}
+	//keyboard
+	inputManager.AssignKey<JumpUp>(KeyboardButton::W, 0);
+	inputManager.AssignKey<JumpDown>(KeyboardButton::S, 0);
+	inputManager.AssignKey<JumpLeft>(KeyboardButton::A, 0);
+	inputManager.AssignKey<JumpRight>(KeyboardButton::D, 0);
+
+	inputManager.AssignKey<JumpUp>(KeyboardButton::ArrowUp, 1);
+	inputManager.AssignKey<JumpDown>(KeyboardButton::ArrowDown, 1);
+	inputManager.AssignKey<JumpLeft>(KeyboardButton::ArrowLeft, 1);
+	inputManager.AssignKey<JumpRight>(KeyboardButton::ArrowRight, 1);
+
+	inputManager.AssignKey<ChooseCoOpGameMode>(KeyboardButton::O, 0);
+	inputManager.AssignKey<ChooseVersusGameMode>(KeyboardButton::P, 0);
+	inputManager.AssignKey<ChooseSinglePlayerGameMode>(KeyboardButton::I, 0);
+	inputManager.AssignKey<GoToMenu>(KeyboardButton::U, 0);
+	inputManager.AssignKey<ExitCommand>(KeyboardButton::ESCAPE, 0);
 }
 
 void dae::Minigin::Cleanup()

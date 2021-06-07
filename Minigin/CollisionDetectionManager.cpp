@@ -7,11 +7,17 @@
 #include "../AliEngine/Scene.h"
 #include "PlayerMovementComponent.h"
 #include "EnemyManager.h"
+#include "ScoreComponent.h"
+#include "Locator.h"
 #include "EnemyMovementComponent.h"
 
 void CollisionDetectionManager::Update()
 {
 	if (dae::SceneManager::GetInstance().GetCurrentScene()->GetCurrentGameMode() == dae::Scene::GameMode::None)
+	{
+		return;
+	}
+	if (m_pQbert->GetComponent<PlayerMovementComponent>()->GetIsOnDisc())
 	{
 		return;
 	}
@@ -21,6 +27,7 @@ void CollisionDetectionManager::Update()
 		{
 			if (m_pOtherEntities[i]->GetName() == "Disc")
 			{
+				Locator::GetAudio().QueueSound(AudioService::SoundIds::LiftEffect, true, 50);
 				m_pQbert->GetComponent<PlayerMovementComponent>()->SetDiscTransform(m_pOtherEntities[i]->GetComponent<TransformComponent>());
 				dae::SceneManager::GetInstance().GetCurrentScene()->GetCurrentLevel()->GetComponent<PyramidComponent>()->GetDisc(m_pOtherEntities[i])->SetIsMovingToTop(true);
 			}
@@ -39,15 +46,21 @@ void CollisionDetectionManager::Update()
 			}
 			else if (m_pOtherEntities[i]->GetName() == "Sam" || m_pOtherEntities[i]->GetName() == "Slick")
 			{
+				dae::SceneManager::GetInstance().GetCurrentScene().get()->GetPlayer(0).get()->GetComponent<ScoreComponent>()->IncreaseScore((int)Event::CatchSlickOrSam);
 				m_pOtherEntities[i]->GetComponent<EnemyMovementComponent>()->SetIsDead(true);
 			}
 		}
 		if (dae::SceneManager::GetInstance().GetCurrentScene()->GetCurrentGameMode() == dae::Scene::GameMode::Coop)
 		{
+			if (m_pQbert2->GetComponent<PlayerMovementComponent>()->GetIsOnDisc())
+			{
+				return;
+			}
 			if (IsOverlapping(m_pQbertTransform2->GetRect(), m_pOtherEntityTransforms[i]->GetRect()))
 			{
 				if (m_pOtherEntities[i]->GetName() == "Disc")
 				{
+					Locator::GetAudio().QueueSound(AudioService::SoundIds::LiftEffect, true, 50);
 					m_pQbert2->GetComponent<PlayerMovementComponent>()->SetDiscTransform(m_pOtherEntities[i]->GetComponent<TransformComponent>());
 					dae::SceneManager::GetInstance().GetCurrentScene()->GetCurrentLevel()->GetComponent<PyramidComponent>()->GetDisc(m_pOtherEntities[i])->SetIsMovingToTop(true);
 				}
@@ -59,6 +72,7 @@ void CollisionDetectionManager::Update()
 				}
 				else if (m_pOtherEntities[i]->GetName() == "Sam" || m_pOtherEntities[i]->GetName() == "Slick")
 				{
+					dae::SceneManager::GetInstance().GetCurrentScene().get()->GetPlayer(1).get()->GetComponent<ScoreComponent>()->IncreaseScore((int)Event::CatchSlickOrSam);
 					m_pOtherEntities[i]->GetComponent<EnemyMovementComponent>()->SetIsDead(true);
 				}
 			}

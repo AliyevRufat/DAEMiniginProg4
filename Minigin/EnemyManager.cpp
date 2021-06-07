@@ -5,6 +5,7 @@
 #include "EnemyMovementComponent.h"
 #include "CollisionDetectionManager.h"
 #include "LivesObserver.h"
+#include "ScoreComponent.h"
 #include "Minigin.h"
 #include "../AliEngine/TransformComponent.h"
 #include "PlayerMovementComponent.h"
@@ -37,7 +38,7 @@ void EnemyManager::Update()
 
 	if (m_SpawnTimerCoily >= m_SpawnTimeCoily && !m_CoilySpawned && dae::SceneManager::GetInstance().GetCurrentScene()->GetCurrentGameMode() != dae::Scene::GameMode::Versus)
 	{
-		SpawnEnemy(EnemyType::Coily);
+		SpawnEnemy(EnemyType::Coily, dae::SceneManager::GetInstance().GetCurrentScene()->GetCurrentGameMode());
 		m_CoilySpawned = true;
 		m_SpawnTimerCoily -= m_SpawnTimerCoily;
 	}
@@ -45,11 +46,11 @@ void EnemyManager::Update()
 	{
 		if (randNr == 0)
 		{
-			SpawnEnemy(EnemyType::WrongWay);
+			SpawnEnemy(EnemyType::WrongWay, dae::SceneManager::GetInstance().GetCurrentScene()->GetCurrentGameMode());
 		}
 		else
 		{
-			SpawnEnemy(EnemyType::Ugg);
+			SpawnEnemy(EnemyType::Ugg,dae::SceneManager::GetInstance().GetCurrentScene()->GetCurrentGameMode());
 		}
 		++m_WrongWayUggAmount;
 		m_SpawnTimerWrongWayUgg -= m_SpawnTimerWrongWayUgg;
@@ -58,11 +59,11 @@ void EnemyManager::Update()
 	{
 		if (randNr == 0)
 		{
-			SpawnEnemy(EnemyType::Sam);
+			SpawnEnemy(EnemyType::Sam,dae::SceneManager::GetInstance().GetCurrentScene()->GetCurrentGameMode());
 		}
 		else
 		{
-			SpawnEnemy(EnemyType::Slick);
+			SpawnEnemy(EnemyType::Slick,dae::SceneManager::GetInstance().GetCurrentScene()->GetCurrentGameMode());
 		}
 		m_SamOrSlickSpawned = true;
 		m_SpawnTimerSamSlick -= m_SpawnTimerSamSlick;
@@ -97,6 +98,16 @@ void EnemyManager::DeleteFallenEnemies()
 
 			if (m_SpEnemies[i]->GetName() == "Coily")
 			{
+				auto pPlayerActor = dae::SceneManager::GetInstance().GetCurrentScene().get();
+
+				if (pPlayerActor->GetPlayer(0)->GetComponent<PlayerMovementComponent>()->GetIsOnDisc())
+				{
+					pPlayerActor->GetPlayer(0).get()->GetComponent<ScoreComponent>()->IncreaseScore((int)Event::CoilyBaitededWithFlyingDisc);
+				}
+				else if (pPlayerActor->GetPlayer(1)->GetComponent<PlayerMovementComponent>()->GetIsOnDisc())
+				{
+					pPlayerActor->GetPlayer(1).get()->GetComponent<ScoreComponent>()->IncreaseScore((int)Event::CoilyBaitededWithFlyingDisc);
+				}
 				m_CoilySpawned = false;
 			}
 			else if (m_SpEnemies[i]->GetName() == "WrongWay" || m_SpEnemies[i]->GetName() == "Ugg")

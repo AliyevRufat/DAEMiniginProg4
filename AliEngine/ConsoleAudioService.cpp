@@ -43,9 +43,9 @@ void ConsoleAudioService::PlaySound(const SoundIds& soundId, int volume, bool is
 	}
 }
 
-void ConsoleAudioService::QueueSound(const SoundIds& soundId, bool isEffect, int volume)
+void ConsoleAudioService::QueueSound(const SoundIds& soundId, bool isEffect, int)
 {
-	Sound sound{ soundId, isEffect,volume };
+	Sound sound{ soundId, isEffect,10 };
 	std::lock_guard<std::mutex> mLock{ m_Mutex };
 	m_SoundQueue.push(sound);
 	m_ActiveQueue.notify_one();

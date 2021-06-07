@@ -20,7 +20,7 @@ CubeObject::CubeObject()
 	m_pGameObject = std::make_shared<GameObject>(("Cube"));
 }
 
-void CubeObject::ChangeColor()
+void CubeObject::ChangeColor(bool& hasColored)
 {
 	if (m_CurrentLevel == Scene::Level::FirstLevel)
 	{
@@ -29,6 +29,7 @@ void CubeObject::ChangeColor()
 			m_ColorState = ColorState::SecondColor;
 
 			m_pGameObject->GetComponent<AnimationComponent>()->SetAnimationState(AnimationComponent::CubeColorState::Yellow);
+			hasColored = true;
 		}
 	}
 	else if (m_CurrentLevel == Scene::Level::SecondLevel)
@@ -38,12 +39,14 @@ void CubeObject::ChangeColor()
 			m_ColorState = ColorState::SecondColor;
 
 			m_pGameObject->GetComponent<AnimationComponent>()->SetAnimationState(AnimationComponent::CubeColorState::Yellow);
+			hasColored = true;
 		}
 		else if (m_ColorState == ColorState::SecondColor)
 		{
 			m_ColorState = ColorState::ThirdColor;
 
 			m_pGameObject->GetComponent<AnimationComponent>()->SetAnimationState(AnimationComponent::CubeColorState::Blue);
+			hasColored = true;
 		}
 	}
 	else if (m_CurrentLevel == Scene::Level::ThirdLevel)
@@ -53,12 +56,14 @@ void CubeObject::ChangeColor()
 			m_ColorState = ColorState::SecondColor;
 
 			m_pGameObject->GetComponent<AnimationComponent>()->SetAnimationState(AnimationComponent::CubeColorState::Yellow);
+			hasColored = true;
 		}
 		else if (m_ColorState == ColorState::SecondColor)
 		{
 			m_ColorState = ColorState::FirstColor;
 
 			m_pGameObject->GetComponent<AnimationComponent>()->SetAnimationState(AnimationComponent::CubeColorState::Red);
+			hasColored = true;
 		}
 	}
 	m_CurrentLevel = dae::SceneManager::GetInstance().GetCurrentScene()->GetGameLevel();

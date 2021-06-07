@@ -167,3 +167,17 @@ public:
 	{};
 	void Undo() override {};
 };
+
+class GoToMenu final : public Command
+{
+public:
+	GoToMenu(int index) :Command(index) { m_ControllerIndex = index; };
+
+	void Execute() const override
+	{
+		GameStateManager::GetInstance().LoadMenuScreen();
+	}
+	void Release() const override
+	{};
+	void Undo() override {};
+};

@@ -9,11 +9,11 @@ public:
 
 	enum class SoundIds
 	{
-		AttackEffect,
-		HurtEffect,
+		FallEffect,
 		JumpEffect,
-		BackgroundStream,
-		MainMenuStream
+		LiftEffect,
+		VictoryEffect,
+		Hurt
 	};
 
 	struct Sound

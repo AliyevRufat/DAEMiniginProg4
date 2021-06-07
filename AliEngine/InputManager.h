@@ -23,6 +23,11 @@ namespace dae
 		P = SDLK_p,
 		I = SDLK_i,
 		O = SDLK_o,
+		U = SDLK_u,
+		ArrowUp = SDLK_UP,
+		ArrowDown = SDLK_DOWN,
+		ArrowLeft = SDLK_LEFT,
+		ArrowRight = SDLK_RIGHT,
 		ESCAPE = SDLK_ESCAPE,
 		SPACE = SDLK_SPACE
 	};

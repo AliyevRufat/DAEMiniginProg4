@@ -4,6 +4,8 @@
 #include "AnimationComponent.h"
 #include "../AliEngine/SceneManager.h"
 #include "PyramidComponent.h"
+#include "ScoreComponent.h"
+#include "Locator.h"
 #include "../AliEngine/SceneManager.h"
 #include "../AliEngine/Scene.h"
 #include "../AliEngine/EngineTime.h"
@@ -102,13 +104,25 @@ void BaseMovementComponent::Jump()
 
 		if (m_pGameObject->GetName() == "Q*Bert") // TODO : should not be here , add it to player movement component or something
 		{
-			cube->ChangeColor();
-			//TODO : add score
+			Locator::GetAudio().QueueSound(AudioService::SoundIds::JumpEffect, true, 50);
+
+			bool hasColored = false;
+			cube->ChangeColor(hasColored);
+			if (hasColored)
+			{
+				dae::SceneManager::GetInstance().GetCurrentScene().get()->GetPlayer(0).get()->GetComponent<ScoreComponent>()->IncreaseScore((int)Event::ColorChanged);
+			}
 		}
 		else if (m_pGameObject->GetName() == "Q*Bert2") // TODO : should not be here , add it to player movement component or something
 		{
-			cube->ChangeColor();
-			//TODO : add score
+			Locator::GetAudio().QueueSound(AudioService::SoundIds::JumpEffect, true, 50);
+
+			bool hasColored = false;
+			cube->ChangeColor(hasColored);
+			if (hasColored)
+			{
+				dae::SceneManager::GetInstance().GetCurrentScene().get()->GetPlayer(1).get()->GetComponent<ScoreComponent>()->IncreaseScore((int)Event::ColorChanged);
+			}
 		}
 		else if (m_pGameObject->GetName() == "Sam" || m_pGameObject->GetName() == "Slick")
 		{

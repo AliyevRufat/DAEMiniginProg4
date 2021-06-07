@@ -9,6 +9,7 @@
 #include "../AliEngine/EngineTime.h"
 #include "../AliEngine/SceneManager.h"
 #include "GameStateManager.h"
+#include "ScoreComponent.h"
 #include "CollisionDetectionManager.h"
 #include "PlayerMovementComponent.h"
 #include "PyramidLoader.h"
@@ -217,6 +218,8 @@ const glm::vec2& PyramidComponent::GetCubeOffset() const
 
 void PyramidComponent::TeleportPlayersToCorrectPos(dae::Scene::GameMode gameMode)
 {
+	EnemyManager::GetInstance().DeleteAllEnemies();
+
 	const int playerWidth = 16;
 	const int playerHeight = 16;
 	if (gameMode == dae::Scene::GameMode::SinglePlayer)
@@ -316,6 +319,18 @@ std::shared_ptr<FlyingDisc> PyramidComponent::GetDisc(std::shared_ptr<GameObject
 
 void PyramidComponent::SpawnDiscs()
 {
+	//add score for the amount of unused discs
+	for (size_t i = 0; i < m_Discs.size(); i++)
+	{
+		dae::SceneManager::GetInstance().GetCurrentScene().get()->GetPlayer(0).get()->GetComponent<ScoreComponent>()->IncreaseScore((int)Event::DiscLeftAtEndOfTheStage);
+		auto player2 = dae::SceneManager::GetInstance().GetCurrentScene().get()->GetPlayer(1);
+		if (player2)
+		{
+			player2.get()->GetComponent<ScoreComponent>()->IncreaseScore((int)Event::DiscLeftAtEndOfTheStage);
+		}
+	}
+
+	//
 	int index = 0;
 	int row = 7;
 	std::vector<int> leftSideIndices;
@@ -341,12 +356,18 @@ void PyramidComponent::SpawnDiscs()
 	disc1Pos.x -= m_CubeDistance.x * 1.5f;
 	disc2Pos.x += m_CubeDistance.x * 2.5f;
 
-	for (auto& cube : m_Cubes) cube->SetHasDiscNextToIt(false);
-
-	for (auto& disc : m_Discs) disc->SetIsUsed(true);
+	for (auto& cube : m_Cubes)
+	{
+		cube->SetHasDiscNextToIt(false);
+	}
+	for (auto& disc : m_Discs)
+	{
+		disc->SetIsUsed(true);
+	}
 
 	CreateDisc(disc1Pos, *dae::SceneManager::GetInstance().GetCurrentScene());
 	m_Cubes[leftSideCubeIndex]->SetHasDiscNextToIt(true);
+
 	CreateDisc(disc2Pos, *dae::SceneManager::GetInstance().GetCurrentScene());
 	m_Cubes[rightSideCubeIndex]->SetHasDiscNextToIt(true);
 }
@@ -390,6 +411,8 @@ bool PyramidComponent::LevelCompletedCheck()
 		{
 			cube->ResetColor();
 		}
+		Locator::GetAudio().QueueSound(AudioService::SoundIds::VictoryEffect, true, 50);
+
 		return true;
 	}
 	else if (currentScene->GetGameLevel() == dae::Scene::Level::SecondLevel)
@@ -408,6 +431,8 @@ bool PyramidComponent::LevelCompletedCheck()
 		{
 			cube->ResetColor();
 		}
+		Locator::GetAudio().QueueSound(AudioService::SoundIds::VictoryEffect, true, 50);
+
 		return true;
 	}
 	else if (currentScene->GetGameLevel() == dae::Scene::Level::ThirdLevel)
@@ -426,6 +451,8 @@ bool PyramidComponent::LevelCompletedCheck()
 		{
 			cube->ResetColor();
 		}
+		Locator::GetAudio().QueueSound(AudioService::SoundIds::VictoryEffect, true, 50);
+
 		return true;
 	}
 	return false;
