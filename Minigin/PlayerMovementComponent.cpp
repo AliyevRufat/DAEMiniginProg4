@@ -5,7 +5,7 @@
 #include "EnemyManager.h"
 #include "../AliEngine/Transform.h"
 #include "HealthComponent.h"
-#include "Locator.h"
+#include "../AliEngine/Locator.h"
 
 PlayerMovementComponent::PlayerMovementComponent(const std::string& name, dae::Scene::GameMode gameMode, bool isEnemy)
 	: m_IsKeyPressed{ false }

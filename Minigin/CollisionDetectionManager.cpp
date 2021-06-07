@@ -8,7 +8,7 @@
 #include "PlayerMovementComponent.h"
 #include "EnemyManager.h"
 #include "ScoreComponent.h"
-#include "Locator.h"
+#include "../AliEngine/Locator.h"
 #include "EnemyMovementComponent.h"
 
 void CollisionDetectionManager::Update()

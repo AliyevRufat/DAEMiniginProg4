@@ -36,7 +36,7 @@ public:
 	void SetHasDiscNextToIt(bool hasDisc);
 
 	void ColorFlash();
-	const glm::vec2& GetPosition() const;
+	glm::vec2 GetPosition() const;
 private:
 
 	std::shared_ptr<GameObject> m_pGameObject;

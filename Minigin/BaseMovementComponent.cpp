@@ -5,7 +5,7 @@
 #include "../AliEngine/SceneManager.h"
 #include "PyramidComponent.h"
 #include "ScoreComponent.h"
-#include "Locator.h"
+#include "../AliEngine/Locator.h"
 #include "../AliEngine/SceneManager.h"
 #include "../AliEngine/Scene.h"
 #include "../AliEngine/EngineTime.h"

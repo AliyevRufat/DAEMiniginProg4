@@ -114,7 +114,7 @@ void CubeObject::ColorFlash()
 	}
 }
 
-const glm::vec2& CubeObject::GetPosition() const
+glm::vec2 CubeObject::GetPosition() const
 {
 	return m_pGameObject->GetComponent<TransformComponent>()->GetTransform().GetPosition();
 }
