@@ -2,10 +2,10 @@
 #include <glm\vec3.hpp>
 #include <vector>
 
-class PyramidLoader
+class PyramidLoader final
 {
 public:
-	PyramidLoader(std::string filePath);
+	PyramidLoader(const std::string& filePath);
 	~PyramidLoader() = default;
 
 	PyramidLoader(const PyramidLoader&) = delete;

@@ -1,7 +1,7 @@
 #pragma once
 #include "ComponentIncludes.h"
 
-class ScoreComponent : public BaseComponent
+class ScoreComponent final : public BaseComponent
 {
 public:
 	ScoreComponent(const unsigned int& score);

@@ -1,5 +1,5 @@
 #include "MiniginPCH.h"
-#include "CubeObject.h"
+#include "Cube.h"
 #include <memory>
 #include "../AliEngine/Texture2DComponent.h"
 #include "../AliEngine/Scene.h"
@@ -10,7 +10,7 @@
 
 using namespace dae;
 
-CubeObject::CubeObject()
+Cube::Cube()
 	: m_ColorState{ ColorState::FirstColor }
 	, m_CurrentLevel{ dae::SceneManager::GetInstance().GetCurrentScene()->GetGameLevel() }
 	, m_MaxColorSwitchTime{ 0.3f }
@@ -20,7 +20,7 @@ CubeObject::CubeObject()
 	m_pGameObject = std::make_shared<GameObject>(("Cube"));
 }
 
-void CubeObject::ChangeColor(bool& hasColored)
+void Cube::ChangeColor(bool& hasColored)
 {
 	if (m_CurrentLevel == Scene::Level::FirstLevel)
 	{
@@ -69,33 +69,33 @@ void CubeObject::ChangeColor(bool& hasColored)
 	m_CurrentLevel = dae::SceneManager::GetInstance().GetCurrentScene()->GetGameLevel();
 }
 
-void CubeObject::ResetColor()
+void Cube::ResetColor()
 {
 	m_ColorState = ColorState::FirstColor;
 	m_pGameObject->GetComponent<AnimationComponent>()->SetAnimationState(AnimationComponent::CubeColorState::Red);
 }
 
-bool CubeObject::GetHasDiscNextToIt() const
+bool Cube::GetHasDiscNextToIt() const
 {
 	return m_HasDiscNextToIt;
 }
 
-void CubeObject::SetHasDiscNextToIt(bool hasDisc)
+void Cube::SetHasDiscNextToIt(bool hasDisc)
 {
 	m_HasDiscNextToIt = hasDisc;
 }
 
-void CubeObject::Update()
+void Cube::Update()
 {
 	m_pGameObject->Update();
 }
 
-void CubeObject::Render()
+void Cube::Render()
 {
 	m_pGameObject->Render();
 }
 
-void CubeObject::ColorFlash()
+void Cube::ColorFlash()
 {
 	m_CurrentColorSwitchTime += EngineTime::GetInstance().GetDeltaTime();
 
@@ -114,7 +114,7 @@ void CubeObject::ColorFlash()
 	}
 }
 
-glm::vec2 CubeObject::GetPosition() const
+glm::vec2 Cube::GetPosition() const
 {
 	return m_pGameObject->GetComponent<TransformComponent>()->GetTransform().GetPosition();
 }

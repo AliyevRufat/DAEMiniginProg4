@@ -2,7 +2,7 @@
 #include <string>
 #include <SDL_mixer.h>
 
-class SoundStream
+class SoundStream final
 {
 public:
 	explicit SoundStream(const std::string& path);

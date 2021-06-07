@@ -5,7 +5,7 @@
 #include <string>
 #include <vector>
 
-PyramidLoader::PyramidLoader(std::string filePath)
+PyramidLoader::PyramidLoader(const std::string& filePath)
 	:m_FilePath{ filePath }
 {
 }
@@ -15,10 +15,10 @@ std::vector<glm::vec3> PyramidLoader::ReadGetPositions()
 	m_Positions.clear();
 
 	std::ifstream input;
+	std::string stringBuf;
 	std::string currentLine;
-	std::string stringBuffer;
-	float bufferX = 0;
-	float bufferY = 0;
+	float bufX = 0;
+	float bufY = 0;
 
 	input.open(m_FilePath, std::ios::in | std::ios::binary);
 	if (input.is_open())
@@ -29,17 +29,17 @@ std::vector<glm::vec3> PyramidLoader::ReadGetPositions()
 			{
 				if (currentLine[i] != ',' && currentLine[i] != '\r')
 				{
-					stringBuffer += currentLine[i];
+					stringBuf += currentLine[i];
 				}
 				else if (currentLine[i] == ',')
 				{
-					bufferX = std::stof(stringBuffer);
-					stringBuffer = "";
+					bufX = std::stof(stringBuf);
+					stringBuf = "";
 				}
 			}
-			bufferY = std::stof(stringBuffer);
-			stringBuffer = "";
-			m_Positions.push_back(glm::vec3{ bufferX, bufferY, 0 });
+			bufY = std::stof(stringBuf);
+			stringBuf = "";
+			m_Positions.push_back(glm::vec3{ bufX, bufY, 0 });
 		}
 	}
 

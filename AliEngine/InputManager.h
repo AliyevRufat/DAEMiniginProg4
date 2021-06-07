@@ -86,6 +86,8 @@ namespace dae
 		bool KeyboardInput();
 		bool InputHandler();
 		void ControllerAnalogs();
+		//
+		void SetHasExited(bool hasExited) { m_HasExited = hasExited; };
 		//ControllerTrigger* GetTriggers() const { return m_Triggers; };
 		//ControllerStick* GetSticks() const { return m_Sticks; };
 		//----------------------------------------------------------------------------------------------
@@ -145,5 +147,7 @@ namespace dae
 
 		//for keyboard
 		KeyboardCommandsMap m_KeyboardButtonCommands;
+		//
+		bool m_HasExited;
 	};
 }

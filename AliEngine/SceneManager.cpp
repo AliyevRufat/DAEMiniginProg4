@@ -27,7 +27,7 @@ dae::Scene& dae::SceneManager::CreateScene(const std::string& name)
 	return *spScene;
 }
 
-void dae::SceneManager::ClearScene(std::shared_ptr<dae::Scene> spScene)
+void dae::SceneManager::ClearScene(const std::shared_ptr<dae::Scene>& spScene)
 {
 	auto sceneIt = std::find_if(m_SpScenes.begin(), m_SpScenes.end(), [&](auto scene) { return spScene == scene; });
 

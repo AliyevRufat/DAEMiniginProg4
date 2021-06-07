@@ -51,7 +51,7 @@ void PyramidComponent::CreateMap()
 
 void PyramidComponent::CreateCube(const size_t& index, const glm::vec2& pos)
 {
-	auto cube = std::make_shared<CubeObject>();
+	auto cube = std::make_shared<Cube>();
 	cube->GetGameObject()->AddComponent(new TransformComponent(pos, glm::vec2(m_CubeScale, m_CubeScale)));
 	cube->GetGameObject()->AddComponent(new Texture2DComponent("Cubes.png", m_CubeScale, true));
 	cube->GetGameObject()->AddComponent(new AnimationComponent(3));
@@ -304,7 +304,7 @@ void PyramidComponent::TeleportPlayersToCorrectPos(dae::Scene::GameMode gameMode
 	}
 }
 
-std::shared_ptr<CubeObject> PyramidComponent::GetSpecificCube(int index) const
+std::shared_ptr<Cube> PyramidComponent::GetSpecificCube(int index) const
 {
 	return m_Cubes[index];
 }
@@ -399,7 +399,7 @@ bool PyramidComponent::LevelCompletedCheck()
 	{
 		for (auto& cube : m_Cubes)
 		{
-			if (cube->GetCurrentColorState() != CubeObject::ColorState::SecondColor)
+			if (cube->GetCurrentColorState() != Cube::ColorState::SecondColor)
 			{
 				return false;
 			}
@@ -419,7 +419,7 @@ bool PyramidComponent::LevelCompletedCheck()
 	{
 		for (auto& cube : m_Cubes)
 		{
-			if (cube->GetCurrentColorState() != CubeObject::ColorState::ThirdColor)
+			if (cube->GetCurrentColorState() != Cube::ColorState::ThirdColor)
 			{
 				return false;
 			}
@@ -439,7 +439,7 @@ bool PyramidComponent::LevelCompletedCheck()
 	{
 		for (auto& cube : m_Cubes)
 		{
-			if (cube->GetCurrentColorState() != CubeObject::ColorState::SecondColor)
+			if (cube->GetCurrentColorState() != Cube::ColorState::SecondColor)
 			{
 				return false;
 			}

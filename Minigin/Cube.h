@@ -3,7 +3,7 @@
 #include "../AliEngine/GameObject.h"
 #include "glm/vec2.hpp"
 
-class CubeObject
+class Cube final
 {
 public:
 	enum class ColorState
@@ -13,14 +13,14 @@ public:
 		ThirdColor
 	};
 
-	CubeObject();
+	Cube();
 
-	~CubeObject() = default;
+	~Cube() = default;
 
-	CubeObject(const CubeObject& other) = delete;
-	CubeObject(CubeObject&& other) = delete;
-	CubeObject& operator=(const CubeObject& other) = delete;
-	CubeObject& operator=(CubeObject&& other) = delete;
+	Cube(const Cube& other) = delete;
+	Cube(Cube&& other) = delete;
+	Cube& operator=(const Cube& other) = delete;
+	Cube& operator=(Cube&& other) = delete;
 
 	void Update();
 	void Render();

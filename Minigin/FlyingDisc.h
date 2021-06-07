@@ -3,7 +3,7 @@
 #include "glm\vec2.hpp"
 #include "../AliEngine/TransformComponent.h"
 
-class FlyingDisc
+class FlyingDisc final
 {
 public:
 	FlyingDisc(const glm::vec2& finalPos);

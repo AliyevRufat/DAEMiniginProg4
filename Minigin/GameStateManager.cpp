@@ -166,7 +166,7 @@ void GameStateManager::SinglePlayer()
 	scene->Add(scoreDisplay);
 	//lives
 	auto livesDisplay = std::make_shared<GameObject>("LivesDisplay");
-	livesDisplay->AddComponent(new TransformComponent(glm::vec2(250, 50)));
+	livesDisplay->AddComponent(new TransformComponent(glm::vec2(350, 50)));
 	font = ResourceManager::GetInstance().LoadFont("Lingua.otf", 20);
 	auto livesCounter = new TextComponent("Remaining lives: 3", font, SDL_Color{ 255,255,255 });
 	livesDisplay->AddComponent(livesCounter);

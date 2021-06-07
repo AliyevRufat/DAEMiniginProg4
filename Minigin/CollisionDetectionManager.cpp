@@ -80,7 +80,7 @@ void CollisionDetectionManager::Update()
 	}
 }
 
-void CollisionDetectionManager::AddCollisionObject(std::shared_ptr<GameObject> gameObject)
+void CollisionDetectionManager::AddCollisionObject(const std::shared_ptr<GameObject>& gameObject)
 {
 	auto transform = gameObject->GetComponent<TransformComponent>();
 
@@ -116,7 +116,7 @@ bool CollisionDetectionManager::IsOverlapping(const SDL_Rect& r1, const SDL_Rect
 	return true;
 }
 
-void CollisionDetectionManager::DeleteGameObject(std::shared_ptr<GameObject> gameObject)
+void CollisionDetectionManager::DeleteGameObject(const std::shared_ptr<GameObject>& gameObject)
 {
 	for (size_t i = 0; i < m_pOtherEntities.size(); i++)
 	{

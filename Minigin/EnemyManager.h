@@ -5,7 +5,7 @@
 #include <SDL.h>
 #include "../AliEngine/Scene.h"
 
-class EnemyManager : public dae::Singleton<EnemyManager>
+class EnemyManager final : public dae::Singleton<EnemyManager>
 {
 public:
 
@@ -41,13 +41,13 @@ private:
 	void SpawnWrongWayOrUgg(EnemyType enemyType);
 	//DataMembers
 	float m_SpawnTimerCoily = 0.f;
-	float m_SpawnTimeCoily = 10.f;
+	float m_SpawnTimeCoily = 6.0f;
 
 	float m_SpawnTimerSamSlick = 0.f;
 	float m_SpawnTimeSamSlick = 15.f;
 
 	float m_SpawnTimerWrongWayUgg = 0.f;
-	float m_SpawnTimeWrongWayUgg = 8.f;
+	float m_SpawnTimeWrongWayUgg = 6.f;
 	//
 	bool m_CoilySpawned = false;
 	bool m_SamOrSlickSpawned = false;

@@ -63,9 +63,6 @@
     <ClInclude Include="PyramidComponent.h">
       <Filter>MiniginEngine\Components</Filter>
     </ClInclude>
-    <ClInclude Include="CubeObject.h">
-      <Filter>QBERTGame</Filter>
-    </ClInclude>
     <ClInclude Include="CollisionDetectionManager.h">
       <Filter>QBERTGame</Filter>
     </ClInclude>
@@ -89,6 +86,9 @@
     </ClInclude>
     <ClInclude Include="PyramidLoader.h">
       <Filter>MiniginEngine\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Cube.h">
+      <Filter>QBERTGame</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -119,9 +119,6 @@
     <ClCompile Include="PyramidComponent.cpp">
       <Filter>MiniginEngine\Components</Filter>
     </ClCompile>
-    <ClCompile Include="CubeObject.cpp">
-      <Filter>QBERTGame</Filter>
-    </ClCompile>
     <ClCompile Include="CollisionDetectionManager.cpp">
       <Filter>QBERTGame</Filter>
     </ClCompile>
@@ -145,6 +142,9 @@
     </ClCompile>
     <ClCompile Include="PyramidLoader.cpp">
       <Filter>MiniginEngine\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Cube.cpp">
+      <Filter>QBERTGame</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

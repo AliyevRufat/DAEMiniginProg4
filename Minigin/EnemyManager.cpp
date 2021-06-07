@@ -50,7 +50,7 @@ void EnemyManager::Update()
 		}
 		else
 		{
-			SpawnEnemy(EnemyType::Ugg,dae::SceneManager::GetInstance().GetCurrentScene()->GetCurrentGameMode());
+			SpawnEnemy(EnemyType::Ugg, dae::SceneManager::GetInstance().GetCurrentScene()->GetCurrentGameMode());
 		}
 		++m_WrongWayUggAmount;
 		m_SpawnTimerWrongWayUgg -= m_SpawnTimerWrongWayUgg;
@@ -59,11 +59,11 @@ void EnemyManager::Update()
 	{
 		if (randNr == 0)
 		{
-			SpawnEnemy(EnemyType::Sam,dae::SceneManager::GetInstance().GetCurrentScene()->GetCurrentGameMode());
+			SpawnEnemy(EnemyType::Sam, dae::SceneManager::GetInstance().GetCurrentScene()->GetCurrentGameMode());
 		}
 		else
 		{
-			SpawnEnemy(EnemyType::Slick,dae::SceneManager::GetInstance().GetCurrentScene()->GetCurrentGameMode());
+			SpawnEnemy(EnemyType::Slick, dae::SceneManager::GetInstance().GetCurrentScene()->GetCurrentGameMode());
 		}
 		m_SamOrSlickSpawned = true;
 		m_SpawnTimerSamSlick -= m_SpawnTimerSamSlick;
@@ -152,21 +152,21 @@ void EnemyManager::SetParametersAccordingToTheLevel(dae::Scene::Level currentLev
 	{
 	case dae::Scene::Level::FirstLevel:
 		m_SpeedMultiplier = 1.0f;
-		m_SpawnTimeCoily = 10.0f;
+		m_SpawnTimeCoily = 6.0f;
 		m_SpawnTimeSamSlick = 15.f;
-		m_SpawnTimeWrongWayUgg = 8.f;
+		m_SpawnTimeWrongWayUgg = 6.f;
 		break;
 	case dae::Scene::Level::SecondLevel:
 		m_SpeedMultiplier = 1.5f;
-		m_SpawnTimeCoily = 8.0f;
+		m_SpawnTimeCoily = 5.0f;
 		m_SpawnTimeSamSlick = 12.f;
-		m_SpawnTimeWrongWayUgg = 7.f;
+		m_SpawnTimeWrongWayUgg = 5.f;
 		break;
 	case dae::Scene::Level::ThirdLevel:
 		m_SpeedMultiplier = 2.0f;
-		m_SpawnTimeCoily = 6.f;
+		m_SpawnTimeCoily = 2.f;
 		m_SpawnTimeSamSlick = 10.f;
-		m_SpawnTimeWrongWayUgg = 6.f;
+		m_SpawnTimeWrongWayUgg = 3.f;
 		break;
 	}
 }

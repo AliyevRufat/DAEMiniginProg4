@@ -9,8 +9,8 @@ class CollisionDetectionManager final : public dae::Singleton<CollisionDetection
 {
 public:
 	void Update();
-	void AddCollisionObject(std::shared_ptr<GameObject> gameObject);
-	void DeleteGameObject(std::shared_ptr<GameObject> gameObject);
+	void AddCollisionObject(const std::shared_ptr<GameObject>& gameObject);
+	void DeleteGameObject(const std::shared_ptr<GameObject>& gameObject);
 	void ClearCollisions();
 private:
 	//Methods
@@ -19,8 +19,8 @@ private:
 	friend class dae::Singleton<CollisionDetectionManager>;
 	//Datamembers
 	std::vector<TransformComponent*> m_pOtherEntityTransforms;
-	TransformComponent* m_pQbertTransform;
-	TransformComponent* m_pQbertTransform2;
+	TransformComponent* m_pQbertTransform = nullptr;
+	TransformComponent* m_pQbertTransform2 = nullptr;
 	//
 	std::vector<std::shared_ptr<GameObject>> m_pOtherEntities;
 	std::shared_ptr<GameObject> m_pQbert;

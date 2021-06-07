@@ -7,6 +7,7 @@ dae::InputManager::InputManager()
 	ControllerButton::ButtonRight, ControllerButton::ButtonDown, ControllerButton::ButtonLeft , ControllerButton::ButtonSelect,ControllerButton::ButtonStart ,
 	ControllerButton::ButtonRightThumb,ControllerButton::ButtonLeftThumb,ControllerButton::ButtonRightShoulder,ControllerButton::ButtonLeftShoulder }
 	, m_CurrentState{}
+	, m_HasExited{ false }
 {
 	for (size_t i = 0; i < XUSER_MAX_COUNT; i++)
 	{
@@ -72,7 +73,7 @@ bool dae::InputManager::InputHandler()
 				}
 			}
 			//check if exited the program
-			if (button == ControllerButton::ButtonSelect && IsPressed(button, m_Controllers[i]))
+			if (m_HasExited)
 			{
 				return false;
 			}
@@ -131,7 +132,7 @@ bool dae::InputManager::KeyboardInput()
 
 	if (SDL_PollEvent(&ev))
 	{
-		if (ev.type == SDL_QUIT)
+		if (ev.type == SDL_QUIT || m_HasExited)
 			return false;
 
 		if (ev.type == SDL_KEYDOWN)

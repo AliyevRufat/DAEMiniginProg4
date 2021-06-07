@@ -13,13 +13,14 @@
 #include "../AliEngine/SceneManager.h"
 #include "GameStateManager.h"
 #include "../AliEngine/Scene.h"
+#include "../AliEngine/InputManager.h"
 
 class ExitCommand final : public Command
 {
 public:
 	ExitCommand(int index) :Command(index) {};
 
-	void Execute() const override {  }
+	void Execute() const override { dae::InputManager::GetInstance().SetHasExited(true); }
 	void Release() const override {};
 	void Undo() override {};
 };

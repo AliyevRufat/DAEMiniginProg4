@@ -2,7 +2,7 @@
 #include <string>
 #include <SDL_mixer.h>
 
-class SoundEffect
+class SoundEffect final
 {
 public:
 	explicit SoundEffect(const std::string& path);

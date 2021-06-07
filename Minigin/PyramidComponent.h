@@ -3,9 +3,8 @@
 #include "../AliEngine/GameObject.h"
 #include "../AliEngine/Scene.h"
 #include <glm\vec2.hpp>
-#include "CubeObject.h"
+#include "Cube.h"
 #include "AnimationComponent.h"
-#include "CubeObject.h"
 #include "FlyingDisc.h"
 
 class PyramidComponent final : public BaseComponent
@@ -19,7 +18,7 @@ public:
 	const glm::vec2& GetCubeOffset() const;
 	bool GetNextCubeIndex(int& currentIndex, AnimationComponent::AnimationState jumpDir, bool isSidewaysJump, int currentColumn, int currentRow) const; // Returns false if the player jumps off the map
 	void TeleportPlayersToCorrectPos(dae::Scene::GameMode gameMode);
-	std::shared_ptr<CubeObject> GetSpecificCube(int index) const;
+	std::shared_ptr<Cube> GetSpecificCube(int index) const;
 	std::shared_ptr<FlyingDisc> GetDisc(std::shared_ptr<GameObject> gameObject);
 private:
 	void Initialize();
@@ -38,7 +37,7 @@ private:
 	const glm::vec2 m_HighestCubePos;
 	const float m_CubeScale;
 
-	std::shared_ptr<CubeObject> m_Cubes[m_MaxCubes];
+	std::shared_ptr<Cube> m_Cubes[m_MaxCubes];
 	std::vector<std::shared_ptr<FlyingDisc>> m_Discs;
 
 	const float m_MaxCubesColorChangeTime; //time length of cube flashing
