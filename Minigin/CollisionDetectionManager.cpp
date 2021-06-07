@@ -11,6 +11,10 @@
 
 void CollisionDetectionManager::Update()
 {
+	if (dae::SceneManager::GetInstance().GetCurrentScene()->GetCurrentGameMode() == dae::Scene::GameMode::None)
+	{
+		return;
+	}
 	for (size_t i = 0; i < m_pOtherEntities.size(); i++)
 	{
 		if (IsOverlapping(m_pQbertTransform->GetRect(), m_pOtherEntityTransforms[i]->GetRect()))
@@ -107,5 +111,21 @@ void CollisionDetectionManager::DeleteGameObject(std::shared_ptr<GameObject> gam
 			m_pOtherEntities.erase(m_pOtherEntities.begin() + i);
 			m_pOtherEntityTransforms.erase(m_pOtherEntityTransforms.begin() + i);
 		}
+	}
+}
+
+void CollisionDetectionManager::ClearCollisions()
+{
+	for (size_t i = 0; i < m_pOtherEntities.size(); i++)
+	{
+		m_pOtherEntities.erase(m_pOtherEntities.begin() + i);
+		m_pOtherEntityTransforms.erase(m_pOtherEntityTransforms.begin() + i);
+		--i;
+	}
+	m_pQbertTransform = nullptr;
+	m_pQbertTransform2 = nullptr;
+	for (size_t i = 0; i < m_pOtherEntityTransforms.size(); i++)
+	{
+		m_pOtherEntityTransforms[i] = nullptr;
 	}
 }

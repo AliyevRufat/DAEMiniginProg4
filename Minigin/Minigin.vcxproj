@@ -212,6 +212,7 @@ xcopy "$(SolutionDir)3rdParty\SDL2_Mixer\lib\x64\*.dll" "$(OutputPath)" /R /Y</C
     <ClInclude Include="EnemyManager.h" />
     <ClInclude Include="EnemyMovementComponent.h" />
     <ClInclude Include="FlyingDisc.h" />
+    <ClInclude Include="GameStateManager.h" />
     <ClInclude Include="HealthComponent.h" />
     <ClInclude Include="ComponentIncludes.h" />
     <ClInclude Include="LivesObserver.h" />
@@ -220,6 +221,7 @@ xcopy "$(SolutionDir)3rdParty\SDL2_Mixer\lib\x64\*.dll" "$(OutputPath)" /R /Y</C
     <ClInclude Include="BaseMovementComponent.h" />
     <ClInclude Include="PlayerMovementComponent.h" />
     <ClInclude Include="PyramidComponent.h" />
+    <ClInclude Include="PyramidLoader.h" />
     <ClInclude Include="ScoreComponent.h" />
     <ClInclude Include="ScoreObserver.h" />
   </ItemGroup>
@@ -230,6 +232,7 @@ xcopy "$(SolutionDir)3rdParty\SDL2_Mixer\lib\x64\*.dll" "$(OutputPath)" /R /Y</C
     <ClCompile Include="EnemyManager.cpp" />
     <ClCompile Include="EnemyMovementComponent.cpp" />
     <ClCompile Include="FlyingDisc.cpp" />
+    <ClCompile Include="GameStateManager.cpp" />
     <ClCompile Include="HealthComponent.cpp" />
     <ClCompile Include="LivesObserver.cpp" />
     <ClCompile Include="Main.cpp" />
@@ -244,6 +247,7 @@ xcopy "$(SolutionDir)3rdParty\SDL2_Mixer\lib\x64\*.dll" "$(OutputPath)" /R /Y</C
     <ClCompile Include="BaseMovementComponent.cpp" />
     <ClCompile Include="PlayerMovementComponent.cpp" />
     <ClCompile Include="PyramidComponent.cpp" />
+    <ClCompile Include="PyramidLoader.cpp" />
     <ClCompile Include="ScoreComponent.cpp" />
     <ClCompile Include="ScoreObserver.cpp" />
   </ItemGroup>

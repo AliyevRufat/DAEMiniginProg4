@@ -140,4 +140,5 @@ void dae::Scene::ClearScene()
 	m_SpPlayers.clear();
 	m_SpLevels.clear();
 	m_SpCurrentLevel = nullptr;
+	m_CurrentLevel = Level::FirstLevel;
 }

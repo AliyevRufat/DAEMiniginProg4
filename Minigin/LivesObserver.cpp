@@ -59,5 +59,5 @@ void LivesObserver::ChangeLives(const GameObject* actor)
 		spPlayerDiedGO = dae::SceneManager::GetInstance().GetCurrentScene().get()->GetObjectByName("Player 2 Died!");
 	}
 	auto textCompPlayerDied = std::static_pointer_cast<GameObject>(spPlayerDiedGO).get()->GetComponent<TextComponent>();
-	textCompPlayerDied->SetIsVisible(true, 5.0f);
+	textCompPlayerDied->SetIsVisible(true, 2.0f);
 }

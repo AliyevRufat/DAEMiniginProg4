@@ -5,10 +5,13 @@
 #include "../AliEngine/TransformComponent.h"
 #include "../AliEngine/Texture2DComponent.h"
 #include "HealthComponent.h"
+#include "../AliEngine/Scene.h"
 #include "../AliEngine/EngineTime.h"
 #include "../AliEngine/SceneManager.h"
+#include "GameStateManager.h"
 #include "CollisionDetectionManager.h"
 #include "PlayerMovementComponent.h"
+#include "PyramidLoader.h"
 #include <iomanip>
 #include "EnemyManager.h"
 
@@ -34,25 +37,12 @@ void PyramidComponent::Initialize()
 
 void PyramidComponent::CreateMap()
 {
-	int indexCounter = 0;
-	int rowCubeCount = m_RowAmount;
-	glm::vec2 highestCubePos = m_HighestCubePos;
+	PyramidLoader pyramidLoader("../Data/PyramidCoordinations.txt");
+	std::vector<glm::vec3>cubePositions = pyramidLoader.ReadGetPositions();
 
-	for (int j = 0; j < m_RowAmount; j++)
+	for (size_t i = 0; i < cubePositions.size(); i++)
 	{
-		for (int i = 0; i < rowCubeCount; i++)
-		{
-			glm::vec2 pos = highestCubePos;
-			pos.x += m_CubeDistance.x * i;
-			pos.y += m_CubeDistance.y * i;
-
-			CreateCube(indexCounter, pos);
-			indexCounter++;
-		}
-		highestCubePos.x -= m_CubeDistance.x;
-		highestCubePos.y += m_CubeDistance.y;
-
-		rowCubeCount--;
+		CreateCube(i, glm::vec3(cubePositions[i].x * m_CubeScale + m_HighestCubePos.x, cubePositions[i].y * m_CubeScale + m_HighestCubePos.y, 0));
 	}
 
 	SpawnDiscs();
@@ -199,6 +189,10 @@ void PyramidComponent::Update()
 		m_IsLevelFinished = LevelCompletedCheck();
 		if (m_IsLevelFinished)
 		{
+			if (dae::SceneManager::GetInstance().GetCurrentScene()->GetGameLevel() == dae::Scene::Level::Finished)
+			{
+				GameStateManager::GetInstance().LoadWinScreen();
+			}
 			EnemyManager::GetInstance().SetParametersAccordingToTheLevel(currScene->GetGameLevel());
 			EnemyManager::GetInstance().DeleteAllEnemies();
 		}
@@ -426,7 +420,7 @@ bool PyramidComponent::LevelCompletedCheck()
 			}
 		}
 
-		currentScene->SetGameLevel(dae::Scene::Level(0));
+		currentScene->SetGameLevel(dae::Scene::Level(3));
 
 		for (auto& cube : m_Cubes)
 		{

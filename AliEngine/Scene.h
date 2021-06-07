@@ -12,6 +12,7 @@ namespace dae
 
 		enum class GameMode
 		{
+			None,
 			SinglePlayer,
 			Coop,
 			Versus
@@ -21,9 +22,7 @@ namespace dae
 			FirstLevel = 0,
 			SecondLevel = 1,
 			ThirdLevel = 2,
-			WonGame,
-			LostGame,
-			Menu
+			Finished = 3
 		};
 
 		void Add(const std::shared_ptr<SceneObject>& spObject);

@@ -12,10 +12,11 @@
 #include "PyramidComponent.h"
 #include "EnemyMovementComponent.h"
 #include "HealthComponent.h"
+#include "GameStateManager.h"
 
 void EnemyManager::Update()
 {
-	if (dae::SceneManager::GetInstance().GetCurrentScene()->GetCurrentGameMode() == dae::Scene::GameMode::Versus)
+	if (dae::SceneManager::GetInstance().GetCurrentScene()->GetCurrentGameMode() == dae::Scene::GameMode::None || dae::SceneManager::GetInstance().GetCurrentScene()->GetCurrentGameMode() == dae::Scene::GameMode::Versus)
 	{
 		return;
 	}

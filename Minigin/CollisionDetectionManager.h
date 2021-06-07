@@ -5,12 +5,13 @@
 
 class TransformComponent;
 
-class CollisionDetectionManager final : public dae::Singleton<CollisionDetectionManager >
+class CollisionDetectionManager final : public dae::Singleton<CollisionDetectionManager>
 {
 public:
 	void Update();
 	void AddCollisionObject(std::shared_ptr<GameObject> gameObject);
 	void DeleteGameObject(std::shared_ptr<GameObject> gameObject);
+	void ClearCollisions();
 private:
 	//Methods
 	bool IsOverlapping(const SDL_Rect& r1, const SDL_Rect& r2);
