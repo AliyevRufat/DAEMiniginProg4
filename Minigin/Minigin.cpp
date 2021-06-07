@@ -42,11 +42,11 @@ void dae::Minigin::Initialize()
 	Renderer::GetInstance().Init(m_Window);
 
 	Locator::Provide(new ConsoleAudioService());
-	Locator::GetAudio().AddSound(AudioService::SoundIds::FallEffect, "Resources/Sounds/Fall.wav", true);
-	Locator::GetAudio().AddSound(AudioService::SoundIds::JumpEffect, "Resources/Sounds/Jump.wav", true);
-	Locator::GetAudio().AddSound(AudioService::SoundIds::LiftEffect, "Resources/Sounds/Lift.wav", true);
-	Locator::GetAudio().AddSound(AudioService::SoundIds::VictoryEffect, "Resources/Sounds/Victory.wav", true);
-	Locator::GetAudio().AddSound(AudioService::SoundIds::Hurt, "Resources/Sounds/Hurt.wav", true);
+	Locator::GetAudio().AddSound(AudioService::SoundIds::FallEffect, "../Data/Sounds/Fall.wav", true);
+	Locator::GetAudio().AddSound(AudioService::SoundIds::JumpEffect, "../Data/Sounds/Jump.wav", true);
+	Locator::GetAudio().AddSound(AudioService::SoundIds::LiftEffect, "../Data/Sounds/Lift.wav", true);
+	Locator::GetAudio().AddSound(AudioService::SoundIds::VictoryEffect, "../Data/Sounds/Victory.wav", true);
+	Locator::GetAudio().AddSound(AudioService::SoundIds::Hurt, "../Data/Sounds/Hurt.wav", true);
 
 	//where second parameter = volume
 }
